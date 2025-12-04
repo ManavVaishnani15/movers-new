@@ -1,0 +1,20 @@
+body{
+	background-image:url('../images/residential.png'); background-repeat:no-repeat;background-size: cover;
+}
+
+.text-navy{
+	color:navy!important;
+}
+
+.black-border{
+	border: 1px solid #000000!important;
+}
+
+.white-background{
+	background-color: #FFFFFF!important;
+}
+
+.font-size-125-rem
+{
+	font-size: 1.25rem!important;
+}

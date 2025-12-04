@@ -1,0 +1,580 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+
+
+<cfset clientid=5>
+<cfset un='admin@top12movers.com'>
+<cfset pw=24725>
+
+
+
+<cfset datenow = #dateformat(now(), "YYYY-MM-DD")#>
+<html>
+<head>
+<cfif parameterexists(clientid) is 'yes'>
+<cfquery name="getinfo" datasource="aaalh3x_onestep">
+select * from CLIENTS
+where id=#clientid#
+</cfquery>
+</cfif>
+<html>
+<head>
+	<title><cfif parameterexists(clientid) is 'yes'><cfoutput>#getinfo.first_name# #getinfo.last_name# Estimate</cfoutput></cfif></title>
+    <style>
+    body {
+        height: 842px;
+        width: 595px;
+        /* to centre page on screen*/
+        margin-left: auto;
+        margin-right: auto;
+    }
+    </style>
+</head>
+<cfif parameterexists(un) is 'no'>
+<b>Log In</b><br>
+<form action="main.cfm" method="post">
+username <input type="text" name="username" size="15"><br>
+password <input type="password" name="password" size="15"><br>
+<input type="submit" value="Log In">
+</form>
+<cfabort>
+<cfelse>
+<cfquery name="verify" datasource="aaalh3x_onestep">
+select * from MEMBERS
+where username='#un#' and temp_pw=#pw# and active=1
+</cfquery>
+ <cfif #verify.recordcount# is 0>
+ <b>Log In</b><br>
+ <form action="main.cfm" method="post">
+ username <input type="text" name="username" size="15"><br>
+ password <input type="password" name="password" size="15"><br>
+ <input type="submit" value="Log In">
+ </form>
+ <cfabort>
+ </cfif>
+</cfif>
+<body>
+<cfquery name="getinfo" datasource="aaalh3x_onestep">
+select * from CLIENTS
+where id=#clientid#
+</cfquery>
+<cfif parameterexists(sendmail) is 'yes'>
+<cfmail
+TO="#getinfo.email#"
+FROM="admin@top12movers.com"
+SUBJECT="Your Moving Estimate"
+TYPE="HTML"
+><style>
+    body {
+        height: 842px;
+        width: 595px;
+        /* to centre page on screen*/
+        margin-left: auto;
+        margin-right: auto;
+		margin-top: 0px;
+    }
+    </style>
+	<table border="0" cellspacing="0" cellpadding="0" width="100%">
+<tr>
+<td width="104" valign="Middle"><img src="http://www.top12movingbiz.com/admin/letters/top12movers-logo.jpg" width="104" height="73" alt="" border="0"></td>
+<td valign="middle" width="100%"><div align="center"><font face="arial" size="3" color="black"><b>Top12Movers</b></font><font size="1"><br></font><font face="arial" size="6" color="silver"><b>ESTIMATE</b></font></div></td>
+<td align="right" width="104" valign="middle"><font face="arial" size="3"><cfoutput>#dateformat(now(), "MM/DD/YYYY")#</cfoutput></font></td>
+</tr>
+</table>
+<cfoutput>
+<table border="1" cellspacing="0" cellpadding="3" width="100%">
+<tr>
+<td bgcolor="silver" valign="middle" width="50%"><div align="center"><font face="arial" size="2"><b>MOVE FROM</b></font></div></td>
+<td bgcolor="silver" valign="middle"><div align="center"><font face="arial" size="2"><b>MOVE TO</b></font></div></td>
+</tr>
+<tr>
+<td valign="top">
+<font face="arial" size="2"><b>CUSTOMER</b>: #getinfo.first_name# #getinfo.last_name#<br>
+<b>STREET ADDRESS</b>: #getinfo.from_address#<cfif #getinfo.from_address2# is not ''>#getinfo.from_address#</cfif><br>
+<b>CITY, STATE, ZIP</b>: #getinfo.from_city#, #getinfo.from_state# #getinfo.from_zip#<br>
+<b>ORIGIN PHONE</b>: #getinfo.phone#<br>
+<b>EMAIL ADDRESS</b>: #getinfo.email#<br>
+
+</td>
+<td valign="top">
+<font face="arial" size="2">
+<b>STREET ADDRESS</b>: #getinfo.to_address# <cfif #getinfo.to_address2# is not ''>#getinfo.to_address#</cfif><br> 
+<b>CITY, STATE, ZIP</b>: #getinfo.to_city#, #getinfo.to_state# #getinfo.to_zip#<br>
+
+
+</td>
+</tr>
+</table>
+<font face="arial" size="2">
+<b>The following estimates represent the bottom line price for each of the top 12 moving carriers after discount. Please select your preferred carrier and contact your Moving Consultant to advise which company you have chosen.  After you notify your Moving Consultant, you will immediately receive an email with a survey inventory and a detailed Customer Order For Service which will include the prices from the carrier you selected.</b></font><br></cfoutput>
+<cfif (#getinfo.valuation# is not 0 AND #getinfo.valuation# is not '') OR #getinfo.packing# is not 0 OR #getinfo.move_type# is not 0 OR #getinfo.transportation# is not '' OR #getinfo.acessorial# is not ''>
+<table border="1" cellspacing="0" cellpadding="0" width="100%">
+<tr>
+<td>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr>
+<td valign="middle" width="100%"><cfif #getinfo.weight# is not ''>
+<font face="arial" size="2"><b>Estimated&nbsp;Weight</b>:&nbsp;<cfoutput>#getinfo.weight#</cfoutput></font></cfif>
+</td>
+<td valign="middle"><cfif #getinfo.miles# is not ''>
+<font face="arial" size="2"><b>Miles</b>:&nbsp;<cfoutput>#getinfo.miles#</cfoutput></font></cfif>
+</td>
+</tr>
+<tr>
+<td valign="middle">
+<cfif #getinfo.move_type# is not 0>
+<cfquery name="getmovetype" datasource="aaalh3x_onestep">
+select * from MOVE_TYPES
+where ID=#getinfo.move_type#
+</cfquery>
+<font face="arial" size="2"><b>Move&nbsp;Type</b>:&nbsp;<cfoutput>#getmovetype.type#</cfoutput></font>
+</cfif>
+</td>
+<td valign="middle">
+<font face="arial" size="2"><b>Valuation&nbsp;Included</b>:&nbsp;<cfif #getinfo.valuation_included# is not 0 AND #getinfo.valuation_included# is not ''>Yes<cfelse>No</cfif><cfif #getinfo.valuation# is not 0 and #getinfo.valuation# is not ''>&nbsp;<b>Avg.&nbsp;Amount</b>:&nbsp;$<cfoutput>#getinfo.valuation#</cfoutput></cfif></font>
+</td>
+</tr>
+<tr>
+<td valign="middle">
+<cfif #getinfo.packing# is not 0>
+<cfquery name="getpacking" datasource="aaalh3x_onestep">
+select * from PACKING_TYPES
+where ID=#getinfo.packing#
+</cfquery>
+<font face="arial" size="2"><b>Packing</b>:&nbsp;<cfoutput>#getpacking.type#</cfoutput></font>
+<cfelse>
+<font face="arial" size="2"><b>Packing</b>:&nbsp;Not&nbsp;Requested</font>
+</cfif>
+</td>
+<td valign="middle"><cfoutput>
+<font face="arial" size="2"><b>Storage&nbsp;Included</b>:<cfif #getinfo.storage_included# is 1>&nbsp;Yes<cfelse>&nbsp;No</cfif>&nbsp;<cfif #getinfo.storage_included# is 1><b>Days&nbsp;in&nbsp;Storage</b>:&nbsp;#getinfo.days_in_storage#</cfif></font>
+</td></cfoutput>
+</tr>
+<cfif #getinfo.acessorial# is not ''>
+<tr>
+<td colspan="2">
+<font face="arial" size="2"><b>Accessorials</b>: <cfoutput>#getinfo.acessorial#</cfoutput>
+</td>
+</tr>
+</cfif>
+<cfif #getinfo.estimate_comments# is not ''>
+<tr>
+<td colspan="2">
+<font face="arial" size="2"><b>Comments</b>: <cfoutput>#getinfo.estimate_comments#</cfoutput>
+</td>
+</tr></cfif>
+</table></td></tr></table></cfif>
+<table border="1" cellspacing="0" cellpadding="2" width="100%">
+<tr>
+<td colspan="2"><div align="center"><font face="arial" size="2"><b>YOUR MOVE COST ESTIMATES</b></font></div></td>
+</tr>
+<tr>
+<td bgcolor="silver"><div align="center"><font face="arial" size="2">SERVICE PROVIDER (CARRIER)</font></div></td>
+<td bgcolor="silver"><div align="center"><font face="arial" size="2">ESTIMATE</font></div></td>
+</tr>
+<!--- check for 'other carrier' --->
+<cfif #getinfo.other_carrier# is not '' and #getinfo.other_carrier_amount# is not '' and #getinfo.other_carrier_amount# is not '0'>
+<tr><cfoutput>
+<td valign="middle"><font face="arial" size="2">#getinfo.other_carrier#</font>
+</td>
+<td valign="middle"><div align="right"><font face="arial" size="2">#getinfo.other_carrier_amount#</font></div>
+</td></cfoutput>
+</tr>
+</cfif>
+
+<cfquery name="getmovers" datasource="aaalh3x_onestep">
+select * from CARRIERS
+where active=1 
+order by company
+</cfquery>
+<cfloop query="getmovers">
+<cfquery name="getqt" datasource="aaalh3x_onestep">
+select * from ESTIMATES
+where carrier=#getmovers.id# and user_hook=#clientid# and amount <> ''
+</cfquery>
+<cfif #getqt.recordcount# is not 0>
+<tr><cfoutput>
+<td valign="middle"><font face="arial" size="2">#getmovers.company#</font>
+</td>
+<td valign="middle"><div align="right"><font face="arial" size="2">#getqt.amount#</font></div>
+</td></cfoutput>
+</tr></cfif></cfloop>
+</table>
+<table border="0" cellspacing="0" cellpadding="3" width="100%">
+<tr>
+<td valign="middle"><div align="center"><font face="arial" size="3"><b>BINDING</b></font></div>
+<font face="arial" size="1">For this binding estimate, carrier must deliver the shipment upon payment of 100% of the final price, which will be based on the carrier estimate selected.</font></td>
+<td valign="middle"><font face="arial" size="1">The prices on this estimate are valid when accepted and signed within 60 days.  Changes to the loading date could result in a price change.  All bound services listed are included in the totals.</td>
+</tr>
+</table><hr>
+<table border="0" cellspacing="0" cellpadding="3" width="100%">
+<tr>
+<td valign="top"><font face="arial" size="1"><b>FOR QUESTIONS OR TO BOOK YOUR MOVE, PLEASE CONTACT YOUR AGENT</b></font><br>
+<font size="2" face="arial"><cfoutput><b>#verify.name#</b><br>
+<cfif #verify.phone# is not ''>#verify.phone#</cfif> <cfif #verify.email# is not ''>#verify.email#</cfif></cfoutput></font>
+</td>
+<td valign="top"><font face="arial" size="2"><b>Top12Movers</b></font><br>
+<font face="arial" size="2">1-800-289-5329<br>
+<cfoutput>#getinfo.mc_number#</cfoutput></font>
+</td>
+</tr>
+</table>
+	
+</cfmail>
+
+
+<cfif parameterexists(altmail) is 'yes'>
+
+<cfmail
+TO="#verify.email#"
+FROM="admin@top12movers.com"
+SUBJECT="Your Moving Estimate"
+TYPE="HTML"
+><style>
+    body {
+        height: 842px;
+        width: 595px;
+        /* to centre page on screen*/
+        margin-left: auto;
+        margin-right: auto;
+		margin-top: 0px;
+    }
+    </style>
+	<table border="0" cellspacing="0" cellpadding="0" width="100%">
+<tr>
+<td width="104" valign="Middle"><img src="http://www.top12movingbiz.com/admin/letters/top12movers-logo.jpg" width="104" height="73" alt="" border="0"></td>
+<td valign="middle" width="100%"><div align="center"><font face="arial" size="3" color="black"><b>Top12Movers</b></font><font size="1"><br></font><font face="arial" size="6" color="silver"><b>ESTIMATE</b></font></div></td>
+<td align="right" width="104" valign="middle"><font face="arial" size="3"><cfoutput>#dateformat(now(), "MM/DD/YYYY")#</cfoutput></font></td>
+</tr>
+</table>
+<cfoutput>
+<table border="1" cellspacing="0" cellpadding="3" width="100%">
+<tr>
+<td bgcolor="silver" valign="middle" width="50%"><div align="center"><font face="arial" size="2"><b>MOVE FROM</b></font></div></td>
+<td bgcolor="silver" valign="middle"><div align="center"><font face="arial" size="2"><b>MOVE TO</b></font></div></td>
+</tr>
+<tr>
+<td valign="top">
+<font face="arial" size="2"><b>CUSTOMER</b>: #getinfo.first_name# #getinfo.last_name#<br>
+<b>STREET ADDRESS</b>: #getinfo.from_address#<cfif #getinfo.from_address2# is not ''>#getinfo.from_address#</cfif><br>
+<b>CITY, STATE, ZIP</b>: #getinfo.from_city#, #getinfo.from_state# #getinfo.from_zip#<br>
+<b>ORIGIN PHONE</b>: #getinfo.phone#<br>
+<b>EMAIL ADDRESS</b>: #getinfo.email#<br>
+
+</td>
+<td valign="top">
+<font face="arial" size="2">
+<b>STREET ADDRESS</b>: #getinfo.to_address# <cfif #getinfo.to_address2# is not ''>#getinfo.to_address#</cfif><br> 
+<b>CITY, STATE, ZIP</b>: #getinfo.to_city#, #getinfo.to_state# #getinfo.to_zip#<br>
+
+
+</td>
+</tr>
+</table>
+<font face="arial" size="2">
+<b>The following estimates represent the bottom line price for each of the top 12 moving carriers after discount. Please select your preferred carrier and contact your Moving Consultant to advise which company you have chosen.  After you notify your Moving Consultant, you will immediately receive an email with a survey inventory and a detailed Customer Order For Service which will include the prices from the carrier you selected.</b></font><br></cfoutput>
+<cfif (#getinfo.valuation# is not 0 AND #getinfo.valuation# is not '') OR #getinfo.packing# is not 0 OR #getinfo.move_type# is not 0 OR #getinfo.transportation# is not '' OR #getinfo.acessorial# is not ''>
+<table border="1" cellspacing="0" cellpadding="0" width="100%">
+<tr>
+<td>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr>
+<td valign="middle" width="100%"><cfif #getinfo.weight# is not ''>
+<font face="arial" size="2"><b>Estimated&nbsp;Weight</b>:&nbsp;<cfoutput>#getinfo.weight#</cfoutput></font></cfif>
+</td>
+<td valign="middle"><cfif #getinfo.miles# is not ''>
+<font face="arial" size="2"><b>Miles</b>:&nbsp;<cfoutput>#getinfo.miles#</cfoutput></font></cfif>
+</td>
+</tr>
+<tr>
+<td valign="middle">
+<cfif #getinfo.move_type# is not 0>
+<cfquery name="getmovetype" datasource="aaalh3x_onestep">
+select * from MOVE_TYPES
+where ID=#getinfo.move_type#
+</cfquery>
+<font face="arial" size="2"><b>Move&nbsp;Type</b>:&nbsp;<cfoutput>#getmovetype.type#</cfoutput></font>
+</cfif>
+</td>
+<td valign="middle">
+<font face="arial" size="2"><b>Valuation&nbsp;Included</b>:&nbsp;<cfif #getinfo.valuation_included# is not 0 AND #getinfo.valuation_included# is not ''>Yes<cfelse>No</cfif><cfif #getinfo.valuation# is not 0 and #getinfo.valuation# is not ''>&nbsp;<b>Avg.&nbsp;Amount</b>:&nbsp;$<cfoutput>#getinfo.valuation#</cfoutput></cfif></font>
+</td>
+</tr>
+<tr>
+<td valign="middle">
+<cfif #getinfo.packing# is not 0>
+<cfquery name="getpacking" datasource="aaalh3x_onestep">
+select * from PACKING_TYPES
+where ID=#getinfo.packing#
+</cfquery>
+<font face="arial" size="2"><b>Packing</b>:&nbsp;<cfoutput>#getpacking.type#</cfoutput></font>
+<cfelse>
+<font face="arial" size="2"><b>Packing</b>:&nbsp;Not&nbsp;Requested</font>
+</cfif>
+</td>
+<td valign="middle"><cfoutput>
+<font face="arial" size="2"><b>Storage&nbsp;Included</b>:<cfif #getinfo.storage_included# is 1>&nbsp;Yes<cfelse>&nbsp;No</cfif>&nbsp;<cfif #getinfo.storage_included# is 1><b>Days&nbsp;in&nbsp;Storage</b>:&nbsp;#getinfo.days_in_storage#</cfif></font>
+</td></cfoutput>
+</tr>
+<cfif #getinfo.acessorial# is not ''>
+<tr>
+<td colspan="2">
+<font face="arial" size="2"><b>Accessorials</b>: <cfoutput>#getinfo.acessorial#</cfoutput>
+</td>
+</tr>
+</cfif>
+<cfif #getinfo.estimate_comments# is not ''>
+<tr>
+<td colspan="2">
+<font face="arial" size="2"><b>Comments</b>: <cfoutput>#getinfo.estimate_comments#</cfoutput>
+</td>
+</tr></cfif>
+</table></td></tr></table></cfif>
+<table border="1" cellspacing="0" cellpadding="2" width="100%">
+<tr>
+<td colspan="2"><div align="center"><font face="arial" size="2"><b>YOUR MOVE COST ESTIMATES</b></font></div></td>
+</tr>
+<tr>
+<td bgcolor="silver"><div align="center"><font face="arial" size="2">SERVICE PROVIDER (CARRIER)</font></div></td>
+<td bgcolor="silver"><div align="center"><font face="arial" size="2">ESTIMATE</font></div></td>
+</tr>
+<!--- check for 'other carrier' --->
+<cfif #getinfo.other_carrier# is not '' and #getinfo.other_carrier_amount# is not '' and #getinfo.other_carrier_amount# is not '0'>
+<tr><cfoutput>
+<td valign="middle"><font face="arial" size="2">#getinfo.other_carrier#</font>
+</td>
+<td valign="middle"><div align="right"><font face="arial" size="2">#getinfo.other_carrier_amount#</font></div>
+</td></cfoutput>
+</tr>
+</cfif>
+<cfquery name="getmovers" datasource="aaalh3x_onestep">
+select * from CARRIERS
+where active=1 
+order by company
+</cfquery>
+<cfloop query="getmovers">
+<cfquery name="getqt" datasource="aaalh3x_onestep">
+select * from ESTIMATES
+where carrier=#getmovers.id# and user_hook=#clientid# and amount <> ''
+</cfquery>
+<cfif #getqt.recordcount# is not 0>
+<tr><cfoutput>
+<td valign="middle"><font face="arial" size="2">#getmovers.company#</font>
+</td>
+<td valign="middle"><div align="right"><font face="arial" size="2">#getqt.amount#</font></div>
+</td></cfoutput>
+</tr></cfif></cfloop>
+</table>
+<table border="0" cellspacing="0" cellpadding="3" width="100%">
+<tr>
+<td valign="middle"><div align="center"><font face="arial" size="3"><b>BINDING</b></font></div>
+<font face="arial" size="1">For this binding estimate, carrier must deliver the shipment upon payment of 100% of the final price, which will be based on the carrier estimate selected.</font></td>
+<td valign="middle"><font face="arial" size="1">The prices on this estimate are valid when accepted and signed within 60 days. Changes to the loading date could result in a price change.  All bound services listed are included in the totals.</td>
+</tr>
+</table><hr>
+<table border="0" cellspacing="0" cellpadding="3" width="100%">
+<tr>
+<td valign="top"><font face="arial" size="1"><b>FOR QUESTIONS OR TO BOOK YOUR MOVE, PLEASE CONTACT YOUR AGENT</b></font><br>
+<font size="2" face="arial"><cfoutput><b>#verify.name#</b><br>
+<cfif #verify.phone# is not ''>#verify.phone#</cfif> <cfif #verify.email# is not ''>#verify.email#</cfif></cfoutput></font>
+</td>
+<td valign="top"><font face="arial" size="2"><b>Top12Movers</b></font><br>
+<font face="arial" size="2">1-800-289-5329<br>
+<cfoutput>#getinfo.mc_number#</cfoutput></font>
+</td>
+</tr>
+</table>
+	
+</cfmail>
+
+</cfif>
+
+<!--- check to see if this letter has already been sent --->
+<cfquery name="check_initial" datasource="aaalh3x_onestep">
+select * from LETTER_SENDS
+where send_type=8 and cust_hook=#clientid#
+</cfquery>
+<cfif #check_initial.recordcount# is not 0><!--- was already sent once --->
+<cfquery name="set_initial" datasource="aaalh3x_onestep">
+insert into LETTER_SENDS
+(send_type,sent,cust_hook,sent_date)
+values ('9','2','#clientid#','#datenow#')
+</cfquery>
+<cfelse>
+<cfquery name="set_initial" datasource="aaalh3x_onestep">
+insert into LETTER_SENDS
+(send_type,sent,cust_hook,sent_date)
+values ('8','2','#clientid#','#datenow#')
+</cfquery>
+</cfif>
+Mail Sent - Recorded that it was sent - You may now close this tab
+ 
+ <cfif parameterexists(altmail) is 'yes'>
+ <br>Send a copy to administrator<br>
+ </cfif>
+
+<cfelse>
+<style>
+    body {
+        height: 842px;
+        width: 595px;
+        /* to centre page on screen*/
+        margin-left: auto;
+        margin-right: auto;
+		margin-top: 0px;
+    }
+    </style>
+<cfif parameterexists(emailit) is 'yes'>
+<form action="estimate.cfm" method="post"><input type="hidden" name="clientid" value="<cfoutput>#clientid#</cfoutput>"><input type="hidden" name="sendmail" value="1"><cfoutput><input type="hidden" name="un" value="#un#"><input type="hidden" name="pw" value="#pw#"></cfoutput>
+<div align="center">
+<input type="submit" value="Email to <cfoutput>#getinfo.email#</cfoutput> Now"><br>
+<input type="checkbox" name="altmail" value="<cfoutput>#verify.id#</cfoutput>"> Check to send copy to yourself</div><br></form>
+</cfif>
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+<tr>
+<td width="104" valign="Middle"><img src="top12movers-logo.jpg" width="104" height="73" alt="" border="0"></td>
+<td valign="middle" width="100%"><div align="center"><font face="arial" size="3" color="black"><b>Top12Movers</b></font><font size="1"><br></font><font face="arial" size="6" color="silver"><b>ESTIMATE</b></font></div></td>
+<td align="right" width="104" valign="middle"><font face="arial" size="3"><cfoutput>#dateformat(now(), "MM/DD/YYYY")#</cfoutput></font></td>
+</tr>
+</table>
+<cfoutput>
+<table border="1" cellspacing="0" cellpadding="3" width="100%">
+<tr>
+<td bgcolor="silver" valign="middle" width="50%"><div align="center"><font face="arial" size="2"><b>MOVE FROM</b></font></div></td>
+<td bgcolor="silver" valign="middle"><div align="center"><font face="arial" size="2"><b>MOVE TO</b></font></div></td>
+</tr>
+<tr>
+<td valign="top">
+<font face="arial" size="2"><b>CUSTOMER</b>: #getinfo.first_name# #getinfo.last_name#<br>
+<b>STREET ADDRESS</b>: #getinfo.from_address#<cfif #getinfo.from_address2# is not ''>#getinfo.from_address#</cfif><br>
+<b>CITY, STATE, ZIP</b>: #getinfo.from_city#, #getinfo.from_state# #getinfo.from_zip#<br>
+<b>ORIGIN PHONE</b>: #getinfo.phone#<br>
+<b>EMAIL ADDRESS</b>: #getinfo.email#<br>
+
+</td>
+<td valign="top">
+<font face="arial" size="2">
+<b>STREET ADDRESS</b>: #getinfo.to_address# <cfif #getinfo.to_address2# is not ''>#getinfo.to_address#</cfif><br> 
+<b>CITY, STATE, ZIP</b>: #getinfo.to_city#, #getinfo.to_state# #getinfo.to_zip#<br>
+
+
+</td>
+</tr>
+</table>
+<font face="arial" size="2">
+<b>The following estimates represent the bottom line price for each of the top 12 moving carriers after discount. Please select your preferred carrier and contact your Moving Consultant to advise which company you have chosen.  After you notify your Moving Consultant, you will immediately receive an email with a survey inventory and a detailed Customer Order For Service which will include the prices from the carrier you selected.</b></font><br></cfoutput>
+<cfif (#getinfo.valuation# is not 0 AND #getinfo.valuation# is not '') OR #getinfo.packing# is not 0 OR #getinfo.move_type# is not 0 OR #getinfo.transportation# is not '' OR #getinfo.acessorial# is not ''>
+<table border="1" cellspacing="0" cellpadding="0" width="100%">
+<tr>
+<td>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr>
+<td valign="middle" width="100%"><cfif #getinfo.weight# is not ''>
+<font face="arial" size="2"><b>Estimated&nbsp;Weight</b>:&nbsp;<cfoutput>#getinfo.weight#</cfoutput></font></cfif>
+</td>
+<td valign="middle"><cfif #getinfo.miles# is not ''>
+<font face="arial" size="2"><b>Miles</b>:&nbsp;<cfoutput>#getinfo.miles#</cfoutput></font></cfif>
+</td>
+</tr>
+<tr>
+<td valign="middle">
+<cfif #getinfo.move_type# is not 0>
+<cfquery name="getmovetype" datasource="aaalh3x_onestep">
+select * from MOVE_TYPES
+where ID=#getinfo.move_type#
+</cfquery>
+<font face="arial" size="2"><b>Move&nbsp;Type</b>:&nbsp;<cfoutput>#getmovetype.type#</cfoutput></font>
+</cfif>
+</td>
+<td valign="middle">
+<font face="arial" size="2"><b>Valuation&nbsp;Included</b>:&nbsp;<cfif #getinfo.valuation_included# is not 0 AND #getinfo.valuation_included# is not ''>Yes<cfelse>No</cfif><cfif #getinfo.valuation# is not 0 and #getinfo.valuation# is not ''>&nbsp;<b>Avg.&nbsp;Amount</b>:&nbsp;$<cfoutput>#getinfo.valuation#</cfoutput></cfif></font>
+</td>
+</tr>
+<tr>
+<td valign="middle">
+<cfif #getinfo.packing# is not 0>
+<cfquery name="getpacking" datasource="aaalh3x_onestep">
+select * from PACKING_TYPES
+where ID=#getinfo.packing#
+</cfquery>
+<font face="arial" size="2"><b>Packing</b>:&nbsp;<cfoutput>#getpacking.type#</cfoutput></font>
+<cfelse>
+<font face="arial" size="2"><b>Packing</b>:&nbsp;Not&nbsp;Requested</font>
+</cfif>
+</td>
+<td valign="middle"><cfoutput>
+<font face="arial" size="2"><b>Storage&nbsp;Included</b>:<cfif #getinfo.storage_included# is 1>&nbsp;Yes<cfelse>&nbsp;No</cfif>&nbsp;<cfif #getinfo.storage_included# is 1><b>Days&nbsp;in&nbsp;Storage</b>:&nbsp;#getinfo.days_in_storage#</cfif></font>
+</td></cfoutput>
+</tr>
+<cfif #getinfo.acessorial# is not ''>
+<tr>
+<td colspan="2">
+<font face="arial" size="2"><b>Accessorials</b>: <cfoutput>#getinfo.acessorial#</cfoutput>
+</td>
+</tr>
+</cfif>
+<cfif #getinfo.estimate_comments# is not ''>
+<tr>
+<td colspan="2">
+<font face="arial" size="2"><b>Comments</b>: <cfoutput>#getinfo.estimate_comments#</cfoutput>
+</td>
+</tr></cfif>
+</table></td></tr></table></cfif>
+<table border="1" cellspacing="0" cellpadding="2" width="100%">
+<tr>
+<td colspan="2"><div align="center"><font face="arial" size="2"><b>YOUR MOVE COST ESTIMATES</b></font></div></td>
+</tr>
+<tr>
+<td bgcolor="silver"><div align="center"><font face="arial" size="2">SERVICE PROVIDER (CARRIER)</font></div></td>
+<td bgcolor="silver"><div align="center"><font face="arial" size="2">ESTIMATE</font></div></td>
+</tr>
+<!--- check for 'other carrier' --->
+<cfif #getinfo.other_carrier# is not '' and #getinfo.other_carrier_amount# is not '' and #getinfo.other_carrier_amount# is not '0'>
+<tr><cfoutput>
+<td valign="middle"><font face="arial" size="2">#getinfo.other_carrier#</font>
+</td>
+<td valign="middle"><div align="right"><font face="arial" size="2">#getinfo.other_carrier_amount#</font></div>
+</td></cfoutput>
+</tr>
+</cfif>
+<cfquery name="getmovers" datasource="aaalh3x_onestep">
+select * from CARRIERS
+where active=1 
+order by company
+</cfquery>
+<cfloop query="getmovers">
+<cfquery name="getqt" datasource="aaalh3x_onestep">
+select * from ESTIMATES
+where carrier=#getmovers.id# and user_hook=#clientid# and amount <> ''
+</cfquery>
+<cfif #getqt.recordcount# is not 0>
+<tr><cfoutput>
+<td valign="middle"><font face="arial" size="2">#getmovers.company#</font>
+</td>
+<td valign="middle"><div align="right"><font face="arial" size="2">#getqt.amount#</font></div>
+</td></cfoutput>
+</tr></cfif></cfloop>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr>
+<td valign="middle"><font face="arial" size="1">For this binding estimate, carrier must deliver the shipment upon payment of 100% of the final price, which will be based on the carrier estimate selected.</font></td>
+<td valign="middle"><font face="arial" size="1">The prices on this estimate are valid when accepted and signed within 60 days. Changes to the loading date could result in a price change.  All bound services listed are included in the totals.</td>
+</tr>
+</table>
+<table border="0" cellspacing="0" cellpadding="2" width="100%">
+<tr><Td colspan="2" height="1" bgcolor="gray"></td></tr>
+<tr>
+<td valign="top"><font face="arial" size="1"><b>FOR QUESTIONS OR TO BOOK YOUR MOVE, PLEASE CONTACT YOUR AGENT</b></font><font size="1"><br></font>
+<font size="2" face="arial"><cfoutput><b>#verify.name#</b><font size="1"><br></font>
+<cfif #verify.phone# is not ''>#verify.phone#</cfif> <cfif #verify.email# is not ''>#verify.email#</cfif></cfoutput></font>
+</td>
+<td valign="top"><font face="arial" size="2"><b>Top12Movers</b></font><font size="1"><br></font>
+<font face="arial" size="2">1-800-289-5329<font size="1"><br></font>
+<cfoutput>#getinfo.mc_number#</cfoutput></font>
+</td>
+</tr>
+</table>
+</cfif>
+</body>
+</html>

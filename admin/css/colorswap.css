@@ -1,0 +1,36 @@
+::-webkit-input-placeholder {
+    color:    #d7eded;
+}
+:-moz-placeholder {
+    color:    #d7eded;
+}
+::-moz-placeholder {
+    color:    #d7eded;
+}
+:-ms-input-placeholder {
+    color:    #d7eded;
+}
+
+input[type="text"] {
+    color:#0d3f3e;
+    background:#d7eded;
+    padding:3px;
+    margin:5px;
+    font-family:Arial;
+    border:1px solid #666;
+}
+
+.remindmedropdown {
+    color:#0d3f3e;
+    background:#d7eded;
+    padding:1px;
+    margin:5px;
+    font-family:Arial;
+    border:1px solid #666;
+	width:100px;
+	height:26px;
+	display: block;
+    float: none;
+}
+
+.remindmedropdown option { color: 0d3f3e; }

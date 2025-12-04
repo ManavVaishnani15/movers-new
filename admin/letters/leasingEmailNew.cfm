@@ -1,0 +1,414 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<cfset datenow = dateformat(now(), "YYYY-MM-DD")>
+<html>
+<head>
+<cfif parameterexists(clientid) is 'yes'>
+<cfquery name="getinfo" datasource="aaalh3x_onestep">
+select * from realtor_records
+where id=#clientid#
+</cfquery>
+</cfif>
+<html>
+<head>
+    <title><cfif parameterexists(clientid) is 'yes'><cfoutput>#getinfo.repfirstname# #getinfo.replastname#</cfoutput></cfif></title>
+    <style>
+    body {
+        height: 842px;
+        width: 595px;
+        /* to centre page on screen*/
+        margin-left: auto;
+        margin-right: auto;
+    }
+    </style>
+</head>
+<cfif parameterexists(un) is 'no'>
+<b>Log In</b><br>
+<form action="main.cfm" method="post">
+username <input type="text" name="username" size="15"><br>
+password <input type="password" name="password" size="15"><br>
+<input type="submit" value="Log In">
+</form>
+<cfabort>
+<cfelse>
+<cfquery name="verify" datasource="aaalh3x_onestep">
+select * from MEMBERS
+where username='#un#' and temp_pw=#pw# and active=1
+</cfquery>
+ <cfif #verify.recordcount# is 0>
+ <b>Log In</b><br>
+ <form action="main.cfm" method="post">
+ username <input type="text" name="username" size="15"><br>
+ password <input type="password" name="password" size="15"><br>
+ <input type="submit" value="Log In">
+ </form>
+ <cfabort>
+ </cfif>
+</cfif>
+<body>
+<cfquery name="getinfo" datasource="aaalh3x_onestep">
+select * from realtor_records
+where id=#clientid#
+</cfquery>
+
+<cfif parameterexists(sendmail) is 'yes'>
+    <cfmail
+     server="vps.affordableusamovers.com"
+      username="referral-agents@nationwideusamovers.com" 
+      password="Guido1935$" 
+      port="587" 
+      useSSL="false"
+    TO="#getinfo.agentEmail#"
+    FROM="referral-agents@nationwideusamovers.com"
+    SUBJECT="Move Referral Program-Nationwide USA Movers"
+    TYPE="HTML">
+            <style>
+		    body {
+		        height: 842px;
+		        width: 895px;
+		        /* to centre page on screen*/
+		        margin-left: auto;
+		        margin-right: auto;
+		        margin-top: 0px;
+		        font-family:calibri;
+		    }
+		    table{
+		    		font-family:calibri;
+		    	}
+			.fontbold{
+				font-weight:bold;
+			}
+			.fontsize12{
+				font-size:12px;
+				color:##666;
+				font-style:italic;
+			}
+			.fontsize13{
+				font-size:13px;
+			}
+			.fontsize14{
+				font-size:14px;
+			}
+            </style>
+            
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+  <tr>
+    <td width="20%" align="center"><img src="http://www.top12movingbiz.com/admin/letters/images/1/Logo.jpg" width="90%"></td>
+    <td width="50%">&nbsp;</td>
+    <td width="20%" align="right" valign="bottom"><p class="fontsize14 fontbold"><cfoutput>#DateFormat(Now(), "mm/dd/yyyy")#</cfoutput></p></td>
+  </tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+  <tr>
+    <td>
+	<span class="fontsize13">Dear #trim(getinfo.repfirstname)# #trim(getinfo.replastname)#,<br><br>
+    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We see that you are a leasing professional or in property management at #trim(getinfo.Companyname)# and you have rental properties at #trim(getinfo.ListingAddress)#.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nationwide USA Movers is looking for property managers and leasing professionals in your area 
+to create a durable partnership and assist with referring clients that are renting a property and need 
+professional moving services.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We have in place a "Customer Referral Program" just for professionals in your line of work, 
+where you can <span style="text-decoration:underline">earn referral fees for each and every referred customer that will be using our services 
+for their move. Moreover, you have the opportunity to refer colleagues or friends as referral agents
+and earn referral fees for every customer that they refer to us and uses our moving services.</span><br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interested in our "Customer Referral Program"? <br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please visit our website at <span style="color:blue;">www.nationwideusamovers.com</span>. "Click" on "Customer Referral 
+Program" inside the blue button and fill out the quick and easy online form to sign up to our referral 
+program for absolutely free. When signing up, type in your new assigned Agent Referral Code <span style="color:red;text-decoration:underline">#trim(getinfo.ReferralCode)#</span>
+for granting discounts on moving to your referred clients.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nationwide USA Movers is a federally licensed and FMCSA-authorized move manager and 
+broker with more than 30 years of experience in the moving industry.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We have partnered with agents from the major Van Lines and 7000 other professionally licensed 
+and insured moving companies nationwide to offer your clients that are renting apartments or properties, a variety of moving services all in one stop. All moves are virtually surveyed for accuracy and 
+ease.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We will find quality movers at affordable prices and, manage your referred customers and clients' move from start to finish.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thank you for taking the time to read this letter. We look forward to starting a partnership with 
+you and your company.<br><br>
+
+
+Sincerely<br><br><br>
+
+Anthony L. Booker<br>
+Real Estate & Business Development<br>
+Nationwide USA Movers<br>
+1-800-922-1475<br>
+
+</span>
+    </td>
+  </tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+  <tr>
+    <td width="90%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="center">
+    <span class="fontsize12">Nationwide USA Movers Inc<br />
+244 Fifth Avenue, Suite 1297<br />
+New York, NY 10001<br />
+MC ##945837 USDOT## 3558324</span>
+    </td>
+  </tr>
+</table>      
+    </cfmail>
+
+
+    <cfif parameterexists(altmail) is 'yes'>
+
+    <cfmail
+     server="vps.affordableusamovers.com"
+      username="referral-agents@nationwideusamovers.com" 
+      password="Guido1935$" 
+      port="587" 
+      useSSL="false"
+    TO="#verify.email#"
+    FROM="referral-agents@nationwideusamovers.com"
+    SUBJECT="Move Referral Program-Nationwide USA Movers"
+    TYPE="HTML">
+        <style>
+		    body {
+		        height: 842px;
+		        width: 895px;
+		        /* to centre page on screen*/
+		        margin-left: auto;
+		        margin-right: auto;
+		        margin-top: 0px;
+		        font-family:calibri;
+		    }
+		    table{
+		    		font-family:calibri;
+		    	}
+			.fontbold{
+				font-weight:bold;
+			}
+			.fontsize12{
+				font-size:12px;
+				color:##666;
+				font-style:italic;
+			}
+			.fontsize13{
+				font-size:13px;
+			}
+			.fontsize14{
+				font-size:14px;
+			}
+            </style>
+            
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+  <tr>
+    <td width="20%" align="center"><img src="http://www.top12movingbiz.com/admin/letters/images/1/Logo.jpg" width="90%"></td>
+    <td width="50%">&nbsp;</td>
+    <td width="20%" align="right" valign="bottom"><p class="fontsize14 fontbold"><cfoutput>#DateFormat(Now(), "mm/dd/yyyy")#</cfoutput></p></td>
+  </tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+  <tr>
+    <td>
+	<span class="fontsize13">Dear #trim(getinfo.repfirstname)# #trim(getinfo.replastname)#,<br><br>
+    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We see that you are a leasing professional or in property management at #trim(getinfo.Companyname)# and you have rental properties at #trim(getinfo.ListingAddress)#.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nationwide USA Movers is looking for property managers and leasing professionals in your area 
+to create a durable partnership and assist with referring clients that are renting a property and need 
+professional moving services.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We have in place a "Customer Referral Program" just for professionals in your line of work, 
+where you can <span style="text-decoration:underline">earn referral fees for each and every referred customer that will be using our services 
+for their move. Moreover, you have the opportunity to refer colleagues or friends as referral agents
+and earn referral fees for every customer that they refer to us and uses our moving services.</span><br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interested in our "Customer Referral Program"? <br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please visit our website at <span style="color:blue;">www.nationwideusamovers.com</span>. "Click" on "Customer Referral 
+Program" inside the blue button and fill out the quick and easy online form to sign up to our referral 
+program for absolutely free. When signing up, type in your new assigned Agent Referral Code <span style="color:red;text-decoration:underline">#trim(getinfo.ReferralCode)#</span>
+for granting discounts on moving to your referred clients.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nationwide USA Movers is a federally licensed and FMCSA-authorized move manager and 
+broker with more than 30 years of experience in the moving industry.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We have partnered with agents from the major Van Lines and 7000 other professionally licensed 
+and insured moving companies nationwide to offer your clients that are renting apartments or properties, a variety of moving services all in one stop. All moves are virtually surveyed for accuracy and 
+ease.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We will find quality movers at affordable prices and, manage your referred customers and clients' move from start to finish.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thank you for taking the time to read this letter. We look forward to starting a partnership with 
+you and your company.<br><br>
+
+
+Sincerely<br><br><br>
+
+Anthony L. Booker<br>
+Real Estate & Business Development<br>
+Nationwide USA Movers<br>
+1-800-922-1475<br>
+
+</span>
+    </td>
+  </tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+  <tr>
+    <td width="90%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="center">
+    <span class="fontsize12">Nationwide USA Movers Inc<br />
+244 Fifth Avenue, Suite 1297<br />
+New York, NY 10001<br />
+MC ##945837 USDOT## 3558324</span>
+    </td>
+  </tr>
+</table>
+            
+    </cfmail>
+
+    </cfif>
+
+    <!--- check to see if this letter has already been sent --->
+    <cfquery name="check_initial" datasource="aaalh3x_onestep">
+    select * from realtor_LETTER_SENDS
+    where send_type=10 and cust_hook=#clientid#
+    </cfquery>
+    <cfif #check_initial.recordcount# is not 0><!--- was already sent once --->
+        <cfquery name="set_initial" datasource="aaalh3x_onestep">
+        insert into realtor_LETTER_SENDS
+        (send_type,sent,cust_hook,sent_date)
+        values ('11','2','#clientid#','#datenow#')
+        </cfquery>
+    <cfelse>
+        <cfquery name="set_initial" datasource="aaalh3x_onestep">
+        insert into realtor_LETTER_SENDS
+        (send_type,sent,cust_hook,sent_date)
+        values ('10','2','#clientid#','#datenow#')
+        </cfquery>
+    </cfif>
+    	Mail Sent - Recorded that it was sent - You may now close this tab
+     
+     <cfif parameterexists(altmail) is 'yes'>
+     <br>Send a copy to administrator<br>
+     </cfif>
+
+<cfelse>
+<style>
+    body {
+        height: 842px;
+        width: 895px;
+        /* to centre page on screen*/
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 0px;
+        font-family:calibri;
+    }
+    table{
+    		font-family:calibri;
+    	}
+	.fontbold{
+		font-weight:bold;
+	}
+	.fontsize12{
+		font-size:12px;
+		color:#666;
+		font-style:italic;
+	}
+	.fontsize13{
+		font-size:13px;
+	}
+	.fontsize14{
+		font-size:14px;
+	}
+    </style>
+<cfif parameterexists(emailit) is 'yes' and getinfo.agentEmail neq "">
+<form action="leasingEmailNew.cfm" method="post"><input type="hidden" name="clientid" value="<cfoutput>#clientid#</cfoutput>"><input type="hidden" name="sendmail" value="1"><cfoutput><input type="hidden" name="un" value="#un#"><input type="hidden" name="pw" value="#pw#"></cfoutput>
+<div align="center">
+<input type="submit" value="Email to <cfoutput>#getinfo.agentEmail#</cfoutput> Now"><br>
+<input type="checkbox" name="altmail" value="<cfoutput>#verify.id#</cfoutput>"> Check to send copy to yourself</div><br></form>
+<cfelseif getinfo.agentEmail eq "">
+<div align="center">You must back up and fill in the email address field</div>
+</cfif>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+  <tr>
+    <td width="20%" align="center"><img src="http://www.top12movingbiz.com/admin/letters/images/1/Logo.jpg" width="90%"></td>
+    <td width="50%">&nbsp;</td>
+    <td width="20%" align="right" valign="bottom"><p class="fontsize14 fontbold"><cfoutput>#DateFormat(Now(), "mm/dd/yyyy")#</cfoutput></p></td>
+  </tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+  <tr>
+    <td>
+<cfoutput>	<span class="fontsize13">Dear #trim(getinfo.repfirstname)# #trim(getinfo.replastname)#,<br><br>
+    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We see that you are a leasing professional or in property management at #trim(getinfo.Companyname)# and you have rental properties at #trim(getinfo.ListingAddress)#.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nationwide USA Movers is looking for property managers and leasing professionals in your area 
+to create a durable partnership and assist with referring clients that are renting a property and need 
+professional moving services.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We have in place a "Customer Referral Program" just for professionals in your line of work, 
+where you can <span style="text-decoration:underline">earn referral fees for each and every referred customer that will be using our services 
+for their move. Moreover, you have the opportunity to refer colleagues or friends as referral agents
+and earn referral fees for every customer that they refer to us and uses our moving services.</span><br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interested in our "Customer Referral Program"? <br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please visit our website at <span style="color:blue;">www.nationwideusamovers.com</span>. "Click" on "Customer Referral 
+Program" inside the blue button and fill out the quick and easy online form to sign up to our referral 
+program for absolutely free. When signing up, type in your new assigned Agent Referral Code <span style="color:red;text-decoration:underline">#trim(getinfo.ReferralCode)#</span>
+for granting discounts on moving to your referred clients.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nationwide USA Movers is a federally licensed and FMCSA-authorized move manager and 
+broker with more than 30 years of experience in the moving industry.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We have partnered with agents from the major Van Lines and 7000 other professionally licensed 
+and insured moving companies nationwide to offer your clients that are renting apartments or properties, a variety of moving services all in one stop. All moves are virtually surveyed for accuracy and 
+ease.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We will find quality movers at affordable prices and, manage your referred customers and clients' move from start to finish.<br><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thank you for taking the time to read this letter. We look forward to starting a partnership with 
+you and your company.<br><br>
+
+
+Sincerely<br><br><br>
+
+Anthony L. Booker<br>
+Real Estate & Business Development<br>
+Nationwide USA Movers<br>
+1-800-922-1475<br>
+
+</span></cfoutput>
+    </td>
+  </tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+  <tr>
+    <td width="90%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="center">
+    <span class="fontsize12">Nationwide USA Movers Inc<br />
+244 Fifth Avenue, Suite 1297<br />
+New York, NY 10001<br />
+MC #945837 USDOT# 3558324</span>
+    </td>
+  </tr>
+</table>
+
+</cfif>
+</body>
+</html>
