@@ -426,9 +426,44 @@ SET repfirstname = '#Rep_first_name#', replastname = '#Rep_last_name#', cellphon
 	streetaddress = '#Rep_address#', city = '#Rep_city#', state = '#Rep_State#', zip = '#rep_zip#', County = '#County#',
     Phone = '#Rep_Phone#', fax = '#fax#', mailingaddress = '#mailingaddress#', mailingCity = '#mailingcity#',
     mailingState = '#mailingState#', mailingZip = '#mailingzip#', mailingCounty = '#mailingCounty#',
-    CompanyName = '#CompanyName#', AccountStatus = '#AccountStatus#', MC = '#MC#', USDOT = '#USDOT#'
+    CompanyName = '#CompanyName#', AccountStatus = '#AccountStatus#', MC = '#MC#', USDOT = '#USDOT#',
+    DBA1 = '#DBA1#', DBA2 = '#DBA2#', AddToListOfCarriers = '#AddToListOfCarriers#', StateDOT = '#StateDOT#',
+    cellphone2 = '#Rep_cellPhone2#', cellphone3 = '#Rep_cellPhone3#', cellphone4 = '#Rep_cellPhone4#',
+    Emailaddress2 = '#Rep_email2#', Emailaddress3 = '#Rep_email3#', Emailaddress4 = '#Rep_email4#',
+    CompanyPosition = '#Rep_Position#', CompanyWebsite = '#CompanyWebsite#',
+    Rep2firstname = '#Rep2_first_name#', Rep2lastname = '#Rep2_last_name#', Rep2phone = '#Rep2_Phone#',
+    Rep2Emailaddress = '#Rep2_email#', Rep2cellphone = '#Rep2_cellPhone#', Rep2Position = '#Rep2_Position#',
+    Rep2cellphone2 = '#Rep2_cellPhone2#', Rep2cellphone3 = '#Rep2_cellPhone3#', Rep2cellphone4 = '#Rep2_cellPhone4#',
+    Rep2Emailaddress2 = '#Rep2_email2#', Rep2Emailaddress3 = '#Rep2_email3#', Rep2Emailaddress4 = '#Rep2_email4#',
+    Rep3firstname = '#Rep3_first_name#', Rep3lastname = '#Rep3_last_name#', Rep3phone = '#Rep3_Phone#',
+    Rep3Emailaddress = '#Rep3_email#', Rep3cellphone = '#Rep3_cellPhone#', Rep3Position = '#Rep3_Position#',
+    Rep3cellphone2 = '#Rep3_cellPhone2#', Rep3cellphone3 = '#Rep3_cellPhone3#', Rep3cellphone4 = '#Rep3_cellPhone4#',
+    Rep3Emailaddress2 = '#Rep3_email2#', Rep3Emailaddress3 = '#Rep3_email3#', Rep3Emailaddress4 = '#Rep3_email4#'
 WHERE ID = #ClientID#
 </cfquery>
+ <!--- Add to Carrier List if requested --->
+ <cfif IsDefined("form.AddToListOfCarriers")>
+   <cfquery name="checkCarrierList" datasource="aaalh3x_onestep">
+     SELECT ID FROM carrier_list WHERE CarrierID = #ClientID#
+   </cfquery>
+   <cfif checkCarrierList.RecordCount EQ 0>
+     <!--- Insert new record with AddToList value (1 for Yes, 0 for No) --->
+     <cfquery name="addCarrierList" datasource="aaalh3x_onestep">
+       INSERT INTO carrier_list (CompanyName, USDOT, MC, CarrierID, AddToList)
+       VALUES ('#CompanyName#', '#USDOT#', '#MC#', #ClientID#, <cfif form.AddToListOfCarriers eq "Yes">1<cfelse>0</cfif>)
+     </cfquery>
+   <cfelse>
+     <!--- Update existing record with AddToList value (1 for Yes, 0 for No) --->
+     <cfquery name="updateCarrierList" datasource="aaalh3x_onestep">
+       UPDATE carrier_list SET
+         CompanyName = '#CompanyName#',
+         USDOT = '#USDOT#',
+         MC = '#MC#',
+         AddToList = <cfif form.AddToListOfCarriers eq "Yes">1<cfelse>0</cfif>
+       WHERE CarrierID = #ClientID#
+     </cfquery>
+   </cfif>
+ </cfif>
 <!--- update more info ---->
 <cfquery name="checkMoreInfo" datasource="aaalh3x_onestep">
 SELECT *
@@ -441,6 +476,7 @@ WHERE ClientID = #ClientID#
 	SET TruckNumberSize = '#TruckNumberSize#',
 		TractorNumber = '#TractorNumber#',
 		TrailerNumber = '#TrailerNumber#',
+		TotalDrivers = '#TotalDrivers#',
 		BIPDLevel = '#BIPDLevel#',
 		CargoLevel = '#CargoLevel#',
 		ThirdPartyMoveIns = '#ThirdPartyMoveIns#',
@@ -452,8 +488,8 @@ WHERE ClientID = #ClientID#
 	</cfquery>
 <cfelse>
 	<cfquery name="insertInfo" datasource="aaalh3x_onestep">
-	INSERT INTO carrier_moreinfo(ClientID,TruckNumberSize,TractorNumber,TrailerNumber,BIPDLevel,CargoLevel,ThirdPartyMoveIns,StorageFacilities,StorageComments,PublishedTariffRates,PublishedTariffRateComments)
-	VALUES(#ClientID#,'#TruckNumberSize#','#TractorNumber#','#TrailerNumber#','#BIPDLevel#','#CargoLevel#','#ThirdPartyMoveIns#','#StorageFacilities#','#StorageComments#','#PublishedTariffRates#','#PublishedTariffRateComments#')
+	INSERT INTO carrier_moreinfo(ClientID,TruckNumberSize,TractorNumber,TrailerNumber,TotalDrivers,BIPDLevel,CargoLevel,ThirdPartyMoveIns,StorageFacilities,StorageComments,PublishedTariffRates,PublishedTariffRateComments)
+	VALUES(#ClientID#,'#TruckNumberSize#','#TractorNumber#','#TrailerNumber#','#TotalDrivers#','#BIPDLevel#','#CargoLevel#','#ThirdPartyMoveIns#','#StorageFacilities#','#StorageComments#','#PublishedTariffRates#','#PublishedTariffRateComments#')
 	</cfquery>
 </cfif>
 
@@ -713,6 +749,37 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
       </div>
     <div class="row">
         <div class="small-3 columns">
+          <label for="DBA1" class="text-left middle">1st DBA</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="DBA1" size="20" id="DBA1" placeholder="1st DBA" value="#DBA1#">
+        </div>
+        <div class="small-3 columns">
+          <label for="AddToListOfCarriers" class="text-left middle">Add to List of Carriers</label>
+        </div>
+        <div class="small-3 columns">
+          <select name="AddToListOfCarriers" id="AddToListOfCarriers">
+          	<option value="Yes"<cfif AddToListOfCarriers eq "Yes" or AddToListOfCarriers eq ""> selected</cfif>>YES</option>
+          	<option value="No"<cfif AddToListOfCarriers eq "No"> selected</cfif>>NO</option>
+          </select>
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="DBA2" class="text-left middle">2nd DBA</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="DBA2" size="20" id="DBA2" placeholder="2nd DBA" value="#DBA2#">
+        </div>
+        <div class="small-3 columns">
+          <label for="StateDOT" class="text-left middle">State DOT##</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="StateDOT" size="20" id="StateDOT" placeholder="State DOT Number" value="#StateDOT#">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
           <label for="MC" class="text-left middle">MC##</label>
         </div>
         <div class="small-3 columns">
@@ -767,66 +834,251 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
           <input type="text" name="Rep_cellPhone" size="20" id="Rep_cellPhone" placeholder="Cell Phone" value="#cellphone#">
         </div>
         <div class="small-3 columns">
+          <label for="Rep_email2" class="text-left middle">Email 2</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep_email2" size="20" id="Rep_email2" placeholder="Email 2" value="#Emailaddress2#">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="Rep_cellPhone2" class="text-left middle">Cell Phone 2</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep_cellPhone2" size="20" id="Rep_cellPhone2" placeholder="Cell Phone 2" value="#cellphone2#">
+        </div>
+        <div class="small-3 columns">
+          <label for="Rep_email3" class="text-left middle">Email 3</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep_email3" size="20" id="Rep_email3" placeholder="Email 3" value="#Emailaddress3#">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="Rep_cellPhone3" class="text-left middle">Cell Phone 3</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep_cellPhone3" size="20" id="Rep_cellPhone3" placeholder="Cell Phone 3" value="#cellphone3#">
+        </div>
+        <div class="small-3 columns">
+          <label for="Rep_email4" class="text-left middle">Email 4</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep_email4" size="20" id="Rep_email4" placeholder="Email 4" value="#Emailaddress4#">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="Rep_cellPhone4" class="text-left middle">Cell Phone 4</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep_cellPhone4" size="20" id="Rep_cellPhone4" placeholder="Cell Phone 4" value="#cellphone4#">
+        </div>
+        <div class="small-3 columns">
           <label for="Fax" class="text-left middle">Fax</label>
         </div>
         <div class="small-3 columns">
           <input type="text" name="Fax" size="20" id="Fax" placeholder="Fax" value="#Fax#">
         </div>
       </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="Rep_Position" class="text-left middle">Position in Company</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep_Position" size="20" id="Rep_Position" placeholder="Company Position" value="#CompanyPosition#">
+        </div>
+        <div class="small-3 columns">
+          <label for="CompanyWebsite" class="text-left middle">Company Website</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="CompanyWebsite" size="20" id="CompanyWebsite" placeholder="Website" value="#CompanyWebsite#">
+        </div>
+      </div>
       </cfoutput>
 	</fieldset>
-	
-    <fieldset class="fieldset">
-    <legend><strong>Physical Address</strong></legend>
-  <cfoutput query="getInfo">
 
+	<fieldset class="fieldset">
+    <legend><strong>Company Representative 2</strong></legend>
+  <cfoutput query="getInfo">
     <div class="row">
         <div class="small-3 columns">
-          <label for="Rep_address" class="text-left middle">Address</label>
+          <label for="Rep2_first_name" class="text-left middle">First Name</label>
         </div>
         <div class="small-3 columns">
-          <input type="text" name="Rep_address" size="20" id="Rep_address" placeholder="Address" value="#streetaddress#">
+          <input type="text" name="Rep2_first_name" size="20" id="Rep2_first_name" placeholder="First Name" value="#Rep2firstname#">
         </div>
         <div class="small-3 columns">
-          <label for="Rep_city" class="text-left middle">City</label>
+          <label for="Rep2_last_name" class="text-left middle">Last Name</label>
         </div>
         <div class="small-3 columns">
-          <input type="text" name="Rep_city" size="20" id="Rep_city" placeholder="City" value="#city#">
+          <input type="text" name="Rep2_last_name" size="20" id="Rep2_last_name" placeholder="Last Name" value="#Rep2lastname#">
         </div>
       </div>
     <div class="row">
         <div class="small-3 columns">
-          <label for="Rep_State" class="text-left middle">State</label>
+          <label for="Rep2_Phone" class="text-left middle">Phone</label>
         </div>
         <div class="small-3 columns">
-          <input type="text" name="Rep_State" size="20" id="Rep_State" placeholder="Sate" value="#state#">
+          <input type="text" name="Rep2_Phone" size="20" id="Rep2_Phone" placeholder="Phone" value="#Rep2phone#">
         </div>
         <div class="small-3 columns">
-          <label for="Rep_zip" class="text-left middle">Zip</label>
+          <label for="Rep2_email" class="text-left middle">Email</label>
         </div>
         <div class="small-3 columns">
-          <input type="text" name="Rep_zip" size="20" id="Rep_zip" placeholder="City" value="#zip#">
+          <input type="text" name="Rep2_email" size="20" id="Rep2_email" placeholder="Email" value="#Rep2Emailaddress#">
         </div>
       </div>
     <div class="row">
         <div class="small-3 columns">
-          <label for="County" class="text-left middle">County</label>
+          <label for="Rep2_cellPhone" class="text-left middle">Cell Phone</label>
         </div>
         <div class="small-3 columns">
-          <input type="text" name="County" size="20" id="County" placeholder="County" value="#County#">
+          <input type="text" name="Rep2_cellPhone" size="20" id="Rep2_cellPhone" placeholder="Cell Phone" value="#Rep2cellphone#">
         </div>
         <div class="small-3 columns">
-          
+          <label for="Rep2_email2" class="text-left middle">Email 2</label>
         </div>
         <div class="small-3 columns">
-          
+          <input type="text" name="Rep2_email2" size="20" id="Rep2_email2" placeholder="Email 2" value="#Rep2Emailaddress2#">
         </div>
       </div>
-    
-    </cfoutput>
-    </fieldset>
-    
-    
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="Rep2_cellPhone2" class="text-left middle">Cell Phone 2</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep2_cellPhone2" size="20" id="Rep2_cellPhone2" placeholder="Cell Phone 2" value="#Rep2cellphone2#">
+        </div>
+        <div class="small-3 columns">
+          <label for="Rep2_email3" class="text-left middle">Email 3</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep2_email3" size="20" id="Rep2_email3" placeholder="Email 3" value="#Rep2Emailaddress3#">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="Rep2_cellPhone3" class="text-left middle">Cell Phone 3</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep2_cellPhone3" size="20" id="Rep2_cellPhone3" placeholder="Cell Phone 3" value="#Rep2cellphone3#">
+        </div>
+        <div class="small-3 columns">
+          <label for="Rep2_email4" class="text-left middle">Email 4</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep2_email4" size="20" id="Rep2_email4" placeholder="Email 4" value="#Rep2Emailaddress4#">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="Rep2_cellPhone4" class="text-left middle">Cell Phone 4</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep2_cellPhone4" size="20" id="Rep2_cellPhone4" placeholder="Cell Phone 4" value="#Rep2cellphone4#">
+        </div>
+        <div class="small-3 columns">
+          <label for="Rep2_Position" class="text-left middle">Position in Company</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep2_Position" size="20" id="Rep2_Position" placeholder="Company Position" value="#Rep2Position#">
+        </div>
+      </div>
+      </cfoutput>
+	</fieldset>
+
+	<fieldset class="fieldset">
+    <legend><strong>Company Representative 3</strong></legend>
+  <cfoutput query="getInfo">
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="Rep3_first_name" class="text-left middle">First Name</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep3_first_name" size="20" id="Rep3_first_name" placeholder="First Name" value="#Rep3firstname#">
+        </div>
+        <div class="small-3 columns">
+          <label for="Rep3_last_name" class="text-left middle">Last Name</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep3_last_name" size="20" id="Rep3_last_name" placeholder="Last Name" value="#Rep3lastname#">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="Rep3_Phone" class="text-left middle">Phone</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep3_Phone" size="20" id="Rep3_Phone" placeholder="Phone" value="#Rep3phone#">
+        </div>
+        <div class="small-3 columns">
+          <label for="Rep3_email" class="text-left middle">Email</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep3_email" size="20" id="Rep3_email" placeholder="Email" value="#Rep3Emailaddress#">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="Rep3_cellPhone" class="text-left middle">Cell Phone</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep3_cellPhone" size="20" id="Rep3_cellPhone" placeholder="Cell Phone" value="#Rep3cellphone#">
+        </div>
+        <div class="small-3 columns">
+          <label for="Rep3_email2" class="text-left middle">Email 2</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep3_email2" size="20" id="Rep3_email2" placeholder="Email 2" value="#Rep3Emailaddress2#">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="Rep3_cellPhone2" class="text-left middle">Cell Phone 2</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep3_cellPhone2" size="20" id="Rep3_cellPhone2" placeholder="Cell Phone 2" value="#Rep3cellphone2#">
+        </div>
+        <div class="small-3 columns">
+          <label for="Rep3_email3" class="text-left middle">Email 3</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep3_email3" size="20" id="Rep3_email3" placeholder="Email 3" value="#Rep3Emailaddress3#">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="Rep3_cellPhone3" class="text-left middle">Cell Phone 3</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep3_cellPhone3" size="20" id="Rep3_cellPhone3" placeholder="Cell Phone 3" value="#Rep3cellphone3#">
+        </div>
+        <div class="small-3 columns">
+          <label for="Rep3_email4" class="text-left middle">Email 4</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep3_email4" size="20" id="Rep3_email4" placeholder="Email 4" value="#Rep3Emailaddress4#">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="Rep3_cellPhone4" class="text-left middle">Cell Phone 4</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep3_cellPhone4" size="20" id="Rep3_cellPhone4" placeholder="Cell Phone 4" value="#Rep3cellphone4#">
+        </div>
+        <div class="small-3 columns">
+          <label for="Rep3_Position" class="text-left middle">Position in Company</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Rep3_Position" size="20" id="Rep3_Position" placeholder="Company Position" value="#Rep3Position#">
+        </div>
+      </div>
+      </cfoutput>
+	</fieldset>
+	  
     <fieldset class="fieldset">
     <legend><strong>Mailing Address</strong></legend>
   <cfoutput query="getInfo">
@@ -876,7 +1128,57 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
     
     </cfoutput>
     </fieldset>
-    
+
+    <fieldset class="fieldset">
+      <legend><strong>Physical Address</strong></legend>
+    <cfoutput query="getInfo">
+
+      <div class="row">
+          <div class="small-3 columns">
+            <label for="Rep_address" class="text-left middle">Address</label>
+          </div>
+          <div class="small-3 columns">
+            <input type="text" name="Rep_address" size="20" id="Rep_address" placeholder="Address" value="#streetaddress#">
+          </div>
+          <div class="small-3 columns">
+            <label for="Rep_city" class="text-left middle">City</label>
+          </div>
+          <div class="small-3 columns">
+            <input type="text" name="Rep_city" size="20" id="Rep_city" placeholder="City" value="#city#">
+          </div>
+        </div>
+      <div class="row">
+          <div class="small-3 columns">
+            <label for="Rep_State" class="text-left middle">State</label>
+          </div>
+          <div class="small-3 columns">
+            <input type="text" name="Rep_State" size="20" id="Rep_State" placeholder="Sate" value="#state#">
+          </div>
+          <div class="small-3 columns">
+            <label for="Rep_zip" class="text-left middle">Zip</label>
+          </div>
+          <div class="small-3 columns">
+            <input type="text" name="Rep_zip" size="20" id="Rep_zip" placeholder="City" value="#zip#">
+          </div>
+        </div>
+      <div class="row">
+          <div class="small-3 columns">
+            <label for="County" class="text-left middle">County</label>
+          </div>
+          <div class="small-3 columns">
+            <input type="text" name="County" size="20" id="County" placeholder="County" value="#County#">
+          </div>
+          <div class="small-3 columns">
+            
+          </div>
+          <div class="small-3 columns">
+            
+          </div>
+        </div>
+      
+      </cfoutput>
+      </fieldset>
+
     <fieldset class="fieldset">
     <legend><strong>More Info</strong></legend>
     <cfquery name="getMoreInfo" datasource="aaalh3x_onestep">
@@ -887,24 +1189,10 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
     <cfoutput>
     <div class="row">
         <div class="small-3 columns">
-          <label for="trucksNumber" class="text-left middle">Trucks - Number and Size</label>
+          <label for="trucksNumber" class="text-left middle">Total number of Trucks</label>
         </div>
         <div class="small-3 columns">
-          <input type="text" name="TruckNumberSize" size="20" id="TruckNumberSize" placeholder="Trucks - Number and Size" value="<cfif getMoreInfo.RecordCount>#getMoreInfo.TruckNumberSize#</cfif>">
-        </div>
-        <div class="small-3 columns">
-          <label for="tractorNumber" class="text-left middle">Tractor Number</label>
-        </div>
-        <div class="small-3 columns">
-          <input type="text" name="tractorNumber" size="20" id="tractorNumber" placeholder="Tractor Number" value="<cfif getMoreInfo.RecordCount>#getMoreInfo.TractorNumber#</cfif>">
-        </div>
-      </div>
-    <div class="row">
-        <div class="small-3 columns">
-          <label for="trailerNumber" class="text-left middle">Trailer Number</label>
-        </div>
-        <div class="small-3 columns">
-          <input type="text" name="trailerNumber" size="20" id="trailerNumber" placeholder="Trailer Number" value="<cfif getMoreInfo.RecordCount>#getMoreInfo.TrailerNumber#</cfif>">
+          <input type="text" name="TruckNumberSize" size="20" id="TruckNumberSize" placeholder="Total number of Trucks" value="<cfif getMoreInfo.RecordCount>#getMoreInfo.TruckNumberSize#</cfif>">
         </div>
         <div class="small-3 columns">
           <label for="BIPDLevel" class="text-left middle">BIPD Level</label>
@@ -915,16 +1203,60 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
       </div>
     <div class="row">
         <div class="small-3 columns">
+          <label for="trailerNumber" class="text-left middle">Total Number of Trailers</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="trailerNumber" size="20" id="trailerNumber" placeholder="Total number of Trailers" value="<cfif getMoreInfo.RecordCount>#getMoreInfo.TrailerNumber#</cfif>">
+        </div>
+        <div class="small-3 columns">
           <label for="cargoLevel" class="text-left middle">Cargo Level</label>
         </div>
         <div class="small-3 columns">
           <input type="text" name="cargoLevel" size="20" id="cargoLevel" placeholder="Cargo Level" value="<cfif getMoreInfo.RecordCount>#getMoreInfo.CargoLevel#</cfif>">
         </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="tractorNumber" class="text-left middle">Total Number of Tractors</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="tractorNumber" size="20" id="tractorNumber" placeholder="Total number of Tractors" value="<cfif getMoreInfo.RecordCount>#getMoreInfo.TractorNumber#</cfif>">
+        </div>
+        <div class="small-3 columns">
+          
+        </div>
+        <div class="small-3 columns">
+          
+        </div>
+      </div>
+
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="TotalDrivers" class="text-left middle">Total Number of Drivers</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="TotalDrivers" size="20" id="TotalDrivers" placeholder="Total number of Drivers" value="<cfif getMoreInfo.RecordCount>#getMoreInfo.TotalDrivers#</cfif>">
+        </div>
+        <div class="small-3 columns">
+          
+        </div>
+        <div class="small-3 columns">
+          
+        </div>
+      </div>
+
+    <div class="row">
         <div class="small-3 columns">
           <label for="thirdPartyIns" class="text-left middle">Third Party Moving Ins.</label>
         </div>
         <div class="small-3 columns">
           <input type="text" name="ThirdPartyMoveIns" size="20" id="ThirdPartyMoveIns" placeholder="Third Party Moving Ins." value="<cfif getMoreInfo.RecordCount>#getMoreInfo.ThirdPartyMoveIns#</cfif>">
+        </div>
+        <div class="small-3 columns">
+          
+        </div>
+        <div class="small-3 columns">
+          
         </div>
       </div>
     <div class="row">
@@ -953,6 +1285,56 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
         </div>
         <div class="small-3 columns">
           <input type="text" name="PublishedTariffRateComments" size="20" id="PublishedTariffRateComments" placeholder="Published Tariff Rate Comments" value="<cfif getMoreInfo.RecordCount>#getMoreInfo.PublishedTariffRateComments#</cfif>">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="AuthorityFirstGranted" class="text-left middle">Authority First Granted (Year)</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="AuthorityFirstGranted" size="20" id="AuthorityFirstGranted" placeholder="Year" value="<cfif getMoreInfo.RecordCount>#getMoreInfo.AuthorityFirstGranted#</cfif>">
+        </div>
+        <div class="small-3 columns">
+          <label for="YearsInBusiness" class="text-left middle">How many years in business</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="YearsInBusiness" size="20" id="YearsInBusiness" placeholder="Years" value="<cfif getMoreInfo.RecordCount>#getMoreInfo.YearsInBusiness#</cfif>">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="AuthorityType" class="text-left middle">Authority Type</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="AuthorityType" size="20" id="AuthorityType" placeholder="Authority Type" value="<cfif getMoreInfo.RecordCount>#getMoreInfo.AuthorityType#</cfif>">
+        </div>
+        <div class="small-3 columns">
+          <label for="CargoType" class="text-left middle">Cargo Type</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="CargoType" size="20" id="CargoType" placeholder="Cargo Type" value="<cfif getMoreInfo.RecordCount>#getMoreInfo.CargoType#</cfif>">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="Milage" class="text-left middle">Milage</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="Milage" size="20" id="Milage" placeholder="Milage" value="<cfif getMoreInfo.RecordCount>#getMoreInfo.Milage#</cfif>">
+        </div>
+        <div class="small-3 columns">
+          <label for="MilageYear" class="text-left middle">Year</label>
+        </div>
+        <div class="small-3 columns">
+          <input type="text" name="MilageYear" size="20" id="MilageYear" placeholder="Year" value="<cfif getMoreInfo.RecordCount>#getMoreInfo.MilageYear#</cfif>">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="AnyComplaints" class="text-left middle">Any Complaints</label>
+        </div>
+        <div class="small-9 columns">
+          <input type="text" name="AnyComplaints" size="60" id="AnyComplaints" placeholder="Any Complaints" value="<cfif getMoreInfo.RecordCount>#getMoreInfo.AnyComplaints#</cfif>">
         </div>
       </div>
     </cfoutput>

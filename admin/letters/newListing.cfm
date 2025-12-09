@@ -84,30 +84,31 @@
     where id=#clientid#
 </cfquery>
 
-<cfsavecontent variable="REQUEST.letter_body" >
-	<cfoutput>
-	<span class="fontsize12">Dear #trim(getinfo.first_name)# #trim(getinfo.last_name)# or Current Occupant,<br><br>
-    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We see that the home in which you reside at #trim(getinfo.FROM_ADDRESS)#<cfif trim(getinfo.FROM_ADDRESS2) is not "">, #trim(getinfo.FROM_ADDRESS2)#</cfif>, has been just listed with #trim(getinfo.realty_company)#
-and soon, you will need to start to get moving estimates.<br><br>
+<cfsavecontent variable="REQUEST.letter_body">
+    <cfoutput>
+        <div class="fontsize14" style="padding-left:15px; padding-right:15px; line-height:1.3em;">
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>NATIONWIDE USA MOVERS, your “ONE STOP SHOP” for estimates and moving quotes</strong> would
-like to offer you a FREE-NO OBLIGATION MOVE ESTIMATE.<br><br>
+            Dear #trim(getinfo.first_name)# #trim(getinfo.last_name)# or Current Occupant,<br><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            We've recently been in contact with your Realtor, 
+            #trim(getinfo.realtor_name)# at 
+            #trim(getinfo.realty_company)# and, since your home at 
+            #trim(getinfo.FROM_ADDRESS)#<cfif trim(getinfo.FROM_ADDRESS2) NEQ ''>, #trim(getinfo.FROM_ADDRESS2)#</cfif> 
+            was recentely listed, we will be offering you huge moving discounts.<br><br>
+            
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get your Quick & Easy Virtual Estimate & lock in your discounts before they expire.<br><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Virtual Walkthroughs are simply & easily done by using your cell phone.<br><br>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>NATIONWIDE USA MOVERS</strong> has access to over 7000 federally authorized, licensed and, insured
-moving companies. We will find you highly reputable professional movers in your area and get you the
-lowest and best prices. Also, you will only have to work with just one Certified Moving Consultant that
-will perform a virtual walkthrough of your residence in 20 min or less and, will gather and send you a
-variety of moving quotes all in one single email, without the bombarding calls from movers.<br><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Call us or go online and don’t forget to mention or type in your personal 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Call us or go online at <span class="colorblue text-underline">www.get-estimates.com</span> to set up your free Virtual Move Estimate as
-soon as possible and use your Personal Promo Code: <span class="fontbold colorred text-underline">#getInfo.discountCode#</span> to lock in up to a 40% discount on
-moving services.</strong><br><br>
+            <b>Move Discount Code:</b> 
+            
+            <span class="fontbold colorred" style="text-decoration:underline;">#getinfo.discountCode#</span>.<br><br>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We look forward to assisting you with your move and providing you with the best moving
-companies and moving services in your area.
-</span>
-	</cfoutput>
+        </div>
+
+    </cfoutput>
 </cfsavecontent>
 
 

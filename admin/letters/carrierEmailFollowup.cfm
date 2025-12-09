@@ -51,16 +51,36 @@ where id=#clientid#
 </cfquery>
 
 <cfif parameterexists(sendmail) is 'yes'>
+    <!--- Build email list based on sendEmailToAll checkbox --->
+    <cfset emailList = getinfo.emailAddress>
+    <cfif parameterexists(sendEmailToAll) and sendEmailToAll eq '1'>
+        <cfif len(trim(getinfo.emailAddress2))>
+            <cfset emailList = emailList & "," & trim(getinfo.emailAddress2)>
+        </cfif>
+        <cfif len(trim(getinfo.emailAddress3))>
+            <cfset emailList = emailList & "," & trim(getinfo.emailAddress3)>
+        </cfif>
+        <cfif len(trim(getinfo.emailAddress4))>
+            <cfset emailList = emailList & "," & trim(getinfo.emailAddress4)>
+        </cfif>
+    </cfif>
+    
     <cfmail
      server="vps.affordableusamovers.com"
       username="movingjobs@nationwideusamovers.com" 
       password="Guido1935$" 
       port="587" 
       useSSL="false"
-    TO="#getinfo.emailAddress#"
+    TO="#emailList#"
     FROM="movingjobs@nationwideusamovers.com"
     SUBJECT="Move Jobs-Nationwide USA Movers"
     TYPE="HTML">
+      
+    <cfmailparam 
+      file="C:\home\top12movingbiz.com\wwwroot\admin\CarrierDocuments\CarrierFlyer.pdf"
+      disposition="attachment"
+      type="application/pdf">
+    
             <style>
 		    body {
 		        height: 842px;
@@ -101,25 +121,25 @@ where id=#clientid#
 <table width="100%" border="0" cellspacing="0" cellpadding="10">
   <tr>
     <td>
-	<span class="fontsize13">Dear #trim(getinfo.repfirstname)# #trim(getinfo.replastname)# or #trim(getinfo.CompanyName)# Company Representative,<br><br>
-    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recently we have been trying to reach you to see if your company would be interested in doing business with us.<br><br>
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We are a nationwide move management company that has been in business for the last 30 years working with the major Van Lines and now, we are expanding our network of carriers to include small to midsize moving companies to help us with loading and hauling of medium to large shipments <i>(3 to 5+ bedroom homes)</i> out of the #trim(getinfo.MailingCounty)# County area.<br><br></span>
-
-<div style="text-align:center"><strong style="text-decoration:underline" class="fontsize13">All move jobs will be priced out based on your own tariff rates and pricing.</strong></div>
-<br>
-<span class="fontsize13">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since your company, #trim(getinfo.CompanyName)# has an interstate authority in good standing with the <i>FMCSA</i>, with low or no complaints, we would like to bring you on as one of our Preferred Carriers.<br><br>
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you are interested in joining our network of carriers, please go online to www.carriermoving.jobs and fill out the quick and easy application form or directly call our Carrier Relations & Business Development Department at 1-800-656-3620 and, we will email you a simple to sign <i>409 Agreement</i>. This agreement is required by the <i>FMCSA</i> in order to do business and receive moves from us.<br><br>
-<br><br>
-Sincerely<br><br><br>
-
-Anthony L. Booker<br>
-Carrier Relations & Business Development<br>
-Nationwide USA Movers<br>
-1-800-656-3620<br>
-
+	<span class="fontsize14">Dear #trim(getinfo.repfirstname)# or #trim(getinfo.CompanyName)# Company Representative,<br><br>
+	    
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recently we have been trying to reach you to see if your company would be interested in doing business with us.<br><br>
+	
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We are a national Move Management company that has been in business for the last 30 years working with the Agents of major Van Lines and now, we are expanding our network of carriers to include small to midsize moving companies to help us with loading and hauling of medium to large shipments (3 to 5+ bedroom homes) out of the #trim(getinfo.MailingCounty)# area.<br><br></span>
+	
+	<div style="text-align:center"><strong style="text-decoration:underline" class="fontsize14">All move jobs will be priced out based on your own tariff rates and pricing.</strong></div>
+	<br>
+	<span class="fontsize14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since your company, #trim(getinfo.CompanyName)# has an interstate authority in good standing with the <i>FMCSA</i>, with low or no complaints, we would like to bring you on as one of our Preferred Carriers.<br><br>
+	
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you are interested in joining our network of carriers, please go online to <a href="http://www.carriermovingjobs.com/">www.carriermovingjobs.com</a> and fill out the quick and easy application form or directly call our Carrier Relations & Business Development Department at <strong>1-800-976-6833 Ext 4</strong>, and, we will email you a simple to sign <i>409 Agreement</i>. This agreement is required by the <i>FMCSA</i> in order to do business and receive moves from us.<br><br>
+	<br><br>
+	Sincerely<br><br><br>
+	
+	Anthony L. Booker<br>
+	Carrier Relations & Business Development<br>
+	Nationwide USA Movers<br>
+	1-800-976-6833 Ext 4<br>
+	
 </span>
     </td>
   </tr>
@@ -132,8 +152,8 @@ Nationwide USA Movers<br>
   <tr>
     <td align="center">
     <span class="fontsize12">Nationwide USA Movers Inc<br />
-244 Fifth Avenue, Suite 1297<br />
-New York, NY 10001<br />
+2319 Third Avenue, Suite 1710<br />
+New York, NY 10035<br />
 MC ##945837 USDOT## 3558324</span>
     </td>
   </tr>
@@ -153,6 +173,12 @@ MC ##945837 USDOT## 3558324</span>
     FROM="movingjobs@nationwideusamovers.com"
     SUBJECT="Move Jobs-Nationwide USA Movers"
     TYPE="HTML">
+
+    <cfmailparam 
+      file="C:\home\top12movingbiz.com\wwwroot\admin\CarrierDocuments\CarrierFlyer.pdf"
+      disposition="attachment"
+      type="application/pdf">
+      
         <style>
 		    body {
 		        height: 842px;
@@ -193,24 +219,25 @@ MC ##945837 USDOT## 3558324</span>
 <table width="100%" border="0" cellspacing="0" cellpadding="10">
   <tr>
     <td>
-	<span class="fontsize13">Dear #trim(getinfo.repfirstname)# #trim(getinfo.replastname)# or #trim(getinfo.CompanyName)# Company Representative,<br><br>
-    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recently we have been trying to reach you to see if your company would be interested in doing business with us.<br><br>
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We are a nationwide move management company that has been in business for the last 30 years working with the major Van Lines and now, we are expanding our network of carriers to include small to midsize moving companies to help us with loading and hauling of medium to large shipments <i>(3 to 5+ bedroom homes)</i> out of the #trim(getinfo.MailingCounty)# County area.<br><br></span>
-
-<div style="text-align:center"><strong style="text-decoration:underline" class="fontsize13">All move jobs will be priced out based on your own tariff rates and pricing.</strong></div>
-<br>
-<span class="fontsize13">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since your company, #trim(getinfo.CompanyName)# has an interstate authority in good standing with the <i>FMCSA</i>, with low or no complaints, we would like to bring you on as one of our Preferred Carriers.<br><br>
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you are interested in joining our network of carriers, please go online to www.carriermoving.jobs and fill out the quick and easy application form or directly call our Carrier Relations & Business Development Department at 1-800-656-3620 and, we will email you a simple to sign <i>409 Agreement</i>. This agreement is required by the <i>FMCSA</i> in order to do business and receive moves from us.<br><br>
-<br><br>
-Sincerely<br><br><br>
-
-Anthony L. Booker<br>
-Carrier Relations & Business Development<br>
-Nationwide USA Movers<br>
-1-800-656-3620<br>
+	<span class="fontsize14">Dear #trim(getinfo.repfirstname)# or #trim(getinfo.CompanyName)# Company Representative,<br><br>
+	    
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recently we have been trying to reach you to see if your company would be interested in doing business with us.<br><br>
+	
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We are a national Move Management company that has been in business for the last 30 years working with the Agents of major Van Lines and now, we are expanding our network of carriers to include small to midsize moving companies to help us with loading and hauling of medium to large shipments (3 to 5+ bedroom homes) out of the #trim(getinfo.MailingCounty)# area.<br><br></span>
+	
+	<div style="text-align:center"><strong style="text-decoration:underline" class="fontsize14">All move jobs will be priced out based on your own tariff rates and pricing.</strong></div>
+	<br>
+	<span class="fontsize14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since your company, #trim(getinfo.CompanyName)# has an interstate authority in good standing with the <i>FMCSA</i>, with low or no complaints, we would like to bring you on as one of our Preferred Carriers.<br><br>
+	
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you are interested in joining our network of carriers, please go online to <a href="http://www.carriermovingjobs.com/">www.carriermovingjobs.com</a> and fill out the quick and easy application form or directly call our Carrier Relations & Business Development Department at <strong>1-800-976-6833 Ext 4</strong>, and, we will email you a simple to sign <i>409 Agreement</i>. This agreement is required by the <i>FMCSA</i> in order to do business and receive moves from us.<br><br>
+	<br><br>
+	Sincerely<br><br><br>
+	
+	Anthony L. Booker<br>
+	Carrier Relations & Business Development<br>
+	Nationwide USA Movers<br>
+	1-800-976-6833 Ext 4<br>
+	
 
 </span>
     </td>
@@ -224,8 +251,8 @@ Nationwide USA Movers<br>
   <tr>
     <td align="center">
     <span class="fontsize12">Nationwide USA Movers Inc<br />
-244 Fifth Avenue, Suite 1297<br />
-New York, NY 10001<br />
+2319 Third Avenue, Suite 1710<br />
+New York, NY 10035<br />
 MC ##945837 USDOT## 3558324</span>
     </td>
   </tr>
@@ -292,6 +319,7 @@ MC ##945837 USDOT## 3558324</span>
 <form action="carrierEmailFollowup.cfm" method="post"><input type="hidden" name="clientid" value="<cfoutput>#clientid#</cfoutput>"><input type="hidden" name="sendmail" value="1"><cfoutput><input type="hidden" name="un" value="#un#"><input type="hidden" name="pw" value="#pw#"></cfoutput>
 <div align="center">
 <input type="submit" value="Email to <cfoutput>#getinfo.emailAddress#</cfoutput> Now"><br>
+<input type="checkbox" name="sendEmailToAll" value="1"> Send email to All<br>
 <input type="checkbox" name="altmail" value="<cfoutput>#verify.id#</cfoutput>"> Check to send copy to yourself</div><br></form>
 <cfelseif getinfo.emailAddress eq "">
 <div align="center">You must back up and fill in the email address field</div>
@@ -309,24 +337,24 @@ MC ##945837 USDOT## 3558324</span>
   <tr>
     <td>
 <cfoutput>
-		<span class="fontsize13">Dear #trim(getinfo.repfirstname)# #trim(getinfo.replastname)# or #trim(getinfo.CompanyName)# Company Representative,<br><br>
+		<span class="fontsize14">Dear #trim(getinfo.repfirstname)# or #trim(getinfo.CompanyName)# Company Representative,<br><br>
 	    
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Recently we have been trying to reach you to see if your company would be interested in doing business with us.<br><br>
 	
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We are a nationwide move management company that has been in business for the last 30 years working with the major Van Lines and now, we are expanding our network of carriers to include small to midsize moving companies to help us with loading and hauling of medium to large shipments <i>(3 to 5+ bedroom homes)</i> out of the #trim(getinfo.MailingCounty)# County area.<br><br></span>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We are a national Move Management company that has been in business for the last 30 years working with the Agents of major Van Lines and now, we are expanding our network of carriers to include small to midsize moving companies to help us with loading and hauling of medium to large shipments (3 to 5+ bedroom homes) out of the #trim(getinfo.MailingCounty)# area.<br><br></span>
 	
-	<div style="text-align:center"><strong style="text-decoration:underline" class="fontsize13">All move jobs will be priced out based on your own tariff rates and pricing.</strong></div>
+	<div style="text-align:center"><strong style="text-decoration:underline" class="fontsize14">All move jobs will be priced out based on your own tariff rates and pricing.</strong></div>
 	<br>
-	<span class="fontsize13">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since your company, #trim(getinfo.CompanyName)# has an interstate authority in good standing with the <i>FMCSA</i>, with low or no complaints, we would like to bring you on as one of our Preferred Carriers.<br><br>
+	<span class="fontsize14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since your company, #trim(getinfo.CompanyName)# has an interstate authority in good standing with the <i>FMCSA</i>, with low or no complaints, we would like to bring you on as one of our Preferred Carriers.<br><br>
 	
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you are interested in joining our network of carriers, please go online to www.carriermoving.jobs and fill out the quick and easy application form or directly call our Carrier Relations & Business Development Department at 1-800-656-3620 and, we will email you a simple to sign <i>409 Agreement</i>. This agreement is required by the <i>FMCSA</i> in order to do business and receive moves from us.<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If you are interested in joining our network of carriers, please go online to <a href="http://www.carriermovingjobs.com/">www.carriermovingjobs.com</a> and fill out the quick and easy application form or directly call our Carrier Relations & Business Development Department at <strong>1-800-976-6833 Ext 4</strong>, and, we will email you a simple to sign <i>409 Agreement</i>. This agreement is required by the <i>FMCSA</i> in order to do business and receive moves from us.<br><br>
 	<br><br>
 	Sincerely<br><br><br>
 	
 	Anthony L. Booker<br>
 	Carrier Relations & Business Development<br>
 	Nationwide USA Movers<br>
-	1-800-656-3620<br>
+	1-800-976-6833 Ext 4<br>
 	
 	</span>
 </cfoutput>
@@ -341,8 +369,8 @@ MC ##945837 USDOT## 3558324</span>
   <tr>
     <td align="center">
     <span class="fontsize12">Nationwide USA Movers Inc<br />
-244 Fifth Avenue, Suite 1297<br />
-New York, NY 10001<br />
+2319 Third Avenue, Suite 1710<br />
+New York, NY 10035<br />
 MC #945837 USDOT# 3558324</span>
     </td>
   </tr>

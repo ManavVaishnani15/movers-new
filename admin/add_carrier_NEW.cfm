@@ -74,8 +74,8 @@ where username='#un#' and temp_pw=#pw# and active=1
 		<cfset appointmentDate = dateformat('#appointment_date#', "YYYY-MM-DD")>
         <cfquery name="add_client" datasource="aaalh3x_onestep">
                 insert into Carrier_records
-                (repfirstname,replastname,MailingAddress,Mailingaddress2,Mailingcity,Mailingstate,Mailingzip,Mailingcounty,Companyname, comments, MC, USDOT)
-                values ('#rep_first_name#','#rep_last_name#','#address#','#address2#','#city#','#state#','#zip#','#county#','#Companyname#','#comments#','#MC#','#USDOT#')
+                (repfirstname,replastname,MailingAddress,Mailingaddress2,Mailingcity,Mailingstate,Mailingzip,Mailingcounty,Companyname, comments, MC, USDOT, STATEDOT)
+                values ('#rep_first_name#','#rep_last_name#','#address#','#address2#','#city#','#state#','#zip#','#county#','#Companyname#','#comments#','#MC#','#USDOT#','#STATE_DOT#')
         </cfquery>
         <cfquery name="add_client" datasource="aaalh3x_onestep">
                 select max(id) AS newID 
@@ -465,6 +465,7 @@ where username='#un#' and temp_pw=#pw# and active=1
 <CFPARAM NAME="varCompanyName" default="">
 <CFPARAM NAME="varMC" default="">
 <CFPARAM NAME="varUSDOT" default="">
+<CFPARAM NAME="varStateDOT" default="">
     
 <cfif IsDefined("checkAddressButton")>
 <CFSET varFirstName = form.rep_first_name>
@@ -477,6 +478,7 @@ where username='#un#' and temp_pw=#pw# and active=1
 <CFSET varCompanyName = form.Companyname>
 <cfset varMC = form.MC>
 <cfset varUSDOT = form.USDOT>
+<cfset varStateDOT = form.STATE_DOT>
 
 <cfquery name="qCheckExisting" datasource="aaalh3x_onestep">
 SELECT ID, repFirstname, repLastname, Companyname
@@ -612,6 +614,14 @@ send_type=20 mark_nonRealtorLead
       </div>
       <div class="row">
         <div class="small-3 columns">
+          <label for="USDOT" class="text-left middle">USDOT</label>
+        </div>
+        <div class="small-9 columns">
+          <input type="text" name="USDOT" size="20" id="USDOT" placeholder="USDOT" value="<cfoutput>#varUSDOT#</cfoutput>">
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-3 columns">
           <label for="MC" class="text-left middle">MC</label>
         </div>
         <div class="small-9 columns">
@@ -620,10 +630,10 @@ send_type=20 mark_nonRealtorLead
       </div>
       <div class="row">
         <div class="small-3 columns">
-          <label for="USDOT" class="text-left middle">USDOT</label>
+          <label for="STATE_DOT" class="text-left middle">STATE DOT</label>
         </div>
         <div class="small-9 columns">
-          <input type="text" name="USDOT" size="20" id="USDOT" placeholder="USDOT" value="<cfoutput>#varUSDOT#</cfoutput>">
+          <input type="text" name="STATE_DOT" size="20" id="STATE_DOT" placeholder="STATE DOT" value="<cfoutput>#varStateDOT#</cfoutput>">
         </div>
       </div>
     <div class="row">

@@ -57,7 +57,7 @@ where id=#clientid#
       port="587" 
       useSSL="false"
     TO="#getinfo.email#"
-    FROM="customercare@nationwideusamovers.com"
+    FROM="move-quotes@nationwideusamovers.com"
     SUBJECT="Nationwide USA Movers preferred list of carriers"
     TYPE="HTML">
             <style>
@@ -104,8 +104,7 @@ where id=#clientid#
 <br>
 <font face="arial" size="2">
 <b>
- The following is a list of moving companies selected from a network of Federally Authorized, Licensed, Bonded and
-Insured Moving Carriers from which you can choose the one that best fit your needs and budget.
+ The following is a list of moving companies that are in our network. All the listed Moving Carriers are Federally Authorized, Licensed and Insured.
 </b></font><br><br>
         </cfoutput>
         <cfif (#getinfo.valuation# is not 0 AND #getinfo.valuation# is not '') OR #getinfo.packing# is not 0 OR #getinfo.move_type# is not 0 OR #getinfo.transportation# is not '' OR #getinfo.acessorial# is not ''>
@@ -167,27 +166,27 @@ Insured Moving Carriers from which you can choose the one that best fit your nee
         </table></td></tr></table></cfif>
         <table border="1" cellspacing="0" cellpadding="2" width="100%">
             <tr>
-                <td bgcolor="silver" colspan="2" height="40"><div align="center"><font face="arial" size="2"><strong>SERVICE PROVIDERS (CARRIERS) LIST</strong></font></div></td>
+                <td bgcolor="silver" colspan="3" height="40"><div align="center"><font face="arial" size="2"><strong>SERVICE PROVIDERS (CARRIERS) LIST</strong></font></div></td>
+            </tr>
+            <tr>
+                <td bgcolor="silver" height="40" width="40%"><div align="center"><font face="arial" size="2"><strong>Company Name</strong></font></div></td>
+                <td bgcolor="silver" height="40" width="30%"><div align="center"><font face="arial" size="2"><strong>US DOT ##</strong></font></div></td>
+                <td bgcolor="silver" height="40" width="30%"><div align="center"><font face="arial" size="2"><strong>MC ##</strong></font></div></td>
             </tr>
             <cfquery name="getmovers" datasource="aaalh3x_onestep">
-                select * from CARRIERS
-                where active=1 
-                order by company
+                select CompanyName, USDOT, MC from carrier_list
+                order by CompanyName
             </cfquery>
 
-            <cfloop query="getmovers">
+            <cfoutput query="getmovers">
                 <tr>
-                    <td valign="middle">
-                        <font face="arial" size="2">
-                            #getmovers.company#
-                            <cfif getmovers.carrier_info is not "">
-                                #getmovers.carrier_info#
-                            </cfif>
-                        </font>
-                    </td>
+                    <td valign="middle"><font face="arial" size="2">#getmovers.CompanyName#</font></td>
+                    <td valign="middle" align="center"><font face="arial" size="2"><cfif getmovers.USDOT is not "">#getmovers.USDOT#<cfelse>&nbsp;</cfif></font></td>
+                    <td valign="middle" align="center"><font face="arial" size="2"><cfif getmovers.MC is not "">#getmovers.MC#<cfelse>&nbsp;</cfif></font></td>
                 </tr>
-            </cfloop>
+            </cfoutput>
         </table>
+
         
 <table border="0" cellspacing="0" cellpadding="3" width="100%">
 	<tr>
@@ -210,7 +209,7 @@ Email address: #verify.email#</cfoutput>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
         <tr>
             <td colspan="2" style="font-family: arial; font-size: 11px; padding-top: 20px;" align="center">
-                <span style="font-weight: bold">Nationwide USA Movers Corporate Headquarters: 244 Fifth Avenue, Suite 1297 New York, NY 10001 MC ## 945837 USDOT ## 3558324</span>
+                <span style="font-weight: bold">Nationwide USA Movers Corporate Headquarters: 2319 Third Avenue, Suite 1710 New York, NY 10035 MC ## 945837 USDOT ## 3558324</span>
             </td>
         </tr>
         <tr>
@@ -235,7 +234,7 @@ quotes are based on the Household Good Motor Carriers’ published tariffs.
       port="587" 
       useSSL="false"
     TO="#verify.email#"
-    FROM="customercare@nationwideusamovers.com"
+    FROM="move-quotes@nationwideusamovers.com"
     SUBJECT="Nationwide USA Movers preferred list of carriers"
     TYPE="HTML">
         <style>
@@ -282,8 +281,7 @@ quotes are based on the Household Good Motor Carriers’ published tariffs.
 <br>
 <font face="arial" size="2">
 <b>
- The following is a list of moving companies selected from a network of Federally Authorized, Licensed, Bonded and
-Insured Moving Carriers from which you can choose the one that best fit your needs and budget.
+ The following is a list of moving companies that are in our network. All the listed Moving Carriers are Federally Authorized, Licensed and Insured.
 </b></font><br><br>
         </cfoutput>
         <cfif (#getinfo.valuation# is not 0 AND #getinfo.valuation# is not '') OR #getinfo.packing# is not 0 OR #getinfo.move_type# is not 0 OR #getinfo.transportation# is not '' OR #getinfo.acessorial# is not ''>
@@ -345,26 +343,25 @@ Insured Moving Carriers from which you can choose the one that best fit your nee
         </table></td></tr></table></cfif>
         <table border="1" cellspacing="0" cellpadding="2" width="100%">
             <tr>
-                <td bgcolor="silver" colspan="2" height="40"><div align="center"><font face="arial" size="2"><strong>SERVICE PROVIDERS (CARRIERS) LIST</strong></font></div></td>
+                <td bgcolor="silver" colspan="3" height="40"><div align="center"><font face="arial" size="2"><strong>SERVICE PROVIDERS (CARRIERS) LIST</strong></font></div></td>
+            </tr>
+            <tr>
+                <td bgcolor="silver" height="40" width="40%"><div align="center"><font face="arial" size="2"><strong>Company Name</strong></font></div></td>
+                <td bgcolor="silver" height="40" width="30%"><div align="center"><font face="arial" size="2"><strong>US DOT ##</strong></font></div></td>
+                <td bgcolor="silver" height="40" width="30%"><div align="center"><font face="arial" size="2"><strong>MC ##</strong></font></div></td>
             </tr>
             <cfquery name="getmovers" datasource="aaalh3x_onestep">
-                select * from CARRIERS
-                where active=1 
-                order by company
+                select CompanyName, USDOT, MC from carrier_list
+                order by CompanyName
             </cfquery>
 
-            <cfloop query="getmovers">
+            <cfoutput query="getmovers">
                 <tr>
-                    <td valign="middle">
-                        <font face="arial" size="2">
-                            #getmovers.company#
-                            <cfif getmovers.carrier_info is not "">
-                                #getmovers.carrier_info#
-                            </cfif>
-                        </font>
-                    </td>
+                    <td valign="middle"><font face="arial" size="2">#getmovers.CompanyName#</font></td>
+                    <td valign="middle" align="center"><font face="arial" size="2"><cfif getmovers.USDOT is not "">#getmovers.USDOT#<cfelse>&nbsp;</cfif></font></td>
+                    <td valign="middle" align="center"><font face="arial" size="2"><cfif getmovers.MC is not "">#getmovers.MC#<cfelse>&nbsp;</cfif></font></td>
                 </tr>
-            </cfloop>
+            </cfoutput>
         </table>
         
 <table border="0" cellspacing="0" cellpadding="3" width="100%">
@@ -388,7 +385,7 @@ Email address: #verify.email#</cfoutput>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
         <tr>
             <td colspan="2" style="font-family: arial; font-size: 11px; padding-top: 20px;" align="center">
-                <span style="font-weight: bold">Nationwide USA Movers Corporate Headquarters: 244 Fifth Avenue, Suite 1297 New York, NY 10001 MC ## 945837 USDOT ## 3558324</span>
+                <span style="font-weight: bold">Nationwide USA Movers Corporate Headquarters: 2319 Third Avenue, Suite 1710 New York, NY 10035 MC ## 945837 USDOT ## 3558324</span>
             </td>
         </tr>
         <tr>
@@ -481,8 +478,7 @@ quotes are based on the Household Good Motor Carriers’ published tariffs.
 <br>
 <font face="arial" size="2">
 <b>
- The following is a list of moving companies selected from a network of Federally Authorized, Licensed, Bonded and
-Insured Moving Carriers from which you can choose the one that best fit your needs and budget.
+ The following is a list of moving companies that are in our network. All the listed Moving Carriers are Federally Authorized, Licensed and Insured.
 </b></font><br><br>
 </cfoutput>
 
@@ -545,24 +541,24 @@ where ID=#getinfo.packing#
 </table></td></tr></table></cfif>
 <table border="1" cellspacing="0" cellpadding="2" width="100%">
             <tr>
-                <td bgcolor="silver" colspan="2" height="40"><div align="center"><font face="arial" size="2"><strong>SERVICE PROVIDERS (CARRIERS) LIST</strong></font></div></td>
+                <td bgcolor="silver" colspan="3" height="40"><div align="center"><font face="arial" size="2"><strong>SERVICE PROVIDERS (CARRIERS) LIST</strong></font></div></td>
+            </tr>
+            <tr>
+                <td bgcolor="silver" height="40" width="40%"><div align="center"><font face="arial" size="2"><strong>Company Name</strong></font></div></td>
+                <td bgcolor="silver" height="40" width="30%"><div align="center"><font face="arial" size="2"><strong>US DOT ##</strong></font></div></td>
+                <td bgcolor="silver" height="40" width="30%"><div align="center"><font face="arial" size="2"><strong>MC ##</strong></font></div></td>
             </tr>
             <cfquery name="getmovers" datasource="aaalh3x_onestep">
-                select * from CARRIERS
-                where active=1 
-                order by company
+                select CompanyName, USDOT, MC from carrier_list
+                where AddToList=1
+                order by CompanyName
             </cfquery>
 
             <cfoutput query="getmovers">
                 <tr>
-                    <td valign="middle">
-                        <font face="arial" size="2">
-                            #getmovers.company#
-                            <cfif getmovers.carrier_info is not "">
-                                #getmovers.carrier_info#
-                            </cfif>
-                        </font>
-                    </td>
+                    <td valign="middle"><font face="arial" size="2">#getmovers.CompanyName#</font></td>
+                    <td valign="middle" align="center"><font face="arial" size="2"><cfif getmovers.USDOT is not "">#getmovers.USDOT#<cfelse>&nbsp;</cfif></font></td>
+                    <td valign="middle" align="center"><font face="arial" size="2"><cfif getmovers.MC is not "">#getmovers.MC#<cfelse>&nbsp;</cfif></font></td>
                 </tr>
             </cfoutput>
         </table>
@@ -588,7 +584,7 @@ Email address: #verify.email#</cfoutput>
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
         <tr>
             <td colspan="2" style="font-family: arial; font-size: 11px; padding-top: 20px;" align="center">
-                <span style="font-weight: bold">Nationwide USA Movers Corporate Headquarters: 244 Fifth Avenue, Suite 1297 New York, NY 10001 MC # 945837 USDOT # 3558324</span>
+                <span style="font-weight: bold">Nationwide USA Movers Corporate Headquarters: 2319 Third Avenue, Suite 1710 New York, NY 10035 MC # 945837 USDOT # 3558324</span>
             </td>
         </tr>
         <tr>

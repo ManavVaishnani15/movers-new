@@ -42,14 +42,18 @@ select * from CLIENTS
 where id=#clientid#
 </cfquery>
 <cfif parameterexists(sendmail) is 'yes'>
+    <cfset emailList = getinfo.email>
+    <cfif len(trim(getinfo.email2))>
+        <cfset emailList = emailList & "," & getinfo.email2>
+    </cfif>
     <cfmail
      server="vps.affordableusamovers.com"
       username="customercare@nationwideusamovers.com" 
       password="Temp1707!" 
       port="587" 
       useSSL="false"
-    TO="#getinfo.email#"
-    FROM="customercare@nationwideusamovers.com"
+    TO="#emailList#"
+    FROM="move-quotes@nationwideusamovers.com"
     SUBJECT="Your Moving Quote"
     TYPE="HTML">
             <style>
@@ -86,7 +90,10 @@ where id=#clientid#
 <b>STREET ADDRESS</b>: #getinfo.from_address#<cfif #getinfo.from_address2# is not ''>#getinfo.from_address#</cfif><br><br>
 <b>CITY, STATE, ZIP</b>: #getinfo.from_city#, #getinfo.from_state# #getinfo.from_zip#<br><br>
 <b>ORIGIN PHONE</b>: #getinfo.phone#<br><br>
-<b>EMAIL ADDRESS</b>: #getinfo.email#<br>
+<b>EMAIL ADDRESS</b>: #getinfo.email#<br><br>
+<b>SECOND EMAIL ADDRESS</b>: #getinfo.email2#<br><br>
+<b>CELL</b>: #getinfo.cell#<br><br>
+<b>SECOND CELL</b>: #getinfo.cell2#<br>
 </td>
 
 <td valign="top">
@@ -105,7 +112,7 @@ where id=#clientid#
 						ASK YOUR MOVING CONSULTANT FOR CLARIFICATION ON THE TYPE OF ESTIMATE FOR EACH COMPANY.</td>
             	</tr>
             	<tr>
-            		<td style="font-family:Arial; font-size:12px;">The following quotes represent the carrier’s estimated bottom-line price conveyed to us by each of the listed service
+            		<td style="font-family:Arial; font-size:12px;">The following quotes represent the carrier's estimated bottom-line price conveyed to us by each of the listed service
 					providers and are valid when accepted and signed within 30 days or 15 days if in peak season period, from the date
 					the estimate is issued. The estimated price is valid only if the Order For Service is signed with the selected carrier.<br>
 					<u>Changes to the loading date could result in a price change.</u></td>
@@ -113,8 +120,7 @@ where id=#clientid#
             	<tr>
             		<td style="font-family:Arial; font-size:12px;"><u>Please select and initial
 next to the carrier you are choosing for your move, then sign, date
-the Moving Estimates form and email back to customercare@nationwideusamovers.com or
-fax back to 703 552 4542.<br>
+the Moving Estimates form and email back to customercare@nationwideusamovers.com.<br>
 Notify immediately the selection to your Moving Consultant to lock in your date and pricing.
 Once you select the Mover, your Moving Consultant will explain and help you understand
 what type of Estimate & Services you will receive.</u></td>
@@ -527,7 +533,7 @@ order by company
     <font face="arial" size="2">#getmovers.company#</font></td>
     <td valign="middle"><font face="arial" size="2">#getqt.TypeOfQuote#</font></td>
     <td valign="middle"><font face="arial" size="2">#getqt.QuoteComment#</font></td>
-    <cfif hideHoursColumn eq false><td valign="middle"><font face="arial" size="2"><cfif getqt.MenQty neq ""> Men: #getqt.MenQty#</cfif><cfif getqt.VanQty neq ""> Vans: #getqt.VanQty#</cfif><cfif getqt.HoursQty neq ""> Hours: #getqt.HoursQty#</cfif><cfif getqt.TravelTimeQty neq ""> Travel Time: #getqt.TravelTimeQty#</cfif></font></td></cfif>
+    <cfif hideHoursColumn eq false><td valign="middle"><font face="arial" size="2"><cfif getqt.MenQty neq ""> #getqt.MenQty# Men; </cfif><cfif getqt.VanQty neq ""> #getqt.VanQty# Vans; </cfif><cfif getqt.HoursQty neq ""> #getqt.HoursQty# Hours; </cfif><cfif getqt.TravelTimeQty neq ""> #getqt.TravelTimeQty# hours Travel Time; </cfif></font></td></cfif>
 	<td valign="middle"><div align="right"><font face="arial" size="2">$#getqt.amount#</font></div>
     <td valign="middle">
     <table width="100%" border="0" cellspacing="1" cellpadding="0">
@@ -552,6 +558,9 @@ not be held responsible for the quality of the moving services offered. Moreover
 not be monitored and managed by Nationwide USA Movers and, this may result in extreme overcharges and poor
 quality of moving services and the shipment will lose move protection.
     </p>    
+	<p>
+		I understand that adding more items or services could result in additional charges because it increases the weight/volume of the shipment, requires more labor and/or trucks, more packing or packing materials, temporary storage or all of the above. I understand also that additional charges could be added for changes in pick-up or delivery dates. There could be additional charges for services not listed.
+	</p>
     <p>I acknowledge that I elected to waive a physical survey of the household goods that need to be moved and that the
 above move estimates are based on a virtual survey of my household goods conducted using a video technology.</p>
 <p>I understand that is my responsibility to show all items that are to be shipped so that an accurate survey can be
@@ -591,7 +600,6 @@ Email address: #verify.email#</cfoutput>
 		<td width="40%" style="font-family:Arial; font-size:12px; font-weight:bold;" valign="top" align="center">
 <br>Nationwide USA Movers Inc<br><br>
 Phone: 1-800-976-6833<br>
-Fax: 703-552-4542
 		</td>
 	</tr>
 </table>
@@ -599,7 +607,7 @@ Fax: 703-552-4542
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
         <tr>
             <td colspan="2" style="font-family: arial; font-size: 11px; padding-top: 20px;" align="center">
-                <span style="font-weight: bold">Nationwide USA Movers Corporate Headquarters: 244 Fifth Avenue, Suite: 1297 New York, NY 10001 MC ## 945837 USDOT ## 3558324</span>
+                <span style="font-weight: bold">Nationwide USA Movers Corporate Headquarters: 2319 Third Avenue, Suite 1710 New York, NY 10035 MC ## 945837 USDOT ## 3558324</span>
             </td>
         </tr>
         <tr>
@@ -607,7 +615,7 @@ Fax: 703-552-4542
                Nationwide USA Movers, Inc is a federally licensed and FMCSA authorized Household Goods Move Manager and
 Broker, that does not own trucks but provides estimates with better pricing for customers and only arranges for
 transportation of Household Goods and additional services by an authorized Household Goods Motor Carrier. All
-quotes are based on the Household Good Motor Carriers’ published tariffs.
+quotes are based on the Household Good Motor Carriers' published tariffs.
             </td>
         </tr>
 </table>
@@ -625,7 +633,7 @@ quotes are based on the Household Good Motor Carriers’ published tariffs.
       port="587" 
       useSSL="false"
     TO="#verify.email#"
-    FROM="customercare@nationwideusamovers.com"
+    FROM="move-quotes@nationwideusamovers.com"
     SUBJECT="Your Moving Quote"
     TYPE="HTML">
         <style>
@@ -662,7 +670,10 @@ quotes are based on the Household Good Motor Carriers’ published tariffs.
 <b>STREET ADDRESS</b>: #getinfo.from_address#<cfif #getinfo.from_address2# is not ''>#getinfo.from_address#</cfif><br><br>
 <b>CITY, STATE, ZIP</b>: #getinfo.from_city#, #getinfo.from_state# #getinfo.from_zip#<br><br>
 <b>ORIGIN PHONE</b>: #getinfo.phone#<br><br>
-<b>EMAIL ADDRESS</b>: #getinfo.email#<br>
+<b>EMAIL ADDRESS</b>: #getinfo.email#<br><br>
+<b>SECOND EMAIL ADDRESS</b>: #getinfo.email2#<br><br>
+<b>CELL</b>: #getinfo.cell#<br><br>
+<b>SECOND CELL</b>: #getinfo.cell2#<br>
 </td>
 
 <td valign="top">
@@ -681,7 +692,7 @@ quotes are based on the Household Good Motor Carriers’ published tariffs.
 						ASK YOUR MOVING CONSULTANT FOR CLARIFICATION ON THE TYPE OF ESTIMATE FOR EACH COMPANY.</td>
             	</tr>
             	<tr>
-            		<td style="font-family:Arial; font-size:12px;">The following quotes represent the carrier’s estimated bottom-line price conveyed to us by each of the listed service
+            		<td style="font-family:Arial; font-size:12px;">The following quotes represent the carrier's estimated bottom-line price conveyed to us by each of the listed service
 					providers and are valid when accepted and signed within 30 days or 15 days if in peak season period, from the date
 					the estimate is issued. The estimated price is valid only if the Order For Service is signed with the selected carrier.<br>
 					<u>Changes to the loading date could result in a price change.</u></td>
@@ -689,8 +700,7 @@ quotes are based on the Household Good Motor Carriers’ published tariffs.
             	<tr>
             		<td style="font-family:Arial; font-size:12px;"><u>Please select and initial
 next to the carrier you are choosing for your move, then sign, date
-the Moving Estimates form and email back to customercare@nationwideusamovers.com or
-fax back to 703 552 4542.<br>
+the Moving Estimates form and email back to customercare@nationwideusamovers.com.<br>
 Notify immediately the selection to your Moving Consultant to lock in your date and pricing.
 Once you select the Mover, your Moving Consultant will explain and help you understand
 what type of Estimate & Services you will receive.</u></td>
@@ -1100,7 +1110,7 @@ order by company
     <font face="arial" size="2">#getmovers.company#</font></td>
     <td valign="middle"><font face="arial" size="2">#getqt.TypeOfQuote#</font></td>
     <td valign="middle"><font face="arial" size="2">#getqt.QuoteComment#</font></td>
-    <cfif hideHoursColumn eq false><td valign="middle"><font face="arial" size="2"><cfif getqt.MenQty neq ""> Men: #getqt.MenQty#</cfif><cfif getqt.VanQty neq ""> Vans: #getqt.VanQty#</cfif><cfif getqt.HoursQty neq ""> Hours: #getqt.HoursQty#</cfif><cfif getqt.TravelTimeQty neq ""> Travel Time: #getqt.TravelTimeQty#</cfif></font></td></cfif>
+    <cfif hideHoursColumn eq false><td valign="middle"><font face="arial" size="2"><cfif getqt.MenQty neq ""> #getqt.MenQty# Men; </cfif><cfif getqt.VanQty neq ""> #getqt.VanQty# Vans; </cfif><cfif getqt.HoursQty neq ""> #getqt.HoursQty# Hours; </cfif><cfif getqt.TravelTimeQty neq ""> #getqt.TravelTimeQty# hours Travel Time; </cfif></font></td></cfif>
 	<td valign="middle"><div align="right"><font face="arial" size="2">$#getqt.amount#</font></div>
     <td valign="middle">
     <table width="100%" border="0" cellspacing="1" cellpadding="0">
@@ -1125,6 +1135,9 @@ not be held responsible for the quality of the moving services offered. Moreover
 not be monitored and managed by Nationwide USA Movers and, this may result in extreme overcharges and poor
 quality of moving services and the shipment will lose move protection.
     </p>    
+	<p>
+		I understand that adding more items or services could result in additional charges because it increases the weight/volume of the shipment, requires more labor and/or trucks, more packing or packing materials, temporary storage or all of the above. I understand also that additional charges could be added for changes in pick-up or delivery dates. There could be additional charges for services not listed.
+	</p>
     <p>I acknowledge that I elected to waive a physical survey of the household goods that need to be moved and that the
 above move estimates are based on a virtual survey of my household goods conducted using a video technology.</p>
 <p>I understand that is my responsibility to show all items that are to be shipped so that an accurate survey can be
@@ -1165,7 +1178,6 @@ Email address: #verify.email#</cfoutput>
 		<td width="40%" style="font-family:Arial; font-size:12px; font-weight:bold;" valign="top" align="center">
 <br>Nationwide USA Movers Inc<br><br>
 Phone: 1-800-976-6833<br>
-Fax: 703-552-4542
 		</td>
 	</tr>
 </table>
@@ -1173,7 +1185,7 @@ Fax: 703-552-4542
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
         <tr>
             <td colspan="2" style="font-family: arial; font-size: 11px; padding-top: 20px;" align="center">
-                <span style="font-weight: bold">Nationwide USA Movers Corporate Headquarters: 244 Fifth Avenue, Suite: 1297 New York, NY 10001 MC ## 945837 USDOT ## 3558324</span>
+                <span style="font-weight: bold">Nationwide USA Movers Corporate Headquarters: 2319 Third Avenue, Suite 1710 New York, NY 10035 MC ## 945837 USDOT ## 3558324</span>
             </td>
         </tr>
         <tr>
@@ -1181,7 +1193,7 @@ Fax: 703-552-4542
                Nationwide USA Movers, Inc is a federally licensed and FMCSA authorized Household Goods Move Manager and
 Broker, that does not own trucks but provides estimates with better pricing for customers and only arranges for
 transportation of Household Goods and additional services by an authorized Household Goods Motor Carrier. All
-quotes are based on the Household Good Motor Carriers’ published tariffs.
+quotes are based on the Household Good Motor Carriers' published tariffs.
             </td>
         </tr>
 </table>
@@ -1257,7 +1269,10 @@ quotes are based on the Household Good Motor Carriers’ published tariffs.
 <b>STREET ADDRESS</b>: #getinfo.from_address#<cfif #getinfo.from_address2# is not ''>#getinfo.from_address#</cfif><br><br>
 <b>CITY, STATE, ZIP</b>: #getinfo.from_city#, #getinfo.from_state# #getinfo.from_zip#<br><br>
 <b>ORIGIN PHONE</b>: #getinfo.phone#<br><br>
-<b>EMAIL ADDRESS</b>: #getinfo.email#<br>
+<b>EMAIL ADDRESS</b>: #getinfo.email#<br><br>
+<b>SECOND EMAIL ADDRESS</b>: #getinfo.email2#<br><br>
+<b>CELL</b>: #getinfo.cell#<br><br>
+<b>SECOND CELL</b>: #getinfo.cell2#<br>
 </td>
 
 <td valign="top">
@@ -1276,7 +1291,7 @@ quotes are based on the Household Good Motor Carriers’ published tariffs.
 						ASK YOUR MOVING CONSULTANT FOR CLARIFICATION ON THE TYPE OF ESTIMATE FOR EACH COMPANY.</td>
             	</tr>
             	<tr>
-            		<td style="font-family:Arial; font-size:12px;">The following quotes represent the carrier’s estimated bottom-line price conveyed to us by each of the listed service
+            		<td style="font-family:Arial; font-size:12px;">The following quotes represent the carrier's estimated bottom-line price conveyed to us by each of the listed service
 					providers and are valid when accepted and signed within 30 days or 15 days if in peak season period, from the date
 					the estimate is issued. The estimated price is valid only if the Order For Service is signed with the selected carrier.<br>
 					<u>Changes to the loading date could result in a price change.</u></td>
@@ -1284,8 +1299,7 @@ quotes are based on the Household Good Motor Carriers’ published tariffs.
             	<tr>
             		<td style="font-family:Arial; font-size:12px;"><u>Please select and initial
 next to the carrier you are choosing for your move, then sign, date
-the Moving Estimates form and email back to customercare@nationwideusamovers.com or
-fax back to 703 552 4542.<br>
+the Moving Estimates form and email back to customercare@nationwideusamovers.com.<br>
 Notify immediately the selection to your Moving Consultant to lock in your date and pricing.
 Once you select the Mover, your Moving Consultant will explain and help you understand
 what type of Estimate & Services you will receive.</u></td>
@@ -1693,7 +1707,7 @@ where carrier=#getmovers.id# and user_hook=#clientid# and amount <> ''
     <font face="arial" size="2">#getmovers.company#</font></td>
     <td valign="middle"><font face="arial" size="2">#getqt.TypeOfQuote#</font></td>
     <td valign="middle"><font face="arial" size="2">#getqt.QuoteComment#</font></td>
-    <cfif hideHoursColumn eq false><td valign="middle"><font face="arial" size="2"><cfif getqt.MenQty neq ""> Men: #getqt.MenQty#</cfif><cfif getqt.VanQty neq ""> Vans: #getqt.VanQty#</cfif><cfif getqt.HoursQty neq ""> Hours: #getqt.HoursQty#</cfif><cfif getqt.TravelTimeQty neq ""> Travel Time: #getqt.TravelTimeQty#</cfif></font></td></cfif>
+    <cfif hideHoursColumn eq false><td valign="middle"><font face="arial" size="2"><cfif getqt.MenQty neq ""> #getqt.MenQty# Men; </cfif><cfif getqt.VanQty neq ""> #getqt.VanQty# Vans; </cfif><cfif getqt.HoursQty neq ""> #getqt.HoursQty# Hours; </cfif><cfif getqt.TravelTimeQty neq ""> #getqt.TravelTimeQty# hours Travel Time; </cfif></font></td></cfif>
 	<td valign="middle"><div align="right"><font face="arial" size="2">$#getqt.amount#</font></div>
     <td valign="middle">
     <table width="100%" border="0" cellspacing="1" cellpadding="0">
@@ -1718,6 +1732,9 @@ not be held responsible for the quality of the moving services offered. Moreover
 not be monitored and managed by Nationwide USA Movers and, this may result in extreme overcharges and poor
 quality of moving services and the shipment will lose move protection.
     </p>    
+	<p>
+		I understand that adding more items or services could result in additional charges because it increases the weight/volume of the shipment, requires more labor and/or trucks, more packing or packing materials, temporary storage or all of the above. I understand also that additional charges could be added for changes in pick-up or delivery dates. There could be additional charges for services not listed.
+	</p>
     <p>I acknowledge that I elected to waive a physical survey of the household goods that need to be moved and that the
 above move estimates are based on a virtual survey of my household goods conducted using a video technology.</p>
 <p>I understand that is my responsibility to show all items that are to be shipped so that an accurate survey can be
@@ -1758,7 +1775,6 @@ Email address: #verify.email#</cfoutput>
 		<td width="40%" style="font-family:Arial; font-size:12px; font-weight:bold;" valign="top" align="center">
 <br>Nationwide USA Movers Inc<br><br>
 Phone: 1-800-976-6833<br>
-Fax: 703-552-4542
 		</td>
 	</tr>
 </table>
@@ -1766,7 +1782,7 @@ Fax: 703-552-4542
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
         <tr>
             <td colspan="2" style="font-family: arial; font-size: 11px; padding-top: 20px;" align="center">
-                <span style="font-weight: bold">Nationwide USA Movers Corporate Headquarters: 244 Fifth Avenue, Suite: 1297 New York, NY 10001 MC # 945837 USDOT # 3558324</span>
+                <span style="font-weight: bold">Nationwide USA Movers Corporate Headquarters: 2319 Third Avenue, Suite 1710 New York, NY 10035 MC # 945837 USDOT # 3558324</span>
             </td>
         </tr>
         <tr>
@@ -1774,7 +1790,7 @@ Fax: 703-552-4542
                Nationwide USA Movers, Inc is a federally licensed and FMCSA authorized Household Goods Move Manager and
 Broker, that does not own trucks but provides estimates with better pricing for customers and only arranges for
 transportation of Household Goods and additional services by an authorized Household Goods Motor Carrier. All
-quotes are based on the Household Good Motor Carriers’ published tariffs.
+quotes are based on the Household Good Motor Carriers' published tariffs.
             </td>
         </tr>
 </table>

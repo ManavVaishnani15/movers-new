@@ -51,16 +51,36 @@ where id=#clientid#
 </cfquery>
 
 <cfif parameterexists(sendmail) is 'yes'>
+    <!--- Build email list based on sendEmailToAll checkbox --->
+    <cfset emailList = getinfo.emailAddress>
+    <cfif parameterexists(sendEmailToAll) and sendEmailToAll eq '1'>
+        <cfif len(trim(getinfo.emailAddress2))>
+            <cfset emailList = emailList & "," & trim(getinfo.emailAddress2)>
+        </cfif>
+        <cfif len(trim(getinfo.emailAddress3))>
+            <cfset emailList = emailList & "," & trim(getinfo.emailAddress3)>
+        </cfif>
+        <cfif len(trim(getinfo.emailAddress4))>
+            <cfset emailList = emailList & "," & trim(getinfo.emailAddress4)>
+        </cfif>
+    </cfif>
+    
     <cfmail
      server="vps.affordableusamovers.com"
       username="movingjobs@nationwideusamovers.com" 
       password="Guido1935$" 
       port="587" 
       useSSL="false"
-    TO="#getinfo.emailAddress#"
+    TO="#emailList#"
     FROM="movingjobs@nationwideusamovers.com"
     SUBJECT="Move Jobs-Nationwide USA Movers"
     TYPE="HTML">
+
+    <cfmailparam 
+      file="C:\home\top12movingbiz.com\wwwroot\admin\CarrierDocuments\CarrierFlyer.pdf"
+      disposition="attachment"
+      type="application/pdf">
+
             <style>
 		    body {
 		        height: 842px;
@@ -101,20 +121,20 @@ where id=#clientid#
 <table width="100%" border="0" cellspacing="0" cellpadding="10">
   <tr>
     <td>
-	<span class="fontsize13"><cfoutput>
-                             	Dear #trim(getinfo.repfirstname)# #trim(getinfo.replastname)# or #trim(getinfo.CompanyName)# Company Representative,<br><br>
+	<span class="fontsize14"><cfoutput>
+                             	Dear #trim(getinfo.repfirstname)# or #trim(getinfo.CompanyName)# Company Representative,<br><br>
 	    
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nationwide USA Movers is looking for carriers to help with hauling of local and interstate shipments for our Direct Marketing and National Account moves.<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nationwide USA Movers is looking for moving carriers to help with the hauling of local and interstate shipments for our Direct Marketing and National Account moves.<br><br>
 	
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At Nationwide USA Movers we find, research and contract with accounts that do moving and relocation (i.e. Real Estate Associations, Corporations, Government Agencies etc). Our mission is to find moving jobs and pass them on to carriers in our network.<br><br>
 	
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At this moment, we have a new account that has more than 200 moves coming out of the #trim(getinfo.MailingCounty)# County area and we are looking for carriers to help with hauling of shipments. These moves are mainly <i>3–4-bedroom homes with weights averaging 18,000 Lbs or 2600 cubic feet in size.</i><br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At this moment, we have a new account that has more than 200 moves coming out of the #trim(getinfo.MailingCounty)# County area and we are looking for carriers to help with hauling of shipments. These moves are mainly <i> 3-4-bedroom homes with weights averaging 9000+ Lbs or 1285 cubic feet in size.</i><br><br>
 	
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All our moves are surveyed by an AMSA/ATA Certified Moving Consultant (to assure the accuracy of the estimate) and, we provide our carriers with videos of the surveyed homes together with complete moving information to help them pricing out the moves based on their own pricing.<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All our moves are already surveyed by our experienced Moving Estimators (to assure the accuracy of the estimate) and we provide our carriers with videos of the surveyed homes together with complete moving information to help our carriers price out the moves based on their own pricing and tariffs.<br><br>
 	
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since your company, #trim(getinfo.CompanyName)#, has an interstate authority in good standing with the <i>FMCSA</i> with low or no complains, we would like to bring you on as one of our preferred carriers.<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since your company, #trim(getinfo.CompanyName)#, has an interstate authority in good standing with the <i>FMCSA</i> with low or no complains, we would like to bring you on as one of our Preferred Carriers.<br><br>
 	
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If interested in joining our network of carriers, please go online to www.carriermoving.jobs and fill out the quick and easy application form or directly call our Carrier Relations & Business Development Department at <strong>1-800-656-3620</strong>.<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If interested in joining our Network of Carriers, please go online to <a href="http://www.carriermovingjobs.com/">www.carriermovingjobs.com</a> and fill out the quick and easy application form or directly call our Carrier Relations & Business Development Department at <strong>1-800-976-6833 Ext 4</strong>.<br><br>
 	
 	After filling out the form or calling, <span style="text-decoration:underline">ask us to send you a demo video of an actual upcoming move
                              </cfoutput></span>.
@@ -124,7 +144,7 @@ Sincerely<br><br><br>
 Anthony L. Booker<br>
 Carrier Relations & Business Development<br>
 Nationwide USA Movers<br>
-1-800-656-3620<br>
+1-800-976-6833 Ext 4 <br>
 
 </span>
     </td>
@@ -138,8 +158,8 @@ Nationwide USA Movers<br>
   <tr>
     <td align="center">
     <span class="fontsize12">Nationwide USA Movers Inc<br />
-244 Fifth Avenue, Suite 1297<br />
-New York, NY 10001<br />
+2319 Third Avenue, Suite 1710<br />
+New York, NY 10035<br />
 MC ##945837 USDOT## 3558324</span>
     </td>
   </tr>
@@ -159,6 +179,12 @@ MC ##945837 USDOT## 3558324</span>
     FROM="movingjobs@nationwideusamovers.com"
     SUBJECT="Move Jobs-Nationwide USA Movers"
     TYPE="HTML">
+
+    <cfmailparam 
+      file="C:\home\top12movingbiz.com\wwwroot\admin\CarrierDocuments\CarrierFlyer.pdf"
+      disposition="attachment"
+      type="application/pdf">
+
         <style>
 		    body {
 		        height: 842px;
@@ -199,20 +225,20 @@ MC ##945837 USDOT## 3558324</span>
 <table width="100%" border="0" cellspacing="0" cellpadding="10">
   <tr>
     <td>
-	<span class="fontsize13"><cfoutput>
-                             	Dear #trim(getinfo.repfirstname)# #trim(getinfo.replastname)# or #trim(getinfo.CompanyName)# Company Representative,<br><br>
+		<span class="fontsize14"><cfoutput>
+                             	Dear #trim(getinfo.repfirstname)# or #trim(getinfo.CompanyName)# Company Representative,<br><br>
 	    
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nationwide USA Movers is looking for carriers to help with hauling of local and interstate shipments for our Direct Marketing and National Account moves.<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nationwide USA Movers is looking for moving carriers to help with the hauling of local and interstate shipments for our Direct Marketing and National Account moves.<br><br>
 	
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At Nationwide USA Movers we find, research and contract with accounts that do moving and relocation (i.e. Real Estate Associations, Corporations, Government Agencies etc). Our mission is to find moving jobs and pass them on to carriers in our network.<br><br>
 	
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At this moment, we have a new account that has more than 200 moves coming out of the #trim(getinfo.MailingCounty)# County area and we are looking for carriers to help with hauling of shipments. These moves are mainly <i>3–4-bedroom homes with weights averaging 18,000 Lbs or 2600 cubic feet in size.</i><br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At this moment, we have a new account that has more than 200 moves coming out of the #trim(getinfo.MailingCounty)# County area and we are looking for carriers to help with hauling of shipments. These moves are mainly <i> 3-4-bedroom homes with weights averaging 9000+ Lbs or 1285 cubic feet in size.</i><br><br>
 	
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All our moves are surveyed by an AMSA/ATA Certified Moving Consultant (to assure the accuracy of the estimate) and, we provide our carriers with videos of the surveyed homes together with complete moving information to help them pricing out the moves based on their own pricing.<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All our moves are already surveyed by our experienced Moving Estimators (to assure the accuracy of the estimate) and we provide our carriers with videos of the surveyed homes together with complete moving information to help our carriers price out the moves based on their own pricing and tariffs.<br><br>
 	
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since your company, #trim(getinfo.CompanyName)#, has an interstate authority in good standing with the <i>FMCSA</i> with low or no complains, we would like to bring you on as one of our preferred carriers.<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since your company, #trim(getinfo.CompanyName)#, has an interstate authority in good standing with the <i>FMCSA</i> with low or no complains, we would like to bring you on as one of our Preferred Carriers.<br><br>
 	
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If interested in joining our network of carriers, please go online to www.carriermoving.jobs and fill out the quick and easy application form or directly call our Carrier Relations & Business Development Department at <strong>1-800-656-3620</strong>.<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If interested in joining our Network of Carriers, please go online to <a href="http://www.carriermovingjobs.com/">www.carriermovingjobs.com</a> and fill out the quick and easy application form or directly call our Carrier Relations & Business Development Department at <strong>1-800-976-6833 Ext 4</strong>.<br><br>
 	
 	After filling out the form or calling, <span style="text-decoration:underline">ask us to send you a demo video of an actual upcoming move
                              </cfoutput></span>.
@@ -222,7 +248,7 @@ Sincerely<br><br><br>
 Anthony L. Booker<br>
 Carrier Relations & Business Development<br>
 Nationwide USA Movers<br>
-1-800-656-3620<br>
+1-800-976-6833 Ext 4 <br>
 
 </span>
     </td>
@@ -236,8 +262,8 @@ Nationwide USA Movers<br>
   <tr>
     <td align="center">
     <span class="fontsize12">Nationwide USA Movers Inc<br />
-244 Fifth Avenue, Suite 1297<br />
-New York, NY 10001<br />
+2319 Third Avenue, Suite 1710<br />
+New York, NY 10035<br />
 MC ##945837 USDOT## 3558324</span>
     </td>
   </tr>
@@ -304,6 +330,7 @@ MC ##945837 USDOT## 3558324</span>
 <form action="carrierEmailNew.cfm" method="post"><input type="hidden" name="clientid" value="<cfoutput>#clientid#</cfoutput>"><input type="hidden" name="sendmail" value="1"><cfoutput><input type="hidden" name="un" value="#un#"><input type="hidden" name="pw" value="#pw#"></cfoutput>
 <div align="center">
 <input type="submit" value="Email to <cfoutput>#getinfo.emailAddress#</cfoutput> Now"><br>
+<input type="checkbox" name="sendEmailToAll" value="1"> Send email to All<br>
 <input type="checkbox" name="altmail" value="<cfoutput>#verify.id#</cfoutput>"> Check to send copy to yourself</div><br></form>
 <cfelseif getinfo.emailAddress eq "">
 <div align="center">You must back up and fill in the email address field</div>
@@ -320,20 +347,20 @@ MC ##945837 USDOT## 3558324</span>
 <table width="100%" border="0" cellspacing="0" cellpadding="10">
   <tr>
     <td>
-	<span class="fontsize13"><cfoutput>
-                             	Dear #trim(getinfo.repfirstname)# #trim(getinfo.replastname)# or #trim(getinfo.CompanyName)# Company Representative,<br><br>
+		<span class="fontsize14"><cfoutput>
+                             	Dear #trim(getinfo.repfirstname)# or #trim(getinfo.CompanyName)# Company Representative,<br><br>
 	    
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nationwide USA Movers is looking for carriers to help with hauling of local and interstate shipments for our Direct Marketing and National Account moves.<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nationwide USA Movers is looking for moving carriers to help with the hauling of local and interstate shipments for our Direct Marketing and National Account moves.<br><br>
 	
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At Nationwide USA Movers we find, research and contract with accounts that do moving and relocation (i.e. Real Estate Associations, Corporations, Government Agencies etc). Our mission is to find moving jobs and pass them on to carriers in our network.<br><br>
 	
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At this moment, we have a new account that has more than 200 moves coming out of the #trim(getinfo.MailingCounty)# County area and we are looking for carriers to help with hauling of shipments. These moves are mainly <i>3–4-bedroom homes with weights averaging 18,000 Lbs or 2600 cubic feet in size.</i><br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At this moment, we have a new account that has more than 200 moves coming out of the #trim(getinfo.MailingCounty)# County area and we are looking for carriers to help with hauling of shipments. These moves are mainly <i> 3-4-bedroom homes with weights averaging 9000+ Lbs or 1285 cubic feet in size.</i><br><br>
 	
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All our moves are surveyed by an AMSA/ATA Certified Moving Consultant (to assure the accuracy of the estimate) and, we provide our carriers with videos of the surveyed homes together with complete moving information to help them pricing out the moves based on their own pricing.<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All our moves are already surveyed by our experienced Moving Estimators (to assure the accuracy of the estimate) and we provide our carriers with videos of the surveyed homes together with complete moving information to help our carriers price out the moves based on their own pricing and tariffs.<br><br>
 	
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since your company, #trim(getinfo.CompanyName)#, has an interstate authority in good standing with the <i>FMCSA</i> with low or no complains, we would like to bring you on as one of our preferred carriers.<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since your company, #trim(getinfo.CompanyName)#, has an interstate authority in good standing with the <i>FMCSA</i> with low or no complains, we would like to bring you on as one of our Preferred Carriers.<br><br>
 	
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If interested in joining our network of carriers, please go online to www.carriermoving.jobs and fill out the quick and easy application form or directly call our Carrier Relations & Business Development Department at <strong>1-800-656-3620</strong>.<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If interested in joining our Network of Carriers, please go online to <a href="http://www.carriermovingjobs.com/">www.carriermovingjobs.com</a> and fill out the quick and easy application form or directly call our Carrier Relations & Business Development Department at <strong>1-800-976-6833 Ext 4</strong>.<br><br>
 	
 	After filling out the form or calling, <span style="text-decoration:underline">ask us to send you a demo video of an actual upcoming move
                              </cfoutput></span>.
@@ -343,7 +370,7 @@ Sincerely<br><br><br>
 Anthony L. Booker<br>
 Carrier Relations & Business Development<br>
 Nationwide USA Movers<br>
-1-800-656-3620<br>
+1-800-976-6833 Ext 4 <br>
 
 </span>
     </td>
@@ -357,8 +384,8 @@ Nationwide USA Movers<br>
   <tr>
     <td align="center">
     <span class="fontsize12">Nationwide USA Movers Inc<br />
-244 Fifth Avenue, Suite 1297<br />
-New York, NY 10001<br />
+2319 Third Avenue, Suite 1710<br />
+New York, NY 10035<br />
 MC #945837 USDOT# 3558324</span>
     </td>
   </tr>

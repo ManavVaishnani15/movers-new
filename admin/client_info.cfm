@@ -281,6 +281,27 @@ where username='#un#' and temp_pw=#pw# and active=1
      </cfif>
 </cfif>
 
+<cfif parameterexists(mark_underContract) is 'yes'>
+    <!--- check to see if this letter has already been sent --->
+    <cfquery name="check_initial" datasource="aaalh3x_onestep">
+        select * from LETTER_SENDS
+        where send_type=400 and cust_hook=#clientid#
+    </cfquery>
+     <cfif #check_initial.recordcount# is not 0><!--- was already sent once --->
+         <cfquery name="set_initial" datasource="aaalh3x_onestep">
+             insert into LETTER_SENDS
+             (send_type,sent,cust_hook,sent_date)
+             values ('401','1','#clientid#','#datenow#')
+         </cfquery>
+     <cfelse>
+         <cfquery name="set_initial" datasource="aaalh3x_onestep">
+             insert into LETTER_SENDS
+             (send_type,sent,cust_hook,sent_date)
+             values ('400','1','#clientid#','#datenow#')
+         </cfquery>
+     </cfif>
+</cfif>
+
 <cfif parameterexists(mark_nonRealtorLead) is 'yes'>
     <!--- check to see if this letter has already been sent --->
     <cfquery name="check_initial" datasource="aaalh3x_onestep">
@@ -347,6 +368,7 @@ where username='#un#' and temp_pw=#pw# and active=1
 <cfif parameterexists(mark_initial) is 'yes' OR  
 	parameterexists(mark_estimate) is 'yes' or
 	parameterexists(mark_nonRealtorLead) is 'yes' or
+	parameterexists(mark_underContract) is 'yes' or
 	parameterexists(mark_mayflowerLetter) is 'yes'>
 <cfquery name="q" datasource="aaalh3x_onestep">
 insert into LETTER_SENDS
@@ -557,6 +579,11 @@ where id=#clientid#
      <cfelse>
         <cfset contdate = ''>
      </cfif>
+     <cfif IsDefined("new_under_contract_date") AND #new_under_contract_date# is not 'None Yet' and #new_under_contract_date# is not ''>
+        <cfset undercontdate = #dateformat(new_under_contract_date, "YYYY-MM-DD")#>
+     <cfelse>
+        <cfset undercontdate = ''>
+     </cfif>
      <cfif #new_closing_date# is not 'None Yet' and #new_closing_date# is not ''>
         <cfset closdate = #dateformat(new_closing_date, "YYYY-MM-DD")#>
      <cfelse>
@@ -609,13 +636,16 @@ where id=#clientid#
          <cfif #movcompdate# is not ''>move_comp_date='#movcompdate#',<cfelse>move_comp_date=NULL,</cfif>
          <cfif #movdate# is not ''>moving_date='#movdate#',<cfelse>moving_date=NULL,</cfif>
          <cfif #contdate# is not ''>contract_date='#contdate#',<cfelse>contract_date=NULL,</cfif>
+         <cfif #undercontdate# is not ''>under_contract_date='#undercontdate#',<cfelse>under_contract_date=NULL,</cfif>
          <cfif #appdate# is not ''>appointment_date='#appdate#',<cfelse>appointment_date=NULL,</cfif>
          <cfif #closdate# is not ''>closing_date='#closdate#',<cfelse>closing_date=NULL,</cfif>
         first_name='#new_first_name#',
         last_name='#new_last_name#',
         email='#new_email#',
+        email2='#new_email2#',
         phone='#new_phone#',
         cell='#new_cell#',
+        cell2='#new_cell2#',
         fax='#new_fax#',
         appt_confirmed='#new_appt_confirmed#',
         from_address='#new_from_address#',
@@ -905,7 +935,16 @@ Realtor <!--- <input type="text" name="new_realty_company" size="20" value="#get
 </cfif>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
-<td valign="middle"><font face="arial" size="2">Contract/Offer Date </td><td valign="middle"><input class="remindmedropdowna" name="new_contract_date" id="datepicker" value="<cfoutput>#contdate#</cfoutput>" size="10"></td>
+<td valign="middle"><font face="arial" size="2">Offer Date </td><td valign="middle"><input class="remindmedropdowna" name="new_contract_date" id="datepicker" value="<cfoutput>#contdate#</cfoutput>" size="10"></td>
+</tr>
+
+<cfif #getinfo.under_contract_date# is ''>
+<cfset undercontdate = 'None Yet'>
+<cfelse>
+<cfset undercontdate = '#dateformat(getinfo.under_contract_date, "MM/DD/YYYY")#'>
+</cfif>
+<tr>
+<td valign="middle"><font face="arial" size="2">Under Contract Date </td><td valign="middle"><input class="remindmedropdowna" name="new_under_contract_date" id="datepickerd" value="<cfoutput>#undercontdate#</cfoutput>" size="10"></td>
 </tr>
 
 <cfif #getinfo.closing_date# is ''>
@@ -935,11 +974,15 @@ Realtor <!--- <input type="text" name="new_realty_company" size="20" value="#get
 </tr>
 <tr>
 <td valign="middle"><div align="right"><font face="arial" size="2">&nbsp;Email </div></td><td valign="middle"><input type="text" name="new_email" size="20" value="#getinfo.email#"></td>
-<td valign="middle"><div align="right"><font face="arial" size="2">Phone </div></td><td valign="middle"><input type="text" name="new_phone" size="12" value="#getinfo.phone#"></td>
+<td valign="middle"><div align="right"><font face="arial" size="2">&nbsp;Phone </div></td><td valign="middle"><input type="text" name="new_phone" size="12" value="#getinfo.phone#"></td>
 </tr>
 <tr>
+<td valign="middle"><div align="right"><font face="arial" size="2">&nbsp;Second Email </div></td><td valign="middle"><input type="text" name="new_email2" size="20" value="#getinfo.email2#"></td>
 <td valign="middle"><div align="right"><font face="arial" size="2">&nbsp;Cell </div></td><td valign="middle"><input type="text" name="new_cell" size="12" value="#getinfo.cell#"></td>
+</tr>
+<tr>
 <td valign="middle"><div align="right"><font face="arial" size="2">&nbsp;Fax </div></td><td valign="middle"><input type="text" name="new_fax" size="12" value="#getinfo.fax#"></td>
+<td valign="middle"><div align="right"><font face="arial" size="2">&nbsp;Second Cell </div></td><td valign="middle"><input type="text" name="new_cell2" size="12" value="#getinfo.cell2#"></td>
 </tr></table>
 <br>
 </cfoutput>
@@ -1891,7 +1934,7 @@ where send_type=21 and (sent=1 or sent=2) and cust_hook=#clientid#
 <tr>
     <td valign="middle">
         <cfoutput>
-            <a href="letters/closingLetter.cfm?clientid=#clientid#&un=#un#&pw=#pw#&directPrint=1" target="_c#clientid#">Closing Letter</a>
+            <a href="letters/closingLetter.cfm?clientid=#clientid#&un=#un#&pw=#pw#&directPrint=1" target="_c#clientid#">Pending/Closing Letter</a>
         </cfoutput>
     </td>
     <td valign="middle">
@@ -1909,6 +1952,30 @@ where send_type=21 and (sent=1 or sent=2) and cust_hook=#clientid#
     <td valign="middle">
         <cfoutput>
             <a href="printQueueAdd.cfm?clientid=#clientid#&un=#un#&pw=#pw#&type=closing">Queue</a>
+        </cfoutput>
+    </td>
+</tr>
+<tr>
+    <td valign="middle">
+        <cfoutput>
+            <a href="letters/underContractLetter.cfm?clientid=#clientid#&un=#un#&pw=#pw#&directPrint=1" target="_u#clientid#">Under Contract Letter</a>
+        </cfoutput>
+    </td>
+    <td valign="middle">
+        <cfif #getinfo.email# CONTAINS '.' AND #getinfo.email# CONTAINS '@'>
+            <cfoutput>
+                <a href="letters/underContractLetter.cfm?clientid=#clientid#&emailit=y&un=#un#&pw=#pw#" target="_u#clientid#">Email Now</a>
+            </cfoutput>
+        </cfif>
+    </td>
+    <td valign="middle">
+        <cfoutput>
+            <a href="client_info.cfm?un=#un#&pw=#pw#&clientid=#clientid#&mark_underContract=y<cfif parameterexists(url1) is 'yes'>&url1=#url1#</cfif><cfif parameterexists(searchacct) is 'yes'>&searchacct=#searchacct#</cfif><cfif parameterexists(type) is 'yes'>&type=#type#</cfif><cfif parameterexists(keyword) is 'yes'>&keyword=#keyword#</cfif>">Mark Mailed Today</a>
+        </cfoutput>
+    </td>
+    <td valign="middle">
+        <cfoutput>
+            <a href="printQueueAdd.cfm?clientid=#clientid#&un=#un#&pw=#pw#&type=underContract">Queue</a>
         </cfoutput>
     </td>
 </tr>
@@ -1975,7 +2042,7 @@ where send_type=21 and (sent=1 or sent=2) and cust_hook=#clientid#
     <td valign="middle">
         <cfif #getinfo.email# CONTAINS '.' AND #getinfo.email# CONTAINS '@'>
             <cfoutput>
-                <a href="letters/followup_new.cfm?clientid=#clientid#&emailit=y&un=#un#&pw=#pw#&directPrint=1" target="_f#clientid#">Email Now</a>
+                <a href="letters/followup.cfm?clientid=#clientid#&emailit=y&un=#un#&pw=#pw#&directPrint=1" target="_f#clientid#">Email Now</a>
             </cfoutput>
         </cfif>
     </td>

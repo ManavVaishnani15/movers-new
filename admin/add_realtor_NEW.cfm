@@ -55,24 +55,12 @@ where username='#un#' and temp_pw=#pw# and active=1
 <cfset datenow = dateformat(now(), "YYYY-MM-DD")>
 <CFIF IsDefined("AddNewRecordButton")>
 
-    <cfset loopCounter= 1 />
-    
-    <cfquery name="usedCodes" datasource="aaalh3x_onestep">
-        select distinct ReferralCode
-        from Realtor_records
-    </cfquery>
-    <cfset codeList = ValueList(usedCodes.ReferralCode)>
-    <cfset discountCodeNumeric = randRange(100,999) />
-    <cfset strAlpha = "ABCDEFGHIJKLMNOPQRDTUVWXYZ" />
-    <cfset discountCode = Mid(strAlpha, RandRange(1, Len(strAlpha) ),1) />
-    <cfset discountCode = "#discountCode##Mid(strAlpha, RandRange(1, Len(strAlpha) ),1)#-#discountCodeNumeric#" />
-
         <cfset appointment_date = Now()>
 		<cfset appointmentDate = dateformat('#appointment_date#', "YYYY-MM-DD")>
         <cfquery name="add_client" datasource="aaalh3x_onestep">
                 insert into Realtor_records
                 (repfirstname,replastname,AgencyAddress,Agencyaddress2,Agencycity,Agencystate,Agencyzip,Companyname, comments, ReferralCode, CellPhone, OfficePhone, OtherPhone, AgentEmail, ListingAddress)
-                values ('#rep_first_name#','#rep_last_name#','#address#','#address2#','#city#','#state#','#zip#','#Companyname#','#comments#','#discountCode#','#CellPhone#','#OfficePhone#','#OtherPhone#','#AgentEmail#','#ListingAddress#')
+                values ('#rep_first_name#','#rep_last_name#','#address#','#address2#','#city#','#state#','#zip#','#Companyname#','#comments#','#ReferralCode#','#CellPhone#','#OfficePhone#','#OtherPhone#','#AgentEmail#','#ListingAddress#')
         </cfquery>
         <cfquery name="add_client" datasource="aaalh3x_onestep">
                 select max(id) AS newID 
@@ -362,6 +350,7 @@ where username='#un#' and temp_pw=#pw# and active=1
 </table>
 </cfoutput>
     
+<CFPARAM NAME="varReferralCode" default="">
 <CFPARAM NAME="varFirstName" default="">
 <CFPARAM NAME="varLastName" default="">
 <CFPARAM NAME="varAddress" default="">
@@ -377,6 +366,7 @@ where username='#un#' and temp_pw=#pw# and active=1
 <CFPARAM NAME="varAgentEmail" default="">
     
 <cfif IsDefined("checkAddressButton")>
+<CFSET varReferralCode = form.ReferralCode>
 <CFSET varCompanyname = form.Companyname>
 <CFSET varFirstName = form.rep_first_name>
 <CFSET varLastName = form.rep_last_name>
@@ -528,6 +518,17 @@ send_type=20 mark_nonRealtorLead
     </fieldset>
 	<fieldset class="fieldset">
     <legend><strong>Add New Realtor Record</strong></legend>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="ReferralCode" class="text-left middle">Referral Agent Discount Code</label>
+        </div>
+        <div class="small-9 columns">
+          <input type="text" name="ReferralCode" size="20" id="ReferralCode" placeholder="Referral Agent Discount Code" value="<cfoutput>#varReferralCode#</cfoutput>" required>
+			<span class="form-error">
+            Referral Agent Discount Code is required
+          </span>
+        </div>
+      </div>
     <div class="row">
         <div class="small-3 columns">
           <label for="Companyname" class="text-left middle">Referral Agent Agency</label>

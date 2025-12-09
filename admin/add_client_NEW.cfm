@@ -54,30 +54,15 @@ where username='#un#' and temp_pw=#pw# and active=1
 
 <cfset datenow=#dateformat(now(), "YYYY-MM-DD")#>
 <CFIF IsDefined("AddNewRecordButton")>
-    <cfquery name="usedCodes" datasource="aaalh3x_onestep">
-        select distinct discountCode
-        from CLIENTS
-    </cfquery>
-    <cfset codeList = ValueList(usedCodes.discountCode)>
-    <cfset discountCodeNumeric = randRange(1000,9999) />
-
-    <cfset strAlpha = "ABCDEFGHIJKLMNOPQRDTUVWXYZ" />
-    <cfset discountCode = Mid(strAlpha, RandRange(1, Len(strAlpha) ),1) />
-    <cfset discountCode = "#discountCode##Mid(strAlpha, RandRange(1, Len(strAlpha) ),1)#-#discountCodeNumeric#" />
-
-    <cfset loopCounter= 1 />
-    <!--- <cfloop condition="listFind('#codeList#',discountCode) gt 0 OR loopCounter lt 9000">
-            <cfset discountCode = randRange(1000,9999) />
-            <cfset loopCounter = loopCounter + 1 />
-        </cfloop> --->
         <cfset closingDate=#dateformat('#closing_date#', "YYYY-MM-DD")#>
         <cfset contractDate=#dateformat('#contract_date#', "YYYY-MM-DD")#>
+        <cfset underContractDate=#dateformat('#under_contract_date#', "YYYY-MM-DD")#>
         <cfset appointmentDate=#dateformat('#appointment_date#', "YYYY-MM-DD")#>
 
         <cfquery name="add_client" datasource="aaalh3x_onestep">
                 insert into CLIENTS
-                (entry_date,active,first_name,last_name,from_address,from_address2,from_city,from_state,from_zip,<cfif #closing_date# is not ''>closing_date,</cfif><cfif #contract_date# is not ''>contract_date,</cfif>realty_company,<cfif #appointment_date# is not ''>appointment_date,</cfif>home_price,comments,discountCode, memberId)
-                values ('#datenow#','0','#first_name#','#last_name#','#address#','#address2#','#city#','#state#','#zip#',<cfif #closing_date# is not ''>'#closingDate#',</cfif><cfif #contract_date# is not ''>'#contractDate#',</cfif>'#new_realty_company#',<cfif #appointment_date# is not ''>'#appointmentDate#',</cfif>'#home_price#','#comments#','#discountCode#',#verify.id#)
+                (entry_date,active,first_name,last_name,from_address,from_address2,from_city,from_state,from_zip,<cfif #closing_date# is not ''>closing_date,</cfif><cfif #contract_date# is not ''>contract_date,</cfif><cfif #under_contract_date# is not ''>under_contract_date,</cfif>realty_company,realtor_name,<cfif #appointment_date# is not ''>appointment_date,</cfif>home_price,comments,discountCode, memberId)
+                values ('#datenow#','0','#first_name#','#last_name#','#address#','#address2#','#city#','#state#','#zip#',<cfif #closing_date# is not ''>'#closingDate#',</cfif><cfif #contract_date# is not ''>'#contractDate#',</cfif><cfif #under_contract_date# is not ''>'#underContractDate#',</cfif>'#new_realty_company#','#realtor_name#',<cfif #appointment_date# is not ''>'#appointmentDate#',</cfif>'#home_price#','#comments#','#realtor_discount_code#',#verify.id#)
         </cfquery>
         <cfquery name="add_client" datasource="aaalh3x_onestep">
                 select max(id) AS newID 
@@ -128,6 +113,12 @@ where username='#un#' and temp_pw=#pw# and active=1
                     <cfquery datasource="aaalh3x_onestep">
                             insert into printQueue(clientid,printType,printed,memberId,cleared)
                             values(#add_client.newID#,'gotOffer',0,#verify.id#,0)
+                    </cfquery>
+            </cfif>
+            <cfif #under_contract_date# is not ''  and not isdefined('form.noQueue') >
+                    <cfquery datasource="aaalh3x_onestep">
+                            insert into printQueue(clientid,printType,printed,memberId,cleared)
+                            values(#add_client.newID#,'underContract',0,#verify.id#,0)
                     </cfquery>
             </cfif>
             
@@ -471,6 +462,7 @@ where username='#un#' and temp_pw=#pw# and active=1
 			document.getElementById('datepicker').value = "";
 			document.getElementById('datepickera').value = "";
 			document.getElementById('datepickerb').value = "";
+			document.getElementById('datepickerd').value = "";
 			document.getElementById('comments').value = "";
 		}
     </script>
@@ -773,6 +765,22 @@ where send_type=21 and (sent=1 or sent=2) and cust_hook=#id#
     <legend><strong>Add New Record</strong></legend>
     <div class="row">
         <div class="small-3 columns">
+          <label for="realtor_discount_code" class="text-left middle">Realtor Discount Code</label>
+        </div>
+        <div class="small-9 columns">
+          <input type="text" name="realtor_discount_code" size="20" id="realtor_discount_code" placeholder="Realtor Discount Code">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="realtor_name" class="text-left middle">Realtor Name</label>
+        </div>
+        <div class="small-9 columns">
+          <input type="text" name="realtor_name" size="20" id="realtor_name" placeholder="Realtor Name">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
           <label for="first_name" class="text-left middle">First Name</label>
         </div>
         <div class="small-9 columns">
@@ -859,10 +867,18 @@ where send_type=21 and (sent=1 or sent=2) and cust_hook=#id#
       </div>
     <div class="row">
         <div class="small-3 columns">
-          <label for="contract_date" class="text-left middle">Contract Date</label>
+          <label for="contract_date" class="text-left middle">Offer Date</label>
         </div>
         <div class="small-9 columns">
          <input class="remindmedropdown" name="contract_date" id="datepickera" placeholder="Click to add date">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="under_contract_date" class="text-left middle">Under Contract Date</label>
+        </div>
+        <div class="small-9 columns">
+         <input class="remindmedropdown" name="under_contract_date" id="datepickerd" placeholder="Click to add date">
         </div>
       </div>
     <div class="row">
