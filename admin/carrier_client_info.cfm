@@ -759,8 +759,8 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
         </div>
         <div class="small-3 columns">
           <select name="AddToListOfCarriers" id="AddToListOfCarriers">
-          	<option value="Yes"<cfif AddToListOfCarriers eq "Yes" or AddToListOfCarriers eq ""> selected</cfif>>YES</option>
-          	<option value="No"<cfif AddToListOfCarriers eq "No"> selected</cfif>>NO</option>
+          	<option value="No"<cfif AddToListOfCarriers eq "No" or AddToListOfCarriers eq ""> selected</cfif>>NO</option>
+          	<option value="Yes"<cfif AddToListOfCarriers eq "Yes"> selected</cfif>>YES</option>
           </select>
         </div>
       </div>

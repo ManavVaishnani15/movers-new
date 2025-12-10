@@ -236,7 +236,7 @@
 </style>
 <table width="100%" border="0" cellspacing="0" cellpadding="10">
   <tr>
-    <td width="20%" align="center"><img src="http://www.top12movingbiz.com/admin/letters/images/1/Logo.jpg" width="90%"></td>
+    <td width="20%" align="center"><img src="http://www.top12movingbiz.com/admin/letters/images/1/Logo.jpg" width="100px"></td>
     <td width="50%">&nbsp;</td>
     <td width="20%" align="right" valign="bottom"><p class="fontsize14 fontbold"><cfoutput>#DateFormat(Now(), "mm/dd/yyyy")#</cfoutput></p></td>
   </tr>
@@ -257,9 +257,17 @@
   <tr>
     <td align="center">
     <span class="fontsize12">Nationwide USA Movers Inc<br />
-244 Fifth Avenue, Suite 1297<br />
-New York, NY 10001<br />
+2319 Third Avenue, Suite 1710<br />
+New York, NY 10035<br />
 MC #945837 USDOT# 3558324</span>
     </td>
+  </tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+  <tr>
+	<td align="center">
+		<img src="C:\lucee\tomcat\webapps\ROOT\movers\admin\letters\images\CarrierFlyer.png" width="700px" >
+	</td>
   </tr>
 </table>

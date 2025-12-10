@@ -584,6 +584,12 @@ where id=#clientid#
      <cfelse>
         <cfset undercontdate = ''>
      </cfif>
+     <!--- Store the old under_contract_date to check if it's newly added --->
+     <cfif IsDefined("getinfo.under_contract_date") AND getinfo.under_contract_date NEQ ''>
+        <cfset oldUnderContractDate = getinfo.under_contract_date>
+     <cfelse>
+        <cfset oldUnderContractDate = ''>
+     </cfif>
      <cfif #new_closing_date# is not 'None Yet' and #new_closing_date# is not ''>
         <cfset closdate = #dateformat(new_closing_date, "YYYY-MM-DD")#>
      <cfelse>
@@ -700,6 +706,21 @@ where id=#clientid#
         <cfif #newhangerOfferUrgentCallDate# is not ''>,door_hangerOfferUrgent_call_date='#newhangerOfferUrgentCallDate#'<cfelse>,door_hangerOfferUrgent_call_date=NULL</cfif>
         where ID=#clientid#
     </cfquery>
+    
+    <!--- Automatically queue Under Contract letter if under_contract_date was newly added --->
+    <cfif undercontdate NEQ '' AND oldUnderContractDate EQ ''>
+        <cfquery name="checkExistingUnderContractQueue" datasource="aaalh3x_onestep">
+            select * from printQueue
+            where clientid = #clientid# and printType = 'underContract'
+        </cfquery>
+        <cfif checkExistingUnderContractQueue.recordcount EQ 0>
+            <cfquery datasource="aaalh3x_onestep">
+                insert into printQueue(clientid,printType,printed,memberId,cleared)
+                values(#clientid#,'underContract',0,#verify.id#,0)
+            </cfquery>
+        </cfif>
+    </cfif>
+    
     <br>
     <font face="arial" size="3" color="green"><b>The Client Record was Modified</b></font><br><Br>
 </cfif>
@@ -1183,7 +1204,7 @@ order by company
 </tr>
 <tr>
 <td></td>
-<td valign="middle"><input type="text" name="new_to_address2" size="20" value="#getinfo.to_address#"></td>
+<td valign="middle"><input type="text" name="new_to_address2" size="20" value="#getinfo.to_address2#"></td>
 <Td valign="middle"><font face="arial" size="2">State </td><td valign="middle">
 <div>
   <input class="typeahead" type="text" name="new_to_state" id="new_to_state">

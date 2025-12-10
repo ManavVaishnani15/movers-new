@@ -92,28 +92,28 @@
 
 <cfsavecontent variable="REQUEST.letter_body" >
 	<cfoutput>
-	<span class="fontsize13">Dear #trim(getinfo.repfirstname)# #trim(getinfo.replastname)# or #trim(getinfo.CompanyName)# Company Representative,<br><br>
-    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nationwide USA Movers is looking for carriers to help with hauling of local and interstate shipments for our Direct Marketing and National Account moves.<br><br>
+	<span class="fontsize13">Dear #trim(getinfo.repfirstname)# or #trim(getinfo.CompanyName)# Company Representative,<br><br>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At Nationwide USA Movers we find, research and contract with accounts that do moving and relocation (i.e. Real Estate Associations, Corporations, Government Agencies etc). Our mission is to find moving jobs and pass them on to carriers in our network.<br><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nationwide USA Movers is looking for moving carriers to help with the hauling of local and interstate shipments for our Direct Marketing and National Account moves.<br>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At this moment, we have a new account that has more than 200 moves coming out of the #trim(getinfo.MailingCounty)# County area and we are looking for carriers to help with hauling of shipments. These moves are mainly <i>3–4-bedroom homes with weights averaging 18,000 Lbs or 2600 cubic feet in size.</i><br><br>
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All our moves are surveyed by an AMSA/ATA Certified Moving Consultant (to assure the accuracy of the estimate) and, we provide our carriers with videos of the surveyed homes together with complete moving information to help them pricing out the moves based on their own pricing.<br><br>
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since your company, #trim(getinfo.CompanyName)#, has an interstate authority in good standing with the <i>FMCSA</i> with low or no complains, we would like to bring you on as one of our preferred carriers.<br><br>
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If interested in joining our network of carriers, please go online to www.carriermoving.jobs and fill out the quick and easy application form or directly call our Carrier Relations & Business Development Department at <strong>1-800-656-3620</strong>.<br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At Nationwide USA Movers we find, research and contract with accounts that do moving and relocation (i.e. Real Estate Associations, Corporations, Government Agencies etc). Our mission is to find moving jobs and pass them on to carriers in our network.<br>
+	
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At this moment, we have a new account that has more than 200 moves coming out of the #trim(getinfo.MailingCounty)# County area and we are looking for carriers to help with hauling of shipments. These moves are mainly <i> 3-4-bedroom homes with weights averaging 9000+ Lbs or 1285 cubic feet in size.</i><br>
+	
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All our moves are already surveyed by our experienced Moving Estimators (to assure the accuracy of the estimate) and we provide our carriers with videos of the surveyed homes together with complete moving information to help our carriers price out the moves based on their own pricing and tariffs.<br>
+	
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since your company, #trim(getinfo.CompanyName)#, has an interstate authority in good standing with the <i>FMCSA</i> with low or no complains, we would like to bring you on as one of our Preferred Carriers.<br>
+	
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If interested in joining our Network of Carriers, please go online to <a href="http://www.carriermovingjobs.com/">www.carriermovingjobs.com</a> and fill out the quick and easy application form or directly call our Carrier Relations & Business Development Department at <strong>1-800-976-6833 Ext 4</strong>.<br>
 
 After filling out the form or calling, <span style="text-decoration:underline">ask us to send you a demo video of an actual upcoming move</span>.
 <br><br>
-Sincerely<br><br><br>
+Sincerely<br><br>
 
 Anthony L. Booker<br>
 Carrier Relations & Business Development<br>
 Nationwide USA Movers<br>
-1-800-656-3620<br>
+1-800-976-6833 Ext 4 <br>
 
 </span>
 	</cfoutput>

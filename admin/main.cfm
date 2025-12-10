@@ -423,7 +423,13 @@ where (active=0 or active=1 or active=2) and appt_confirmed=0 and (appointment_d
 <td><div align="center"><cfif #u_month.recordcount# is 1><cfoutput><a href="client_info.cfm?requestTimeout=6000&un=#un#&pw=#pw#&clientid=#u_month.id#&url1=#url1#"></cfoutput><cfelseif #u_month.recordcount# GT 1><cfoutput><a href="search.cfm?requestTimeout=6000&un=#un#&pw=#pw#&type=umonth"></cfoutput></cfif><font face="arial" size="7" color="navy"><b><cfoutput>#u_month.recordcount#</cfoutput></b></font></a></td>
 <cfquery name="u_all" datasource="aaalh3x_onestep">
 select * from CLIENTS
-where (active=0 or active=1 or active=2) and appt_confirmed=0 and (appointment_date >= #dateformat(now(), "MM/DD/yyyy")# OR appointment_date='' OR appointment_date is NULL)
+where (active=0 or active=1 or active=2) and appt_confirmed=0 AND (
+            appointment_date IS NULL
+            OR appointment_date < '1900-01-01'
+            OR appointment_date >= <cfqueryparam 
+                                        value="#dateFormat(now(), 'yyyy-mm-dd')#" 
+                                        cfsqltype="cf_sql_date">
+          )
 </cfquery>
 <td><div align="center"><cfif #u_all.recordcount# is 1><cfoutput><a href="client_info.cfm?requestTimeout=6000&un=#un#&pw=#pw#&clientid=#u_all.id#&url1=#url1#"></cfoutput><cfelseif #u_all.recordcount# GT 1><cfoutput><a href="search.cfm?requestTimeout=6000&un=#un#&pw=#pw#&type=uall"></cfoutput></cfif><font face="arial" size="7" color="gray"><b><cfoutput>#u_all.recordcount#</cfoutput></b></font></a></td>
 </tr>

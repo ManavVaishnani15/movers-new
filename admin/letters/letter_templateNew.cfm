@@ -49,22 +49,20 @@
   <tr><td><cfoutput>#trim(REQUEST.letter_body)#</cfoutput></td></tr>
 </table>
 
-<!-- MOVE DISCOUNT CODE SECTION -->
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
     <tr>
-        <!-- LEFT: Discount Code Info -->
         <td width="70%" align="center" valign="center">
 
-            <div style="line-height:1.25; padding-left:150px;">
+            <div style="line-height:1.75; padding-left:150px;">
                 <span class="fontsize18 fontbold">Move Discount Code</span><br>
 
-                <span class="fontsize24 colorred fontbold" style="text-decoration:underline;">
+                <span class="fontsize28 colorred fontbold" style="text-decoration:underline;">
                     <cfoutput>#getinfo.discountCode#</cfoutput>
                 </span><br>
 
-                <span class="fontsize14 fontbold">LOCK IN AUTOMATIC DISCOUNTS ON YOUR MOVE BY</span><br>
+                <span class="fontsize12 fontbold">LOCK IN AUTOMATIC DISCOUNTS ON YOUR MOVE BY</span><br>
 
-                <span class="fontsize24 colorred fontbold">
+                <span class="fontsize28 colorred fontbold">
                     <cfif len(trim(getinfo.appointment_date))>
                         <cfoutput>#dateformat(getinfo.appointment_date, "MM/DD/YYYY")#</cfoutput>
                     <cfelse>
@@ -79,103 +77,112 @@
 
         </td>
 
-        <!-- RIGHT: QR Code -->
         <td width="30%" align="right" valign="center">
             <img src="C:\lucee\tomcat\webapps\ROOT\movers\admin\images\QR.png" width="160" style="margin-top:0px;">
         </td>
     </tr>
 </table>
 
-<!-- MOVE DISCOUNT CARD + CALL US SECTION -->
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:18px;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
   <tr>
 
-    <!-- LEFT: MOVE DISCOUNT CARD -->
-    <td width="48%" valign="top" align="center">
+    <td width="55%" valign="top" align="center">
 
-		<div style="
-			width: 280px;
-			border: 2px solid #ddd;
-			border-radius: 25px;
-			padding: 10px;
-			background: #f8f9fa;
-			box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-		">
+    <div style="
+        width: 360px;
+        border: 4px dashed #ff0000;
+        border-radius: 30px;
+        padding: 4px;               
+        background: transparent;
+        display: inline-block;
+    ">
 
-			<table width="100%" cellpadding="0" cellspacing="0">
-				<tr>
+        <div style="
+            width: 100%;
+            background: #ffffff;
+            border: 2px solid #ddd;
+            border-radius: 28px;   
+            padding: 15px;
+            box-sizing: border-box;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+        ">
 
-					<!-- LEFT: LOGO -->
-					<td width="35%" valign="top" align="left">
-						<img src="http://www.top12movingbiz.com/admin/letters/images/1/Logo.jpg"
-							style="width:80px; margin-top:4px;">
-					</td>
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
 
-					<!-- RIGHT: TEXT -->
-					<td width="65%" valign="top" style="padding-left:7px;">
+                    <td width="35%" valign="top" align="left">
+                        <img src="http://www.top12movingbiz.com/admin/letters/images/1/Logo.jpg"
+                             style="width:85px; margin-top:4px;">
 
-						<div style="font-size:14px; font-weight:bold; color:#003087; line-height:1.25em;">
-							MOVE DISCOUNT CARD
-						</div>
+                        <div style="font-size:9px; color:#0070C0; margin-top:5px; text-align:left; line-height:1.35em;">
+                            <ul style="margin:0; padding-left:8px; list-style-position:inside;">
+                                <li>Local Moves</li>
+                                <li>Long Distance Moves</li>
+                                <li>Storage</li>
+                                <li>Moving Help</li>
+                            </ul>
+                        </div>
+                    </td>
 
-						<div style="font-size:10px; font-weight:bold; color:#003087; margin-top:1px; line-height:1.25em;">
-							FREE MOVING ESTIMATE
-						</div>
+                    <td width="65%" valign="top" style="padding-left:7px;">
 
-						<div style="font-size:10px; font-weight:bold; color:#003087; line-height:1.25em;">
-							UP TO 40% DISCOUNT ON MOVING
-						</div>
+                        <div style="font-size:14px; font-weight:bold; color:#003087;">
+                            MOVE DISCOUNT CARD
+                        </div>
 
-						<div style="font-size:14px; font-weight:bold; color:#003087; margin-top:3px; line-height:1.25em;">
-							MOVE DISCOUNT CODE
-						</div>
+                        <div style="font-size:10px; font-weight:bold; color:#003087;">
+                            FREE MOVING ESTIMATE
+                        </div>
 
-						<div class="colorred" style="font-size:18px; font-weight:bold; margin-top:1px; letter-spacing:0.5px;">
-							<cfoutput>#getinfo.discountCode#</cfoutput>
-						</div>
-					</td>
-				</tr>
-			</table>
+                        <div style="font-size:10px; font-weight:bold; color:#003087;">
+                            UP TO 40% DISCOUNT ON MOVING
+                        </div>
 
-			<!-- BULLETS -->
-			<div style="font-size:9.5px; color:#0070C0; margin-top:6px; text-align:left; line-height:1.35em;">
-				• Local Moves <br>
-				• Long Distance Moves <br>
-				• Storage <br>
-				• Moving Help <br>
-			</div>
+                        <div style="font-size:14px; font-weight:bold; color:#003087; margin-top:3px;">
+                            MOVE DISCOUNT CODE
+                        </div>
 
-			<!-- CONTACT LINES -->
-			<div style="font-size:8.5px; margin-top:6px; color:#0070C0; text-align:left; line-height:1.35em;">
-				<span>Click to CALL/TEXT:</span>
-				<a href="tel:1-800-976-6833" style="color:#0070C0; font-weight:bold; text-decoration:none;">
-					1-800-976-6833
-				</a>
-				<br>
-				<span>Click to CHAT or SET UP APPOINTMENT:</span>
-				<a href="https://www.nationwideusamovers.com" style="color:#0070C0; font-weight:bold; text-decoration:none;">
-					www.nationwideusamovers.com
-				</a>
-			</div>
+                        <div style="font-size:20px; font-weight:bold; color:red; margin-top:2px;">
+                            <cfoutput>#getinfo.discountCode#</cfoutput>
+                        </div>
 
-		</div>
-    </td>
+                    </td>
+                </tr>
+            </table>
+            
 
-    <!-- RIGHT: CALL US BLOCK -->
-    <td width="52%" valign="top" align="center" style="padding-left:15px;">
+            <div style="font-size:8.5px; margin-top:8px; color:#0070C0; text-align:left; line-height:1.35em;">
+                Click to CALL/TEXT:
+                <a href="tel:1-800-976-6833" style="color:#0070C0; font-weight:bold; text-decoration:none;">
+                    1-800-976-6833
+                </a><br>
+
+                Click to CHAT or SET UP APPOINTMENT:
+                <a href="https://www.nationwideusamovers.com" style="color:#0070C0; font-weight:bold; text-decoration:none;">
+                    www.nationwideusamovers.com
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</td>
+
+
+    <td width="45%" valign="center" align="center" style="padding-left:15px;">
 
         <div style="line-height:1.35;">
-            <span class="fontsize28 fontbold" style="font-style:italic;">CALL US</span>
+            <span class="fontsize24 fontbold" style="font-style:italic;">CALL US</span>
             <span class="fontsize14 fontbold"> MON-SUN 7am-9pm</span><br>
 
-            <span class="fontsize20 fontbold">TOLL LINE 1-800-976-6833</span><br><br>
+            <span class="fontsize18 fontbold">TOLL LINE 1-800-976-6833</span><br><br>
 
-            <span class="fontsize20 fontbold">OR GO ONLINE TO</span><br>
-            <a href="https://www.nationwideusamovers.com" style="color:#0070C0; font-weight:bold; font-size:20px; text-decoration:underline;">
+            <span class="fontsize18 fontbold">OR GO ONLINE TO</span><br>
+            <a href="https://www.nationwideusamovers.com" style="color:#0070C0; font-weight:bold; font-size:18px; text-decoration:underline;">
                 www.nationwideusamovers.com
             </a><br><br>
 
-            <span class="fontsize20 fontbold">OR SCAN THE QR CODE ABOVE</span>
+            <span class="fontsize18 fontbold">OR SCAN THE QR CODE ABOVE</span>
         </div>
 
     </td>
@@ -183,20 +190,18 @@
   </tr>
 </table>
 
-<!-- FOOTER -->
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:5px;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:0px;">
   <tr>
     <td align="center">
 
-        <span class="fontsize14 fontbold">
+        <span class="fontsize12 fontbold">
             Nationwide Services provided in <span style="text-decoration:underline;">ALL 50 STATES</span>
         </span><br>
-        <span class="fontsize14 fontbold">
+        <span class="fontsize12 fontbold">
             Long Distance Moves - Local Moves - Containerized Moves - Storage Moves - Professional Moving Help
         </span>
         <br>
 
-        <!-- Social Media Icons -->
         <div style="margin:2px 0;">
             <img src="http://www.top12movingbiz.com/admin/letters/images/social/facebook.png" width="17" style="margin:0 2px;" alt="Facebook">
             <img src="http://www.top12movingbiz.com/admin/letters/images/social/instagram.png" width="17" style="margin:0 2px;" alt="Instagram">
@@ -205,7 +210,7 @@
             <img src="http://www.top12movingbiz.com/admin/letters/images/social/google.png" width="17" style="margin:0 2px;" alt="Google">
         </div>
 
-        <span class="fontsize9">
+        <span class="fontsize9" style="color:#555555;">
             NATIONWIDE USA MOVERS IS A FEDERALLY LICENSED AND AUTHORIZED MOVE MANAGEMENT COMPANY MC# 945837 USDOT# 3558324
         </span>
     </td>

@@ -59,7 +59,7 @@ where id=#clientid#
             <style>
             body {
                 height: 842px;
-                width: 695px;
+                width: 700px;
                 /* to centre page on screen*/
                 margin-left: auto;
                 margin-right: auto;
@@ -87,7 +87,7 @@ where id=#clientid#
 <tr>
 <td valign="top">
 <font face="arial" size="2"><b>CUSTOMER</b>: #getinfo.first_name# #getinfo.last_name#<br><br>
-<b>STREET ADDRESS</b>: #getinfo.from_address#<cfif #getinfo.from_address2# is not ''>#getinfo.from_address#</cfif><br><br>
+<b>STREET ADDRESS</b>: #getinfo.from_address#<cfif #getinfo.from_address2# is not ''>, #getinfo.from_address2#</cfif><br><br>
 <b>CITY, STATE, ZIP</b>: #getinfo.from_city#, #getinfo.from_state# #getinfo.from_zip#<br><br>
 <b>ORIGIN PHONE</b>: #getinfo.phone#<br><br>
 <b>EMAIL ADDRESS</b>: #getinfo.email#<br><br>
@@ -98,7 +98,7 @@ where id=#clientid#
 
 <td valign="top">
 <font face="arial" size="2">
-<b>STREET ADDRESS</b>: #getinfo.to_address# <cfif #getinfo.to_address2# is not ''>#getinfo.to_address#</cfif><br><br>
+<b>STREET ADDRESS</b>: #getinfo.to_address#<cfif #getinfo.to_address2# is not ''>, #getinfo.to_address2#</cfif><br><br>
 <b>CITY, STATE, ZIP</b>: #getinfo.to_city#, #getinfo.to_state# #getinfo.to_zip#<br>
 
 </td>
@@ -639,7 +639,7 @@ quotes are based on the Household Good Motor Carriers' published tariffs.
         <style>
             body {
                 height: 842px;
-                width: 695px;
+                width: 700px;
                 /* to centre page on screen*/
                 margin-left: auto;
                 margin-right: auto;
@@ -667,7 +667,7 @@ quotes are based on the Household Good Motor Carriers' published tariffs.
 <tr>
 <td valign="top">
 <font face="arial" size="2"><b>CUSTOMER</b>: #getinfo.first_name# #getinfo.last_name#<br><br>
-<b>STREET ADDRESS</b>: #getinfo.from_address#<cfif #getinfo.from_address2# is not ''>#getinfo.from_address#</cfif><br><br>
+<b>STREET ADDRESS</b>: #getinfo.from_address#<cfif #getinfo.from_address2# is not ''>, #getinfo.from_address2#</cfif><br><br>
 <b>CITY, STATE, ZIP</b>: #getinfo.from_city#, #getinfo.from_state# #getinfo.from_zip#<br><br>
 <b>ORIGIN PHONE</b>: #getinfo.phone#<br><br>
 <b>EMAIL ADDRESS</b>: #getinfo.email#<br><br>
@@ -678,7 +678,7 @@ quotes are based on the Household Good Motor Carriers' published tariffs.
 
 <td valign="top">
 <font face="arial" size="2">
-<b>STREET ADDRESS</b>: #getinfo.to_address# <cfif #getinfo.to_address2# is not ''>#getinfo.to_address#</cfif><br><br>
+<b>STREET ADDRESS</b>: #getinfo.to_address#<cfif #getinfo.to_address2# is not ''>, #getinfo.to_address2#</cfif><br><br>
 <b>CITY, STATE, ZIP</b>: #getinfo.to_city#, #getinfo.to_state# #getinfo.to_zip#<br>
 
 </td>
@@ -1231,7 +1231,7 @@ quotes are based on the Household Good Motor Carriers' published tariffs.
 <style>
     body {
         height: 842px;
-        width: 695px;
+        width: 700px;
         /* to centre page on screen*/
         margin-left: auto;
         margin-right: auto;
@@ -1266,7 +1266,7 @@ quotes are based on the Household Good Motor Carriers' published tariffs.
 <tr>
 <td valign="top">
 <font face="arial" size="2"><b>CUSTOMER</b>: #getinfo.first_name# #getinfo.last_name#<br><br>
-<b>STREET ADDRESS</b>: #getinfo.from_address#<cfif #getinfo.from_address2# is not ''>#getinfo.from_address#</cfif><br><br>
+<b>STREET ADDRESS</b>: #getinfo.from_address#<cfif #getinfo.from_address2# is not ''>, #getinfo.from_address2#</cfif><br><br>
 <b>CITY, STATE, ZIP</b>: #getinfo.from_city#, #getinfo.from_state# #getinfo.from_zip#<br><br>
 <b>ORIGIN PHONE</b>: #getinfo.phone#<br><br>
 <b>EMAIL ADDRESS</b>: #getinfo.email#<br><br>
@@ -1277,7 +1277,7 @@ quotes are based on the Household Good Motor Carriers' published tariffs.
 
 <td valign="top">
 <font face="arial" size="2">
-<b>STREET ADDRESS</b>: #getinfo.to_address# <cfif #getinfo.to_address2# is not ''>#getinfo.to_address#</cfif><br><br>
+<b>STREET ADDRESS</b>: #getinfo.to_address#<cfif #getinfo.to_address2# is not ''>, #getinfo.to_address2#</cfif><br><br>
 <b>CITY, STATE, ZIP</b>: #getinfo.to_city#, #getinfo.to_state# #getinfo.to_zip#<br>
 
 </td>
@@ -1781,7 +1781,7 @@ Phone: 1-800-976-6833<br>
 
 <table border="0" cellspacing="0" cellpadding="2" width="100%">
         <tr>
-            <td colspan="2" style="font-family: arial; font-size: 11px; padding-top: 20px;" align="center">
+            <td colspan="2" style="font-family: arial; font-size: 11px; padding-top: 20px;">
                 <span style="font-weight: bold">Nationwide USA Movers Corporate Headquarters: 2319 Third Avenue, Suite 1710 New York, NY 10035 MC # 945837 USDOT # 3558324</span>
             </td>
         </tr>

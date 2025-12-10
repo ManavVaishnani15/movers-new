@@ -107,15 +107,16 @@
             We are trying to contact you to set up a Free Virtual Move Estimate and get you moving discounts.  
             <br><br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Get your Quick & Easy Virtual Estimate & lock in your discounts before they expire.<br><br>
+            Get your Quick & Easy Virtual Estimate & lock in your discounts before they expire.<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Virtual Walkthroughs are simply & easily done by using your cell phone.<br><br>
-
+            <div style="text-align:center;">
+                Virtual Walkthroughs are simply & easily done by using your cell phone.<br><br>
+            </div>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Call us or go online and don’t forget to mention or type in your personal 
+            Call us or go online and don't forget to mention or type in your personal 
 
-            <b>Move Discount Code:</b> 
-            <span class="fontbold colorred" style="text-decoration:underline;">#getinfo.discountCode#</span>.<br><br
+            <b>Move Discount Code:</b><br> 
+            <span class="fontbold colorred" style="text-decoration:underline;">#getinfo.discountCode#</span>.
         </div>
 
     </cfoutput>

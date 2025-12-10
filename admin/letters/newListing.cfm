@@ -96,15 +96,18 @@
             #trim(getinfo.FROM_ADDRESS)#<cfif trim(getinfo.FROM_ADDRESS2) NEQ ''>, #trim(getinfo.FROM_ADDRESS2)#</cfif> 
             was recentely listed, we will be offering you huge moving discounts.<br><br>
             
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get your Quick & Easy Virtual Estimate & lock in your discounts before they expire.<br><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Virtual Walkthroughs are simply & easily done by using your cell phone.<br><br>
-
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Call us or go online and don’t forget to mention or type in your personal 
+            Get your Quick & Easy Virtual Estimate & lock in your discounts before they expire.<br><br>
 
-            <b>Move Discount Code:</b> 
+            <div style="text-align:center;">
+                Virtual Walkthroughs are simply & easily done by using your cell phone.<br><br>
+            </div>
             
-            <span class="fontbold colorred" style="text-decoration:underline;">#getinfo.discountCode#</span>.<br><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Call us or go online and don't forget to mention or type in your personal 
+
+            <b>Move Discount Code:</b> <br> 
+            <span class="fontbold colorred" style="text-decoration:underline;">#getinfo.discountCode#</span>.
 
         </div>
 

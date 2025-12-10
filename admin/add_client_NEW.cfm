@@ -115,12 +115,6 @@ where username='#un#' and temp_pw=#pw# and active=1
                             values(#add_client.newID#,'gotOffer',0,#verify.id#,0)
                     </cfquery>
             </cfif>
-            <cfif #under_contract_date# is not ''  and not isdefined('form.noQueue') >
-                    <cfquery datasource="aaalh3x_onestep">
-                            insert into printQueue(clientid,printType,printed,memberId,cleared)
-                            values(#add_client.newID#,'underContract',0,#verify.id#,0)
-                    </cfquery>
-            </cfif>
             
             <cfif  not (isdefined('form.noQueue') OR IsDefined("queueMayflowerLetter") OR IsDefined("queueMayflowerFlyer") OR isdefined('form.noRealtorLetter'))>
                 <cfquery name="q" datasource="aaalh3x_onestep">
@@ -275,6 +269,14 @@ where username='#un#' and temp_pw=#pw# and active=1
                     WHERE id = #add_client.newID#
                 </cfquery>
          </CFIF> --->
+         
+         <!--- Queue Under Contract letter if under_contract_date is provided --->
+         <cfif #under_contract_date# is not '' and not isdefined('form.noQueue')>
+             <cfquery datasource="aaalh3x_onestep">
+                 insert into printQueue(clientid,printType,printed,memberId,cleared)
+                 values(#add_client.newID#,'underContract',0,#verify.id#,0)
+             </cfquery>
+         </cfif>
          
          <!--- Automatically queue:
                                     * follow up letter 7 days before the Appointment Date

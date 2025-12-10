@@ -54,6 +54,7 @@ where id=#clientid#
     <!--- Build email list based on sendEmailToAll checkbox --->
     <cfset emailList = getinfo.emailAddress>
     <cfif parameterexists(sendEmailToAll) and sendEmailToAll eq '1'>
+        <!--- Add Rep 1 additional emails --->
         <cfif len(trim(getinfo.emailAddress2))>
             <cfset emailList = emailList & "," & trim(getinfo.emailAddress2)>
         </cfif>
@@ -62,6 +63,31 @@ where id=#clientid#
         </cfif>
         <cfif len(trim(getinfo.emailAddress4))>
             <cfset emailList = emailList & "," & trim(getinfo.emailAddress4)>
+        </cfif>
+        <!--- Add Rep 2 emails --->
+        <cfif len(trim(getinfo.Rep2Emailaddress))>
+            <cfset emailList = emailList & "," & trim(getinfo.Rep2Emailaddress)>
+        </cfif>
+        <cfif len(trim(getinfo.Rep2Emailaddress2))>
+            <cfset emailList = emailList & "," & trim(getinfo.Rep2Emailaddress2)>
+        </cfif>
+        <cfif len(trim(getinfo.Rep2Emailaddress3))>
+            <cfset emailList = emailList & "," & trim(getinfo.Rep2Emailaddress3)>
+        </cfif>
+        <cfif len(trim(getinfo.Rep2Emailaddress4))>
+            <cfset emailList = emailList & "," & trim(getinfo.Rep2Emailaddress4)>
+        </cfif>
+        <cfif len(trim(getinfo.Rep3Emailaddress))>
+            <cfset emailList = emailList & "," & trim(getinfo.Rep3Emailaddress)>
+        </cfif>
+        <cfif len(trim(getinfo.Rep3Emailaddress2))>
+            <cfset emailList = emailList & "," & trim(getinfo.Rep3Emailaddress2)>
+        </cfif>
+        <cfif len(trim(getinfo.Rep3Emailaddress3))>
+            <cfset emailList = emailList & "," & trim(getinfo.Rep3Emailaddress3)>
+        </cfif>
+        <cfif len(trim(getinfo.Rep3Emailaddress4))>
+            <cfset emailList = emailList & "," & trim(getinfo.Rep3Emailaddress4)>
         </cfif>
     </cfif>
     
