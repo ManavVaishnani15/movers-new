@@ -50,13 +50,19 @@ select * from CLIENTS
 where id=#clientid#
 </cfquery>
 <cfif parameterexists(sendmail) is 'yes'>
+    <cfset emailList = getinfo.email>
+    <cfif parameterexists(sendEmailToAll) and sendEmailToAll eq '1'>
+        <cfif len(trim(getinfo.email2))>
+            <cfset emailList = emailList & "," & trim(getinfo.email2)>
+        </cfif>
+    </cfif>
     <cfmail
      server="vps.affordableusamovers.com"
       username="customercare@nationwideusamovers.com" 
       password="Temp1707!" 
       port="587" 
       useSSL="false"
-    TO="#getinfo.email#"
+    TO="#emailList#"
     FROM="move-quotes@nationwideusamovers.com"
     SUBJECT="Nationwide USA Movers preferred list of carriers"
     TYPE="HTML">
@@ -89,8 +95,10 @@ where id=#clientid#
 <b>STREET ADDRESS</b>: #getinfo.from_address#<cfif #getinfo.from_address2# is not ''>, #getinfo.from_address2#</cfif><br><br>
 <b>CITY, STATE, ZIP</b>: #getinfo.from_city#, #getinfo.from_state# #getinfo.from_zip#<br><br>
 <b>ORIGIN PHONE</b>: #getinfo.phone#<br><br>
-<b>EMAIL ADDRESS</b>: #getinfo.email#<br>
-
+<b>EMAIL ADDRESS</b>: #getinfo.email#<br><br>
+<b>SECOND EMAIL ADDRESS</b>: #getinfo.email2#<br><br>
+<b>CELL</b>: #getinfo.cell#<br><br>
+<b>SECOND CELL</b>: #getinfo.cell2#<br>
 </td>
 <td valign="top">
 <font face="arial" size="2">
@@ -266,8 +274,10 @@ quotes are based on the Household Good Motor Carriers’ published tariffs.
 <b>STREET ADDRESS</b>: #getinfo.from_address#<cfif #getinfo.from_address2# is not ''>, #getinfo.from_address2#</cfif><br><br>
 <b>CITY, STATE, ZIP</b>: #getinfo.from_city#, #getinfo.from_state# #getinfo.from_zip#<br><br>
 <b>ORIGIN PHONE</b>: #getinfo.phone#<br><br>
-<b>EMAIL ADDRESS</b>: #getinfo.email#<br>
-
+<b>EMAIL ADDRESS</b>: #getinfo.email#<br><br>
+<b>SECOND EMAIL ADDRESS</b>: #getinfo.email2#<br><br>
+<b>CELL</b>: #getinfo.cell#<br><br>
+<b>SECOND CELL</b>: #getinfo.cell2#<br>
 </td>
 <td valign="top">
 <font face="arial" size="2">
@@ -441,6 +451,7 @@ quotes are based on the Household Good Motor Carriers’ published tariffs.
 <form action="carrierList.cfm" method="post"><input type="hidden" name="clientid" value="<cfoutput>#clientid#</cfoutput>"><input type="hidden" name="sendmail" value="1"><cfoutput><input type="hidden" name="un" value="#un#"><input type="hidden" name="pw" value="#pw#"></cfoutput>
 <div align="center">
 <input type="submit" value="Email to <cfoutput>#getinfo.email#</cfoutput> Now"><br>
+<input type="checkbox" name="sendEmailToAll" value="1"> Send email to Both<br>
 <input type="checkbox" name="altmail" value="<cfoutput>#verify.id#</cfoutput>"> Check to send copy to yourself</div><br></form>
 </cfif>
 
@@ -463,8 +474,10 @@ quotes are based on the Household Good Motor Carriers’ published tariffs.
 <b>STREET ADDRESS</b>: #getinfo.from_address#<cfif #getinfo.from_address2# is not ''>, #getinfo.from_address2#</cfif><br><br>
 <b>CITY, STATE, ZIP</b>: #getinfo.from_city#, #getinfo.from_state# #getinfo.from_zip#<br><br>
 <b>ORIGIN PHONE</b>: #getinfo.phone#<br><br>
-<b>EMAIL ADDRESS</b>: #getinfo.email#<br>
-
+<b>EMAIL ADDRESS</b>: #getinfo.email#<br><br>
+<b>SECOND EMAIL ADDRESS</b>: #getinfo.email2#<br><br>
+<b>CELL</b>: #getinfo.cell#<br><br>
+<b>SECOND CELL</b>: #getinfo.cell2#<br>
 </td>
 <td valign="top">
 <font face="arial" size="2">

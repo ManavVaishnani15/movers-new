@@ -79,12 +79,35 @@ where username='#un#' and temp_pw=#pw# and active=1
 
         <cfif not isdefined('form.queueHangerClosing') and not isdefined('form.queueHangerAppt') and not isdefined('form.queueHangerOffer') and not isdefined('form.queueHangerUnited')>
             
-            <cfif #closing_date# is '' and #contract_date# is ''  and not isdefined('form.noQueue') >
-                    <cfquery  datasource="aaalh3x_onestep">
-                            insert into printQueue(clientid,printType,printed,memberId,cleared)
-                            values(#add_client.newID#,'new',0,#verify.id#,0)
-                    </cfquery>
+            <!--- Queue letter based on priority: Under Contract > Closing > Got Offer > New Listing --->
+            <!--- Only queue ONE letter based on what dates are filled in --->
+            <cfif #under_contract_date# is not '' and not isdefined('form.noQueue') >
+                <!--- Under Contract date is set - queue ONLY Under Contract letter --->
+                <cfquery datasource="aaalh3x_onestep">
+                    insert into printQueue(clientid,printType,printed,memberId,cleared)
+                    values(#add_client.newID#,'underContract',0,#verify.id#,0)
+                </cfquery>
+            <cfelseif #closing_date# is not '' and not isdefined('form.noQueue') >
+                <!--- Closing date is set (but not Under Contract) - queue ONLY Closing letter --->
+                <cfquery datasource="aaalh3x_onestep">
+                    insert into printQueue(clientid,printType,printed,memberId,cleared)
+                    values(#add_client.newID#,'closing',0,#verify.id#,0)
+                </cfquery>
+            <cfelseif #contract_date# is not '' and not isdefined('form.noQueue') >
+                <!--- Offer date is set (but not Closing or Under Contract) - queue ONLY Got Offer letter --->
+                <cfquery datasource="aaalh3x_onestep">
+                    insert into printQueue(clientid,printType,printed,memberId,cleared)
+                    values(#add_client.newID#,'gotOffer',0,#verify.id#,0)
+                </cfquery>
+            <cfelseif not isdefined('form.noQueue') >
+                <!--- Only appointment date (or no special dates) - queue New Listing letter --->
+                <cfquery  datasource="aaalh3x_onestep">
+                    insert into printQueue(clientid,printType,printed,memberId,cleared)
+                    values(#add_client.newID#,'new',0,#verify.id#,0)
+                </cfquery>
             </cfif>
+            
+            <!--- Handle LETTER_SENDS for labels --->
             <cfquery name="check_initial" datasource="aaalh3x_onestep">
                     select * from LETTER_SENDS
                     where send_type=1 and cust_hook=#add_client.newID#
@@ -102,19 +125,6 @@ where username='#un#' and temp_pw=#pw# and active=1
                      values ('1','1','#add_client.newID#','#datenow#')
                  </cfquery>
              </cfif>
-
-            <cfif #closing_date# is not ''   and not isdefined('form.noQueue') >
-                    <cfquery datasource="aaalh3x_onestep">
-                            insert into printQueue(clientid,printType,printed,memberId,cleared)
-                            values(#add_client.newID#,'closing',0,#verify.id#,0)
-                    </cfquery>
-            </cfif>
-            <cfif #contract_date# is not ''  and not isdefined('form.noQueue') >
-                    <cfquery datasource="aaalh3x_onestep">
-                            insert into printQueue(clientid,printType,printed,memberId,cleared)
-                            values(#add_client.newID#,'gotOffer',0,#verify.id#,0)
-                    </cfquery>
-            </cfif>
             
             <cfif  not (isdefined('form.noQueue') OR IsDefined("queueMayflowerLetter") OR IsDefined("queueMayflowerFlyer") OR isdefined('form.noRealtorLetter'))>
                 <cfquery name="q" datasource="aaalh3x_onestep">
@@ -269,14 +279,6 @@ where username='#un#' and temp_pw=#pw# and active=1
                     WHERE id = #add_client.newID#
                 </cfquery>
          </CFIF> --->
-         
-         <!--- Queue Under Contract letter if under_contract_date is provided --->
-         <cfif #under_contract_date# is not '' and not isdefined('form.noQueue')>
-             <cfquery datasource="aaalh3x_onestep">
-                 insert into printQueue(clientid,printType,printed,memberId,cleared)
-                 values(#add_client.newID#,'underContract',0,#verify.id#,0)
-             </cfquery>
-         </cfif>
          
          <!--- Automatically queue:
                                     * follow up letter 7 days before the Appointment Date

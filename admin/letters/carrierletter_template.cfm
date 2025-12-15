@@ -263,11 +263,3 @@ MC #945837 USDOT# 3558324</span>
     </td>
   </tr>
 </table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="10">
-  <tr>
-	<td align="center">
-		<img src="C:\lucee\tomcat\webapps\ROOT\movers\admin\letters\images\CarrierFlyer.png" width="700px" >
-	</td>
-  </tr>
-</table>

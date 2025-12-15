@@ -41,7 +41,9 @@
          where (memberId is null or memberId=#verify.id#)
          and printed=0
         and cleared=0
-        <cfif isDefined('url.type') and url.type is "followUp">
+        <cfif isDefined('url.type') and url.type is "underContract">
+            and printType='underContract'
+        <cfelseif isDefined('url.type') and url.type is "followUp">
             and (printType='followUp' or printType='Mayflowerfollowup')
         <cfelse>
             and (printType <> 'followUp' and printType <> 'Mayflowerfollowup')
@@ -106,6 +108,12 @@
         <cfelseif printQueue.printType is "closing">
             <!--- <cfinclude template="letters/close_letter.cfm" /> --->
             <cfdocumentsection><cfinclude template="letters/closingLetter.cfm" /></cfdocumentsection>
+        <cfelseif printQueue.printType is "underContract">
+            <cfdocumentsection><cfinclude template="letters/underContractLetter.cfm" /></cfdocumentsection>
+            <cfquery  datasource="aaalh3x_onestep">
+                insert into LETTER_SENDS(send_type,sent,cust_hook,sent_date)
+                values(400,1,'#clientid#','#datenow#')
+            </cfquery>
         <cfelseif printQueue.printType is "followUp">
             <cfdocumentsection><cfinclude template="letters/followUp.cfm" /></cfdocumentsection>
             <cfquery  datasource="aaalh3x_onestep">

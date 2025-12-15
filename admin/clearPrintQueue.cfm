@@ -46,7 +46,9 @@
         update printQueue
             set cleared=1
         where (memberId is null or memberId=#verify.id#)
-            <cfif isDefined('url.type') and url.type is "followUp">
+            <cfif isDefined('url.type') and url.type is "underContract">
+                and printType='underContract'
+            <cfelseif isDefined('url.type') and url.type is "followUp">
                 and (printType='followUp' OR printType='MayflowerfollowUp')
             <cfelse>
                 and (printType <> 'followUp' AND printType <> 'MayflowerfollowUp')

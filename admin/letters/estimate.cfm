@@ -43,8 +43,10 @@ where id=#clientid#
 </cfquery>
 <cfif parameterexists(sendmail) is 'yes'>
     <cfset emailList = getinfo.email>
-    <cfif len(trim(getinfo.email2))>
-        <cfset emailList = emailList & "," & getinfo.email2>
+    <cfif parameterexists(sendEmailToAll) and sendEmailToAll eq '1'>
+        <cfif len(trim(getinfo.email2))>
+            <cfset emailList = emailList & "," & trim(getinfo.email2)>
+        </cfif>
     </cfif>
     <cfmail
      server="vps.affordableusamovers.com"
@@ -1247,6 +1249,7 @@ quotes are based on the Household Good Motor Carriers' published tariffs.
 <form action="estimate.cfm" method="post"><input type="hidden" name="clientid" value="<cfoutput>#clientid#</cfoutput>"><input type="hidden" name="sendmail" value="1"><cfoutput><input type="hidden" name="un" value="#un#"><input type="hidden" name="pw" value="#pw#"></cfoutput>
 <div align="center">
 <input type="submit" value="Email to <cfoutput>#getinfo.email#</cfoutput> Now"><br>
+<input type="checkbox" name="sendEmailToAll" value="1"> Send email to Both<br>
 <input type="checkbox" name="altmail" value="<cfoutput>#verify.id#</cfoutput>"> Check to send copy to yourself</div><br></form>
 </cfif>
 

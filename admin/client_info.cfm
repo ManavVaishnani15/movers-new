@@ -2063,7 +2063,7 @@ where send_type=21 and (sent=1 or sent=2) and cust_hook=#clientid#
     <td valign="middle">
         <cfif #getinfo.email# CONTAINS '.' AND #getinfo.email# CONTAINS '@'>
             <cfoutput>
-                <a href="letters/followup.cfm?clientid=#clientid#&emailit=y&un=#un#&pw=#pw#&directPrint=1" target="_f#clientid#">Email Now</a>
+                <a href="letters/followup.cfm?clientid=#clientid#&emailit=y&un=#un#&pw=#pw#" target="_f#clientid#">Email Now</a>
             </cfoutput>
         </cfif>
     </td>

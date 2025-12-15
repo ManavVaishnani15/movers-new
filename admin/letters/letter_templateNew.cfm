@@ -23,14 +23,13 @@
 
     /* Optimized spacing for PDF */
     table { border-spacing: 0; }
-    td { padding: 2px 3px; line-height: 1.15em; }
+    td { padding: 0px 0px; line-height: 1em; }
     
-    body { margin: 0; padding: 8px; }
+    body { margin: 0; padding: 0px; }
 
 </style>
 
 
-<!-- HEADER -->
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width="15%" align="left">
