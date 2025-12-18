@@ -115,7 +115,7 @@
                 values(400,1,'#clientid#','#datenow#')
             </cfquery>
         <cfelseif printQueue.printType is "followUp">
-            <cfdocumentsection><cfinclude template="letters/followUp.cfm" /></cfdocumentsection>
+            <cfdocumentsection><cfinclude template="letters/followUpPDF.cfm" /></cfdocumentsection>
             <cfquery  datasource="aaalh3x_onestep">
                 insert into LETTER_SENDS(send_type,sent,cust_hook,sent_date,printqueueId)
                 values(6,1,'#clientid#','#datenow#',<cfqueryparam cfsqltype="cf_sql_bigint" value="#printQueue.id#">)
@@ -232,4 +232,3 @@
                </cfquery> --->
     </cfoutput>
 </cfdocument>
-

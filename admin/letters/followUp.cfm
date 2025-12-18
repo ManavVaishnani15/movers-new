@@ -158,7 +158,7 @@
         port="587" 
         useSSL="false"
         TO="#finalEmailList#"
-        FROM="move-quotes@nationwideusamovers.com"
+        FROM="customercare@nationwideusamovers.com"
         SUBJECT="Follow Up - Moving Discount Available"
         TYPE="HTML">
         #emailContent#
@@ -232,6 +232,18 @@
         width: 700px;
         text-align: center;
         margin-top: 20px;
+    }
+
+    /* Mobile horizontal scroll */
+    @media screen and (max-width: 768px) {
+        body {
+            overflow-x: auto;
+            min-width: 700px;
+        }
+        
+        .page-container {
+            min-width: 700px;
+        }
     }
 </style>
 <div class="page-container">

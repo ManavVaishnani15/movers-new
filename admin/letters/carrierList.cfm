@@ -50,10 +50,26 @@ select * from CLIENTS
 where id=#clientid#
 </cfquery>
 <cfif parameterexists(sendmail) is 'yes'>
-    <cfset emailList = getinfo.email>
+    <!--- Always start with primary email --->
+    <cfset emailList = trim(getinfo.email)>
+    
+    <!--- If "Send email to Both" is checked, add secondary email --->
     <cfif parameterexists(sendEmailToAll) and sendEmailToAll eq '1'>
         <cfif len(trim(getinfo.email2))>
-            <cfset emailList = emailList & "," & trim(getinfo.email2)>
+            <cfif len(emailList)>
+                <cfset emailList = emailList & "," & trim(getinfo.email2)>
+            <cfelse>
+                <cfset emailList = trim(getinfo.email2)>
+            </cfif>
+        </cfif>
+    </cfif>
+    
+    <!--- If "Check to send copy to yourself" is checked, add move-quotes@nationwideusamovers.com --->
+    <cfif parameterexists(altmail) is 'yes'>
+        <cfif len(trim(emailList))>
+            <cfset emailList = emailList & "," & "movers-list@nationwideusamovers.com">
+        <cfelse>
+            <cfset emailList = "movers-list@nationwideusamovers.com">
         </cfif>
     </cfif>
     <cfmail

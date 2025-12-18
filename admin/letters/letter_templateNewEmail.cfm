@@ -1,5 +1,4 @@
 <cfparam name="REQUEST.letter_body" default="">
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +32,7 @@
         /* Discount card desktop */
         .discount-card-container {
             width: 364px;
-            height: 205px;
+            height: 195px;
             padding: 4px;
             background: url('https://www.top12movingbiz.com/admin/letters/images/demo2.png') no-repeat center center;
             background-size: 100% 100%;
@@ -51,26 +50,25 @@
                 margin-left: 150px;
             }
         }
-
-        /* Desktop */
+        
         .desktop-only {
             display: block;
         }
-
-        /* Mobile */
+        
         .contact-mobile {
             display: none;
         }
-
+        
         @media screen and (max-width: 600px) {
             .desktop-only {
                 display: none !important;
             }
-
+        
             .contact-mobile {
                 display: block !important;
             }
         }
+
         /* Mobile responsive styles */
         @media screen and (max-width: 600px) {
             body {
@@ -155,6 +153,7 @@
                 /*min-height: 180px !important;*/
                 /*margin: 0 0 25px !important;*/
                 box-sizing: border-box !important;
+                height: 180px !important;
             }
 
             .discount-card-inner {
@@ -243,7 +242,7 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="wrapper">
   <tr>
     <td width="15%" align="left" class="mobile-padding">
-        <img src="http://www.top12movingbiz.com/admin/letters/images/1/Logo.jpg" width="130" alt="Nationwide USA Movers" class="header-logo">
+        <img src="http://www.top12movingbiz.com/admin/letters/images/1/Logo.jpg" width="110" alt="Nationwide USA Movers" class="header-logo">
     </td>
     <td width="70%" class="desktop-only">&nbsp;</td>
     <td width="15%" align="right" valign="bottom" class="mobile-padding">
@@ -262,14 +261,14 @@
     <tr>
         <td width="70%" align="center" valign="center" class="mobile-padding">
 
-            <div class="discount-section desktop-only" style="margin-left:150px; line-height:2.1;">
+            <div class="discount-section desktop-only" style="margin-left:150px; line-height:1.8;">
                 <span class="fontsize18 fontbold">Move Discount Code</span><br>
 
                 <span class="fontsize28 colorred fontbold" style="text-decoration:underline;">
                     <cfoutput>#getinfo.discountCode#</cfoutput>
                 </span><br>
 
-                <span class="fontsize12 fontbold">LOCK IN AUTOMATIC DISCOUNTS ON YOUR MOVE BY</span><br>
+                <span class="fontsize11 fontbold">LOCK IN AUTOMATIC DISCOUNTS ON YOUR MOVE BY</span><br>
 
                 <span class="fontsize28 colorred fontbold">
                     <cfif len(trim(getinfo.appointment_date))>
@@ -283,7 +282,7 @@
 
                 <span class="fontsize12 colorred">HURRY! BEFORE YOUR OFFER EXPIRES</span>
             </div>
-
+            
             <div class="discount-section contact-mobile" style="margin-left:0; text-align:center; line-height:2.1;">
                 <span class="fontsize18 fontbold">Move Discount Code</span><br>
 
@@ -291,7 +290,7 @@
                     <cfoutput>#getinfo.discountCode#</cfoutput>
                 </span><br>
 
-                <span class="fontsize12 fontbold">LOCK IN AUTOMATIC DISCOUNTS ON YOUR MOVE BY</span><br>
+                <span class="fontsize11 fontbold">LOCK IN AUTOMATIC DISCOUNTS ON YOUR MOVE BY</span><br>
 
                 <span class="fontsize28 colorred fontbold">
                     <cfif len(trim(getinfo.appointment_date))>
@@ -314,7 +313,7 @@
     </tr>
 </table>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:25px;"  class="discount-card-table">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:15px; margin-bottom:15px"  class="discount-card-table">
   <tr>
 
     <td width="55%" valign="top" align="center" class="mobile-padding discount-card-wrapper">
@@ -331,7 +330,7 @@
                              style="width:85px; margin-top:4px; margin-left:15px" class="card-logo-mobile">
 
                         <div class="card-services" style="font-size:9px; color:#0070C0; margin-top:5px; text-align:left; line-height:1;">
-                            <ul style="margin:0; padding-left:15px; list-style-position:inside;">
+                            <ul style="margin:0; padding-left:10px; list-style-position:inside;">
                                 <li>Local Moves</li>
                                 <li>Long Distance Moves</li>
                                 <li>Storage</li>
@@ -406,40 +405,87 @@
   </tr>
 </table>
 
-<!--- Mobile Contact Section (appears below discount card on mobile) --->
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="contact-mobile">
+<!-- MOBILE CONTACT SECTION – BULLETPROOF iOS CENTERING -->
+<table width="100%" border="0" cellspacing="0" cellpadding="0"
+       class="contact-mobile"
+       align="center"
+       style="margin:0px auto;">
   <tr>
-    <td align="center" class="contact-section">
-        <div style="line-height:1.35;">
-            <span class="fontsize24 fontbold" style="font-style:italic;">CALL US</span>
-            <span class="fontsize14 fontbold"> MON-SUN 7am-9pm</span><br>
+    <td align="center">
 
-            <span class="fontsize18 fontbold">TOLL LINE 1-800-976-6833</span><br><br>
+      <!-- FIXED WIDTH CENTER BLOCK (CRITICAL) -->
+      <table width="600" border="0" cellspacing="0" cellpadding="0"
+             align="center"
+             style="margin:15px auto; text-align:center;">
+        <tr>
+          <td align="center" style="text-align:center; padding:15px 10px;">
 
-            <span class="fontsize18 fontbold">OR GO ONLINE TO</span><br>
-            <a href="https://www.nationwideusamovers.com" style="color:#0070C0; font-weight:bold; font-size:18px; text-decoration:underline;">
-                www.nationwideusamovers.com
-            </a><br><br>
+            <span style="display:block; font-size:24px; font-weight:bold; font-style:italic; margin-top:75px">
+              CALL US
+            </span>
 
-            <span class="fontsize18 fontbold">OR SCAN THE QR CODE ABOVE</span>
-        </div>
+            <span style="display:block; font-size:16px; font-weight:bold; margin-top:10px">
+              MON-SUN 7am-9pm
+            </span>
+
+            <br>
+
+            <span style="display:block; font-size:18px; font-weight:bold;">
+              TOLL LINE 1-800-976-6833
+            </span>
+
+            <br>
+
+            <span style="display:block; font-size:18px; font-weight:bold;">
+              OR GO ONLINE TO
+            </span>
+
+            <!-- CENTER LINK (iOS NEEDS ITS OWN TABLE) -->
+            <table border="0" cellspacing="0" cellpadding="0" align="center" style="margin:0 auto;">
+              <tr>
+                <td align="center">
+                  <a href="https://www.nationwideusamovers.com"
+                     style="display:block;
+                            font-size:18px;
+                            font-weight:bold;
+                            color:#0070C0;
+                            text-decoration:underline;
+                            text-align:center;">
+                    www.nationwideusamovers.com
+                  </a>
+                </td>
+              </tr>
+            </table>
+
+            <br>
+
+            <span style="display:block; font-size:18px; font-weight:bold;">
+              OR SCAN THE QR CODE ABOVE
+            </span>
+
+          </td>
+        </tr>
+      </table>
+      <!-- END FIXED WIDTH -->
+
     </td>
   </tr>
 </table>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:20px;">
+
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
   <tr>
     <td align="center" class="footer-section mobile-padding">
 
-        <span class="fontsize12 fontbold">
+        <div class="fontsize12 fontbold">
             Nationwide Services provided in <span style="text-decoration:underline;">ALL 50 STATES</span>
-        </span><br>
-        <span class="fontsize12 fontbold">
+        </div>
+        <div class="fontsize12 fontbold" style="margin:5px 0;">
             Long Distance Moves - Local Moves - Containerized Moves - Storage Moves - Professional Moving Help
-        </span>
-        <br>
+        </div>
 
-        <div class="social-icons" style="margin:2px 0;">
+        <div class="social-icons" style="margin:4px 0;">
             <img src="http://www.top12movingbiz.com/admin/letters/images/social/facebook.png" width="17" style="margin:0 2px; display:inline-block;" alt="Facebook">
             <img src="http://www.top12movingbiz.com/admin/letters/images/social/instagram.png" width="17" style="margin:0 2px; display:inline-block;" alt="Instagram">
             <img src="http://www.top12movingbiz.com/admin/letters/images/social/linkedin.png" width="17" style="margin:0 2px; display:inline-block;" alt="LinkedIn">
@@ -447,9 +493,9 @@
             <img src="http://www.top12movingbiz.com/admin/letters/images/social/google.png" width="17" style="margin:0 2px; display:inline-block;" alt="Google">
         </div>
 
-        <span class="fontsize9" style="color:#555555;">
+        <div class="fontsize9" style="color:#555555; margin:4px 0;">
             NATIONWIDE USA MOVERS IS A FEDERALLY LICENSED AND AUTHORIZED MOVE MANAGEMENT COMPANY MC# 945837 USDOT# 3558324
-        </span>
+        </div>
     </td>
   </tr>
 </table>
