@@ -92,44 +92,41 @@
 
 <cfsavecontent variable="REQUEST.letter_body" >
 	<cfoutput>
-	<span class="fontsize13">Dear #trim(getinfo.repfirstname)# #trim(getinfo.replastname)#.<br><br>
+	<span class="fontsize14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dear #trim(getinfo.repfirstname)# #trim(getinfo.replastname)#<br><br>
     
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We see that you are a Real Estate Agent at #trim(getinfo.CompanyName)# and you have a listing at #trim(getinfo.ListingAddress)#.<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thank you for joining Nationwide USA Movers "Realtor Relo Referral Program".<br>
+<span style="display: block; margin-top:5px"></span>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nationwide USA Movers is looking for real estate professionals in your area to create a durable partnership and assist with referring clients that are renting, selling or buying a property and need professional moving services.<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;By joining our network of Real Estate professionals, you have also been automatically enrolled 
+into our "Customer Referral Program". This program will bring you <span style="text-decoration:underline">Incoming Relocation Business</span> from 
+our clients that are moving into your service areas. Our program will also allow you to earn "<span style="text-decoration:underline">Referral Fees</span>" every time you refer a client or anyone that needs moving services. In addition, you can refer other 
+agents to join our network and earn referral fees from their ongoing customers referrals. - <br>
+<span style="display: block; margin-top:5px"></span>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We have in place a "Customer Referral Program" just for professionals in your line of work, 
-where you can <span style="text-decoration:underline">earn referral fees for each and every referred customer that will be using our services 
-for their move. Moreover, you have the opportunity to refer colleagues or friends as referral agents
-and earn referral fees for every customer that they refer to us and uses our moving services.</span><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Earning referral fees is easy! <span style="text-decoration:underline">Just refer us to your clients for a free quick & easy Virtual Estimate</span>. 
+If your customers decide to use our moving services for their move, you will automatically receive 
+"Referral Fees" added directly to a personal <span style="text-decoration:underline">Referral Agent Debit Mastercard</span> that will be issued in the 
+next 24-48hrs and, either emailed or mailed out via USPS or both. This Mastercard/Bank card will be 
+used to deposit all your future move referral commissions. <br>
+<span style="display: block; margin-top:5px"></span>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interested in our "Customer Referral Program"? <br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Our "Customer Referral Program" has advantages also for your clients & customers: Free Virtual 
+Moving Estimate, move discounts, highly professional moving services, and a certified move coordinator 
+available to the customers 7 days a week. All moves coordinated & managed from start to finish. <br>
+<span style="display: block; margin-top:5px"></span>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please visit our website at <span style="color:blue;">www.nationwideusamovers.com</span>. "Click" on "Customer Referral 
-Program" inside the blue button and fill out the quick and easy online form to sign up to our referral 
-program for absolutely free. When signing up, type in your new assigned Agent Referral Code <span style="color:red;text-decoration:underline">#trim(getinfo.ReferralCode)#</span>
-for granting discounts on moving to your referred clients.<br><br>
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nationwide USA Movers is a federally licensed and FMCSA-authorized move manager and 
-broker with more than 30 years of experience in the moving industry.<br><br>
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We have partnered with agents from the major Van Lines and 7000 other professionally licensed 
-and insured moving companies nationwide to offer your clients that are renting, purchasing or selling a 
-home, a variety of moving services all in one stop. All moves are virtually surveyed for accuracy and 
-ease.<br><br>
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We will find quality movers at affordable prices and, manage your referred customers and clients' move from start to finish.<br><br>
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thank you for taking the time to read this letter. We look forward to starting a partnership with 
-you and your company.<br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For all your referrals, use your "Realtor Discount Code" <span style="color: red">[#getinfo.ReferralCode#]</span> that is on your Digital 
+Move Discount card that was texted or emailed to you. This will also allow clients/customers to receive 
+up to 40% Discounts on our moving services. <br><br>
 
 
-Sincerely<br><br>
 
-Anthony L. Booker<br>
-Real Estate & Business Development<br>
+Sincerely - <br>
+<span style="display: block; margin-top:5px"></span>
+
+Realtor Enrollment Team <br>
 Nationwide USA Movers<br>
-1-800-922-1475<br>
+1-800-976-6833-Ext 3 <br><br>
 
 </span>
 	</cfoutput>

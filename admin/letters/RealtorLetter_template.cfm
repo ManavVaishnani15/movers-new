@@ -65,7 +65,7 @@
 	}
 	
 	.fontsize13{
-		font-size:11.5px;
+		font-size:13px;
 	}
 	
 	.fontsize14{
@@ -234,19 +234,13 @@
 
 
 </style>
-<table width="100%" border="0" cellspacing="0" cellpadding="10">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td width="20%" align="center"><img src="http://www.top12movingbiz.com/admin/letters/images/1/Logo.jpg" width="90%"></td>
-    <td width="45%">&nbsp;</td>
-    <td width="25%" align="right" class="fontsize13">
-    Nationwide USA Movers<br>
-    Corporate Headquarters<br>
-    244 Fifth Avenue-Suite 1297<br>
-    New York-NY 10001
-    </td>
+    <td width="20%" align="center"><img src="http://www.top12movingbiz.com/admin/letters/images/1/Logo.jpg" width="150"></td>
+    <td width="70%">&nbsp;</td>
   </tr>
   <tr>
-  	<td colspan="3" align="right"><p class="fontsize13"><cfoutput>#DateFormat(Now(), "mm/dd/yyyy")#</cfoutput></p></td>
+  	<td colspan="3" align="right"><p class="fontsize14"><cfoutput>#DateFormat(Now(), "mm/dd/yyyy")#</cfoutput></p></td>
   </tr>
 </table>
 
@@ -258,15 +252,15 @@
   </tr>
 </table>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="10">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width="90%">&nbsp;</td>
   </tr>
   <tr>
     <td align="center">
     <span class="fontsize12">Nationwide USA Movers Inc<br />
-244 Fifth Avenue, Suite 1297<br />
-New York, NY 10001<br />
+2319 Third Avenue, Suite 1710<br />
+New York, NY 10035<br />
 MC #945837 USDOT# 3558324</span>
     </td>
   </tr>

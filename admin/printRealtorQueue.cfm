@@ -96,27 +96,21 @@
         <cfif printQueue.printType is "new">
             <!--- <cfinclude template="letters/new_listing_letter.cfm" /> --->
             <cfdocumentsection><cfinclude template="letters/RealtorNewLetter.cfm" /></cfdocumentsection>
-            <cfdocumentsection><cfinclude template="letters/RealtorNewFlyer.cfm" /></cfdocumentsection>
+<!---             <cfdocumentsection><cfinclude template="letters/RealtorNewFlyer.cfm" /></cfdocumentsection> --->
              <cfquery  datasource="aaalh3x_onestep">
                 insert into Realtor_LETTER_SENDS(send_type,sent,cust_hook,sent_date)
                 values(1,1,'#clientid#','#datenow#')
             </cfquery>
-             <cfquery  datasource="aaalh3x_onestep">
-                insert into Realtor_LETTER_SENDS(send_type,sent,cust_hook,sent_date)
-                values(103,1,'#clientid#','#datenow#')
-            </cfquery>
+
             
         <cfelseif printQueue.printType is "RealtorLetter">
             <cfdocumentsection><cfinclude template="letters/RealtorNewLetter.cfm" /></cfdocumentsection>
-            <cfdocumentsection><cfinclude template="letters/RealtorNewFlyer.cfm" /></cfdocumentsection>
+<!---             <cfdocumentsection><cfinclude template="letters/RealtorNewFlyer.cfm" /></cfdocumentsection> --->
              <cfquery  datasource="aaalh3x_onestep">
                 insert into Realtor_LETTER_SENDS(send_type,sent,cust_hook,sent_date)
                 values(100,1,'#clientid#','#datenow#')
             </cfquery>
-             <cfquery  datasource="aaalh3x_onestep">
-                insert into Realtor_LETTER_SENDS(send_type,sent,cust_hook,sent_date)
-                values(103,1,'#clientid#','#datenow#')
-            </cfquery>
+             
             
         <cfelseif printQueue.printType is "LeasingManagerLetter">
             <cfdocumentsection><cfinclude template="letters/LeasingProNewLetter.cfm" /></cfdocumentsection>
