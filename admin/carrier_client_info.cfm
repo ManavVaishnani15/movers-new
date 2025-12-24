@@ -431,6 +431,7 @@ SET repfirstname = '#Rep_first_name#', replastname = '#Rep_last_name#', cellphon
     cellphone2 = '#Rep_cellPhone2#', cellphone3 = '#Rep_cellPhone3#', cellphone4 = '#Rep_cellPhone4#',
     Emailaddress2 = '#Rep_email2#', Emailaddress3 = '#Rep_email3#', Emailaddress4 = '#Rep_email4#',
     CompanyPosition = '#Rep_Position#', CompanyWebsite = '#CompanyWebsite#',
+    AddTo409Agreement = '#AddTo409Agreement#', AddTo409Agreement2 = '#AddTo409Agreement2#', AddTo409Agreement3 = '#AddTo409Agreement3#',
     Rep2firstname = '#Rep2_first_name#', Rep2lastname = '#Rep2_last_name#', Rep2phone = '#Rep2_Phone#',
     Rep2Emailaddress = '#Rep2_email#', Rep2cellphone = '#Rep2_cellPhone#', Rep2Position = '#Rep2_Position#',
     Rep2cellphone2 = '#Rep2_cellPhone2#', Rep2cellphone3 = '#Rep2_cellPhone3#', Rep2cellphone4 = '#Rep2_cellPhone4#',
@@ -705,24 +706,52 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
 	from carrier_supportdocs
 	where ClientID = #clientid#
 	</cfquery>
-    <div class="row">
-    	<cfif getDocuments.recordCount eq 0>
-    	<div class="small-12 columns">
-    		<h5>No Carrier Documents Found</h5>
-    	</div>
-    	<cfelse>
-    	<cfoutput query="getDocuments">
-    		<div class="small-4 columns">
-    			<a href="CarrierDocuments/#Document#" target="_blank"><strong>#Document#</strong></a> <a href="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#&killDocument=true&ID=#ID#" alt="DELETE DOCUMENT" title="DELETE DOCUMENT">[x]</a>
-    		</div>
-    	</cfoutput>
-    	</cfif>
-    	<div class="small-12 columns">
-    		<br>
-    		<a data-open="uploadDocument" class="button tiny">UPLOAD A DOCUMENT</a>
-    	</div>
+	<div class="row">
+		<!-- LEFT COLUMN : Carrier Documents -->
+		<div class="small-8 columns">
+			<cfif getDocuments.recordCount eq 0>
+					<h5>No Carrier Documents Found</h5>
+			<cfelse>
+				<cfoutput query="getDocuments">
+					<div>
+						<a href="CarrierDocuments/#Document#" target="_blank">
+								<strong>#Document#</strong>
+						</a>
+						<a href="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#&killDocument=true&ID=#ID#"
+							title="DELETE DOCUMENT">[x]</a>
+					</div>
+				</cfoutput>
+			</cfif>
+
+			<br>
+			<a data-open="uploadDocument" class="button tiny">
+				UPLOAD A DOCUMENT
+			</a>
+
+		</div>
+
+		<!-- RIGHT COLUMN : 409 Agreement -->
+		<div class="small-4 columns text-right">
+        <h5 style="margin-bottom:5px;">409 Agreement</h5>
+
+        <cfoutput>
+            <span style="display:inline-flex; align-items:center; gap:6px; font-size:14px;">
+                
+                <span style="font-size:18px;">PDF</span>
+
+                <a href="letters/agreement_pdf.cfm?clientid=#clientid#&un=#un#&pw=#pw#"
+                  target="_blank"
+                  title="Open Agreement PDF"
+                  style="font-size:18px; color:##555; text-decoration:none;">
+                    <i class="fa fa-file-pdf-o"></i>
+                </a>
+
+            </span>
+        </cfoutput>
     </div>
-    </fieldset>
+
+	</div>
+	</fieldset>
     
     	
     <cfoutput><form action="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#" method="post" name="addDataForm" data-abide novalidate></cfoutput>
@@ -896,6 +925,21 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
           <input type="text" name="CompanyWebsite" size="20" id="CompanyWebsite" placeholder="Website" value="#CompanyWebsite#">
         </div>
       </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="AddTo409Agreement" class="text-left middle">Add to 409 Agreement</label>
+        </div>
+        <div class="small-3 columns">
+          <select name="AddTo409Agreement" id="AddTo409Agreement">
+            <option value="0"<cfif AddTo409Agreement eq 0 or AddTo409Agreement eq ""> selected="selected"</cfif>>No</option>
+            <option value="1"<cfif AddTo409Agreement eq 1> selected="selected"</cfif>>Yes</option>
+          </select>
+        </div>
+        <div class="small-3 columns">
+        </div>
+        <div class="small-3 columns">
+        </div>
+      </div>
       </cfoutput>
 	</fieldset>
 
@@ -986,6 +1030,21 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
           <input type="text" name="Rep2_Position" size="20" id="Rep2_Position" placeholder="Company Position" value="#Rep2Position#">
         </div>
       </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="AddTo409Agreement2" class="text-left middle">Add to 409 Agreement</label>
+        </div>
+        <div class="small-3 columns">
+          <select name="AddTo409Agreement2" id="AddTo409Agreement2">
+            <option value="0"<cfif AddTo409Agreement2 eq 0 or AddTo409Agreement2 eq ""> selected="selected"</cfif>>No</option>
+            <option value="1"<cfif AddTo409Agreement2 eq 1> selected="selected"</cfif>>Yes</option>
+          </select>
+        </div>
+        <div class="small-3 columns">
+        </div>
+        <div class="small-3 columns">
+        </div>
+      </div>
       </cfoutput>
 	</fieldset>
 
@@ -1074,6 +1133,21 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
         </div>
         <div class="small-3 columns">
           <input type="text" name="Rep3_Position" size="20" id="Rep3_Position" placeholder="Company Position" value="#Rep3Position#">
+        </div>
+      </div>
+    <div class="row">
+        <div class="small-3 columns">
+          <label for="AddTo409Agreement3" class="text-left middle">Add to 409 Agreement</label>
+        </div>
+        <div class="small-3 columns">
+          <select name="AddTo409Agreement3" id="AddTo409Agreement3">
+            <option value="0"<cfif AddTo409Agreement3 eq 0 or AddTo409Agreement3 eq ""> selected="selected"</cfif>>No</option>
+            <option value="1"<cfif AddTo409Agreement3 eq 1> selected="selected"</cfif>>Yes</option>
+          </select>
+        </div>
+        <div class="small-3 columns">
+        </div>
+        <div class="small-3 columns">
         </div>
       </div>
       </cfoutput>

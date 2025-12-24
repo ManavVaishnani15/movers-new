@@ -58,6 +58,15 @@ where username='#un#' and temp_pw=#pw# and active=1
     </style>
 </head>
 
+<script>
+function togglePaymentLinkEdit(show) {
+    var row = document.getElementById('paymentLinkRow');
+    if (row) {
+        row.style.display = show ? '' : 'none';
+    }
+}
+</script>
+
 <body bgcolor="eceeee">
 <cfif parameterexists(un) is 'no'>
     <b>Log In</b><br>
@@ -610,6 +619,16 @@ where id=#clientid#
     <cfelse>
         <cfset new_storage_included = 1>
     </cfif>
+
+    <!--- Update global payment link if submitted --->
+    <cfif IsDefined("form.global_payment_link")>
+        <cfquery name="updatePaymentLink" datasource="aaalh3x_onestep">
+            UPDATE configuration
+            SET config_value = '#form.global_payment_link#',
+                updated_at = NOW()
+            WHERE config_key = 'payment_link'
+        </cfquery>
+    </cfif>
    
     <cfif #form.hangerCallDate# is not 'None Yet' and #form.hangerCallDate# is not ''>
         <cfset newhangerCallDate = #dateformat(form.hangerCallDate, "YYYY-MM-DD")#>
@@ -699,7 +718,12 @@ where id=#clientid#
         OtherServices = '#OtherServices#',
         thirdPartyServices = '#thirdPartyServices#',
         comments='#newcomments#',
-        door_hanger_state='#doorHangerState#'
+        door_hanger_state='#doorHangerState#',
+		moving_company = '#moving_company#',
+        total_cost_of_move = '#total_cost_of_move#',
+        management_fee = '#management_fee#',
+        remaining_balance = '#remaining_balance#',
+        email_sender_full_name = '#email_sender_full_name#'
         <cfif #newhangerCallDate# is not ''>,door_hanger_call_date='#newhangerCallDate#'<cfelse>,door_hanger_call_date=NULL</cfif>
         <cfif #newhanger2CallDate# is not ''>,door_hanger2_call_date='#newhanger2CallDate#'<cfelse>,door_hanger2_call_date=NULL</cfif>
         <cfif #newhangerOfferCallDate# is not ''>,door_hangerOffer_call_date='#newhangerOfferCallDate#'<cfelse>,door_hangerOffer_call_date=NULL</cfif>
@@ -1319,6 +1343,153 @@ order by company
         </td>
     </tr>
 </table>
+
+<br><br>
+<table border="1" cellspacing="0" cellpadding="6">
+    <tr>
+        <td bgcolor="e2e2e2" style="text-align:center;">
+            <font face="arial" size="3"><b>Payment</b></font>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+
+            <table border="0" cellspacing="4" cellpadding="2" width="100%">
+
+                <!-- Row 1 -->
+                <tr>
+                    <td width="28%">
+                        <font face="arial" size="2" style="white-space:nowrap;">
+                            Moving Company
+                        </font>
+                    </td>
+                    <td width="32%">
+                        <input type="text" name="moving_company" size="28"
+                               value="#getinfo.moving_company#">
+                    </td>
+
+                    <td width="22%">
+                        <font face="arial" size="2" style="white-space:nowrap;">
+                            Total cost of move $
+                        </font>
+                    </td>
+                    <td width="18%">
+                        <input type="text" name="total_cost_of_move" size="12"
+                               value="#getinfo.total_cost_of_move#">
+                    </td>
+                </tr>
+
+                <!-- Row 2 -->
+                <tr>
+                    <td>
+                        <font face="arial" size="2" style="white-space:nowrap;">
+                            Management fee $
+                        </font>
+                    </td>
+                    <td>
+                        <input type="text" name="management_fee" size="12"
+                               value="#getinfo.management_fee#">
+                    </td>
+
+                    <td>
+                        <font face="arial" size="2" style="white-space:nowrap;">
+                            Remaining balance $
+                        </font>
+                    </td>
+                    <td>
+                        <input type="text" name="remaining_balance" size="12"
+                               value="#getinfo.remaining_balance#">
+                    </td>
+                </tr>
+
+                <!-- Row 3 -->
+                <tr>
+                    <td>
+                        <font face="arial" size="2" style="white-space:nowrap;">
+                            Email Sender Full Name
+                        </font>
+                    </td>
+                    <td colspan="3">
+                        <input type="text" name="email_sender_full_name" size="28"
+                               value="#getinfo.email_sender_full_name#">
+                    </td>
+                </tr>
+
+                <!-- Row 4 -->
+                <tr>
+                    <td valign="middle">
+                        <font face="arial" size="2" style="white-space:nowrap;">
+                            Payment email
+                        </font>
+                    </td>
+                    <td valign="middle" colspan="3">
+						<cfif #getinfo.email# CONTAINS '.' AND #getinfo.email# CONTAINS '@'>
+							<cfoutput>
+								<a href="letters/paymentEmail.cfm?clientid=#clientid#&emailit=y&un=#un#&pw=#pw#" target="_e#clientid#">Email Now</a>
+							</cfoutput>
+						</cfif>
+					</td>
+                </tr>
+
+                <!-- Row 5 -->
+                <tr>
+                    <td valign="middle">
+                        <font face="arial" size="2" style="white-space:nowrap;">
+                            Payment Link (Global)
+                        </font>
+                    </td>
+
+                    <td valign="middle" colspan="2">
+                        <cfquery name="getPaymentConfig" datasource="aaalh3x_onestep">
+                            SELECT config_value
+                            FROM configuration
+                            WHERE config_key = 'payment_link'
+                        </cfquery>
+
+                        <font face="arial" size="2" color="green">
+                            <cfif getPaymentConfig.recordCount gt 0>
+                                #getPaymentConfig.config_value#
+                            <cfelse>
+                                Not configured
+                            </cfif>
+                        </font>
+                    </td>
+
+                    <td valign="middle">
+                        <input type="button" value="Edit"
+                            onclick="togglePaymentLinkEdit(true);">
+                    </td>
+                </tr>
+
+
+                <!-- Payment Link Edit Row -->
+                <tr id="paymentLinkRow" style="display:none;">
+                    <td colspan="4">
+                        <div style="display:flex; align-items:center; gap:10px;">
+
+                            <input type="text"
+                                name="global_payment_link"
+                                size="70"
+                                value="<cfif getPaymentConfig.recordCount gt 0>#getPaymentConfig.config_value#</cfif>">
+
+                            <!-- Cancel / Close -->
+                            <a href="javascript:void(0);"
+                            onclick="togglePaymentLinkEdit(false);"
+                            title="Cancel"
+                            style="color:##c00; font-weight:bold; text-decoration:none; font-size:16px;">
+                                ✖
+                            </a>
+
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+
+        </td>
+    </tr>
+</table>
 <br><br>
 
 
@@ -1887,6 +2058,28 @@ where send_type=21 and (sent=1 or sent=2) and cust_hook=#clientid#
  <cfif #get_reestimate.recordcount# is not 0>
  <cfoutput query="get_reestimate">
  - Non Realtor Lead Resent <cfif #get_reestimate.sent# is 1>(Mailed<cfelseif #get_reestimate.sent# is 2>(Emailed </cfif> #dateformat(get_reestimate.sent_date, "MMM D, YYYY")#)<br></cfoutput>
+ 
+ </cfif>
+
+<cfquery name="get_paymentEmail" datasource="aaalh3x_onestep">
+select * from LETTER_SENDS
+where send_type=11 and (sent=1 or sent=2) and cust_hook=#clientid#
+</cfquery>
+ <cfif #get_paymentEmail.recordcount# is 0>
+ Payment Email Not Sent<br>
+ 
+ <cfelse>
+  Payment Email Sent <cfif #get_paymentEmail.sent# is 1>(Mailed<cfelseif #get_paymentEmail.sent# is 2>(Emailed </cfif><cfoutput> #dateformat(get_paymentEmail.sent_date, "MMM D, YYYY")#)<br></cfoutput>
+
+ </cfif> 
+ 
+<cfquery name="get_repaymentEmail" datasource="aaalh3x_onestep">
+select * from LETTER_SENDS
+where send_type=13 and (sent=1 or sent=2) and cust_hook=#clientid#
+</cfquery>
+ <cfif #get_repaymentEmail.recordcount# is not 0>
+ <cfoutput query="get_repaymentEmail">
+ - Payment Email Resent <cfif #get_repaymentEmail.sent# is 1>(Mailed<cfelseif #get_repaymentEmail.sent# is 2>(Emailed </cfif> #dateformat(get_repaymentEmail.sent_date, "MMM D, YYYY")#)<br></cfoutput>
  
  </cfif>
 
