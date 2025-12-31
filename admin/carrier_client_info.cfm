@@ -119,6 +119,23 @@ where id=#clientid#
 
 <!--- Delete Move Job Agreement Form --->
 <cfif IsDefined("url.deleteMoveJobForm") AND IsDefined("url.formID")>
+	<!--- First get the PDF path --->
+	<cfquery name="getMoveJobPDF" datasource="aaalh3x_onestep">
+	SELECT pdf_path
+	FROM carrier_move_job_agreements
+	WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#url.formID#">
+	AND carrier_id = <cfqueryparam cfsqltype="cf_sql_integer" value="#ClientID#">
+	</cfquery>
+	
+	<!--- Delete the PDF file if it exists --->
+	<cfif getMoveJobPDF.RecordCount AND getMoveJobPDF.pdf_path NEQ "" AND NOT IsNull(getMoveJobPDF.pdf_path)>
+		<cfset pdfFullPath = "C:\lucee\tomcat\webapps\ROOT\movers\admin\CarrierDocuments\#getMoveJobPDF.pdf_path#">
+		<cfif FileExists(pdfFullPath)>
+			<cffile action="delete" file="#pdfFullPath#">
+		</cfif>
+	</cfif>
+	
+	<!--- Delete the database record --->
 	<cfquery name="deleteMoveJobForm" datasource="aaalh3x_onestep">
 	DELETE FROM carrier_move_job_agreements
 	WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#url.formID#">
@@ -945,40 +962,9 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
 	<div class="row">
 		<!-- LEFT COLUMN : Carrier Documents -->
 		<div class="small-8 columns">
-			<cfif getDocuments.recordCount eq 0 AND getMoveJobPDFs.recordCount eq 0>
+			<cfif getDocuments.recordCount eq 0>
 					<h5>No Carrier Documents Found</h5>
 			<cfelse>
-				<!--- Display Move Job Agreement PDFs --->
-				<cfif getMoveJobPDFs.recordCount gt 0>
-					<h6><strong>Move Job Agreements:</strong></h6>
-					<cfoutput query="getMoveJobPDFs">
-						<!--- Extract last name from customer_name --->
-						<cfset displayNameArray = ListToArray(customer_name, " ")>
-						<cfif ArrayLen(displayNameArray) GT 0>
-							<cfset displayLastName = displayNameArray[ArrayLen(displayNameArray)]>
-						<cfelse>
-							<cfset displayLastName = customer_name>
-						</cfif>
-						<div style="margin-bottom:8px; padding:8px; background-color:##f9f9f9; border-left:3px solid ##2199e8;">
-							<a href="CarrierDocuments/#pdf_path#" target="_blank" style="font-weight:bold;">
-								<i class="fa fa-file-pdf-o" style="color:##d32f2f;"></i> #displayLastName#
-							</a>
-							<cfif IsDate(updated_at)>
-								<span style="color:##666; font-size:12px; margin-left:10px;">
-									(#DateFormat(updated_at, "mm/dd/yyyy")#)
-								</span>
-							<cfelseif IsDate(created_at)>
-								<span style="color:##666; font-size:12px; margin-left:10px;">
-									(#DateFormat(created_at, "mm/dd/yyyy")#)
-								</span>
-							</cfif>
-							<a href="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#&killMoveJobPDF=true&moveJobID=#id#"
-								title="DELETE PDF" style="margin-left:10px; color:red;">[x]</a>
-						</div>
-					</cfoutput>
-					<br>
-				</cfif>
-				
 				<!--- Display Support Documents --->
 				<cfif getDocuments.recordCount gt 0>
 					<h6><strong>Other Documents:</strong></h6>
@@ -1184,10 +1170,13 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
       </div>
     <div class="row">
         <div class="small-3 columns">
-          <label for="Rep_Position" class="text-left middle">Position in Company</label>
+          <label for="Rep_Position" class="text-left middle">Position in Company*</label>
         </div>
         <div class="small-3 columns">
-          <input type="text" name="Rep_Position" size="20" id="Rep_Position" placeholder="Company Position" value="#CompanyPosition#">
+          <input type="text" name="Rep_Position" size="20" id="Rep_Position" placeholder="Company Position" value="#CompanyPosition#" required>
+          <span id="Rep_Position_error" style="color:red; font-size:12px; display:none; padding:0; line-height:1;">
+            Please enter a position in the company.
+          </span>
         </div>
         <div class="small-3 columns">
           <label for="CompanyWebsite" class="text-left middle">Company Website</label>
@@ -1720,7 +1709,7 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
       <cfset getMoveJobForm = QueryNew("id,customer_name,customer_phone,customer_email,move_from,move_to,packing_loading_date,delivery_date,preferred_delivery_date,move_type,storage_needed,days_in_storage,miles,approx_travel_time_hours,total_hours_billed,men_required,suggested_truck_size,residence_type,elevator,stairs_inside,stairs_outside,long_carry,move_size,weight_cubic_feet,packing,total_items,dishpacks,small_boxes,book_boxes,medium_boxes,large_boxes,extra_large_boxes,boxes_6,boxes_6_5,mirror_picture_boxes,wardrobe_boxes,flat_tv_boxes,flat_screen_tv_count,crib_mattress,single_bed_boxes,double_bed_boxes,king_queen_bed_boxes,other_material_needed,accessorial,extra_info,virtual_survey,other_estimate,binding_estimate,non_binding_estimate,not_to_exceed,flat_rate,hourly_estimate,amount_paid_to_carrier,addendum")>
     </cfif>
     <cfoutput><form action="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#<cfif IsDefined('url.formID') AND url.formID NEQ ''>&formID=#url.formID#</cfif>" method="post" name="moveJobAgreementForm"></cfoutput>
-    <fieldset class="fieldset">
+    <fieldset class="fieldset" id="moveJobAgreementForm">
     <legend><strong>Move Job Agreement Form</strong></legend>
     <cfoutput>
     <input type="hidden" name="MoveJobFormID" id="MoveJobFormID" value="<cfif IsDefined('url.formID') AND url.formID NEQ ''>#url.formID#</cfif>">
@@ -1733,7 +1722,7 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
           </cfif>
         </div>
         <div class="small-2 columns">
-          <a href="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#" class="button small">New Form</a>
+          <a href="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID###moveJobAgreementForm" class="button small">New Form</a>
         </div>
     </div>
     <div class="row">
@@ -2093,7 +2082,7 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
 
     <!--- Display list of saved Move Job Agreement forms --->
     <cfquery name="getAllMoveJobForms" datasource="aaalh3x_onestep">
-    SELECT id, customer_name, customer_phone, move_from, move_to, packing_loading_date, delivery_date
+    SELECT id, customer_name, customer_phone, move_from, move_to, packing_loading_date, delivery_date, pdf_path
     FROM carrier_move_job_agreements
     WHERE carrier_id = #clientid#
     ORDER BY id DESC
@@ -2124,9 +2113,14 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
           <td><cfif IsDate(getAllMoveJobForms.packing_loading_date)>#DateFormat(getAllMoveJobForms.packing_loading_date, "mm/dd/yyyy")#</cfif></td>
           <td><cfif IsDate(getAllMoveJobForms.delivery_date)>#DateFormat(getAllMoveJobForms.delivery_date, "mm/dd/yyyy")#</cfif></td>
           <td>
-            <a href="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#&formID=#getAllMoveJobForms.id#" class="button small" title="Edit">
+            <a href="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#&formID=#getAllMoveJobForms.id###moveJobAgreementForm" class="button small" title="Edit">
               <i class="fa fa-pencil"></i>
             </a>
+            <cfif getAllMoveJobForms.pdf_path NEQ "" AND NOT IsNull(getAllMoveJobForms.pdf_path)>
+              <a href="CarrierDocuments/#getAllMoveJobForms.pdf_path#" target="_blank" class="button small" title="View PDF" style="margin-left:5px; background-color:##d32f2f;">
+                <i class="fa fa-file-pdf-o"></i>
+              </a>
+            </cfif>
             <a href="##" onclick="confirmDelete(#getAllMoveJobForms.id#, '#JSStringFormat(getAllMoveJobForms.customer_name)#'); return false;" class="button small alert" title="Delete" style="margin-left:5px;">
               <i class="fa fa-trash"></i>
             </a>
@@ -2324,6 +2318,7 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
 </div>
 
 <script src="foundation-6.2.4/js/vendor/foundation.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 
   $(document).foundation();
@@ -2354,6 +2349,40 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
     });
     <cfset StructDelete(session, "deleteSuccess")>
   </cfif>
+
+  $(document).ready(function() {
+
+  $('form[name="addDataForm"]').on('submit', function(e) {
+    const repPosition = $('#Rep_Position').val().trim();
+
+    if(repPosition === '') {
+      e.preventDefault(); // stop submission
+
+      // Error message
+      $('#Rep_Position_error').text('Position in Company is required.').show();
+
+      // Highlight field
+      $('#Rep_Position').css({
+        'border':'2px solid red',
+        'box-shadow':'0 0 8px rgba(255,0,0,0.4)'
+      });
+
+      // Scroll to field
+      $('html, body').animate({
+        scrollTop: $('#Rep_Position').offset().top - 120
+      }, 500);
+
+      // Remove highlight + error when typing
+      $('#Rep_Position').one('input', function() {
+        $(this).css({'border':'','box-shadow':''});
+        $('#Rep_Position_error').hide();
+      });
+
+      return false;
+    }
+  });
+
+});
 </script>
 </body>
 </html>
