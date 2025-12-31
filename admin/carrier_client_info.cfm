@@ -29,6 +29,29 @@
     </style>
 </head>
 <body>
+
+<!--- Display DocuSign Success/Error/Info Messages --->
+<cfif IsDefined("session.docusignSuccess")>
+    <div style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 15px; margin: 20px; border-radius: 5px;">
+        <strong><i class="fa fa-check-circle"></i> Success:</strong> <cfoutput>#session.docusignSuccess#</cfoutput>
+    </div>
+    <cfset StructDelete(session, "docusignSuccess")>
+</cfif>
+
+<cfif IsDefined("session.docusignError")>
+    <div style="background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 15px; margin: 20px; border-radius: 5px;">
+        <strong><i class="fa fa-exclamation-triangle"></i> Error:</strong> <cfoutput>#session.docusignError#</cfoutput>
+    </div>
+    <cfset StructDelete(session, "docusignError")>
+</cfif>
+
+<cfif IsDefined("session.docusignInfo")>
+    <div style="background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; padding: 15px; margin: 20px; border-radius: 5px;">
+        <strong><i class="fa fa-info-circle"></i> Info:</strong> <cfoutput>#session.docusignInfo#</cfoutput>
+    </div>
+    <cfset StructDelete(session, "docusignInfo")>
+</cfif>
+
 <cfif parameterexists(un) is 'no'>
 <b>Log In</b><br>
 <form action="main.cfm" method="post">
@@ -116,6 +139,9 @@ where id=#clientid#
 	WHERE ID = #ClientID#
 	</cfquery>
 </cfif>
+
+<!--- Include DocuSign Handler --->
+<cfinclude template="docusign_handler.cfm">
 
 <!--- Delete Move Job Agreement Form --->
 <cfif IsDefined("url.deleteMoveJobForm") AND IsDefined("url.formID")>
@@ -2093,7 +2119,8 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
 
     <!--- Display list of saved Move Job Agreement forms --->
     <cfquery name="getAllMoveJobForms" datasource="aaalh3x_onestep">
-    SELECT id, customer_name, customer_phone, move_from, move_to, packing_loading_date, delivery_date
+    SELECT id, customer_name, customer_phone, move_from, move_to, packing_loading_date, delivery_date,
+           docusign_status, docusign_envelope_id, docusign_sent_date, docusign_completed_date
     FROM carrier_move_job_agreements
     WHERE carrier_id = #clientid#
     ORDER BY id DESC
@@ -2111,6 +2138,7 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
           <th>Move To</th>
           <th>Packing Date</th>
           <th>Delivery Date</th>
+          <th>DocuSign Status</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -2124,9 +2152,60 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
           <td><cfif IsDate(getAllMoveJobForms.packing_loading_date)>#DateFormat(getAllMoveJobForms.packing_loading_date, "mm/dd/yyyy")#</cfif></td>
           <td><cfif IsDate(getAllMoveJobForms.delivery_date)>#DateFormat(getAllMoveJobForms.delivery_date, "mm/dd/yyyy")#</cfif></td>
           <td>
+            <cfif Len(getAllMoveJobForms.docusign_status)>
+              <cfif getAllMoveJobForms.docusign_status EQ "completed">
+                <span style="color: green; font-weight: bold;">
+                  <i class="fa fa-check-circle"></i> Signed
+                  <cfif IsDate(getAllMoveJobForms.docusign_completed_date)>
+                    <br><small>#DateFormat(getAllMoveJobForms.docusign_completed_date, "mm/dd/yyyy")#</small>
+                  </cfif>
+                </span>
+              <cfelseif getAllMoveJobForms.docusign_status EQ "sent">
+                <span style="color: orange; font-weight: bold;">
+                  <i class="fa fa-clock-o"></i> Awaiting Signature
+                  <cfif IsDate(getAllMoveJobForms.docusign_sent_date)>
+                    <br><small>Sent: #DateFormat(getAllMoveJobForms.docusign_sent_date, "mm/dd/yyyy")#</small>
+                  </cfif>
+                </span>
+              <cfelseif getAllMoveJobForms.docusign_status EQ "declined">
+                <span style="color: red; font-weight: bold;">
+                  <i class="fa fa-times-circle"></i> Declined
+                </span>
+              <cfelse>
+                <span style="color: gray;">
+                  #getAllMoveJobForms.docusign_status#
+                </span>
+              </cfif>
+            <cfelse>
+              <span style="color: gray;">Not Sent</span>
+            </cfif>
+          </td>
+          <td style="white-space: nowrap;">
             <a href="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#&formID=#getAllMoveJobForms.id#" class="button small" title="Edit">
               <i class="fa fa-pencil"></i>
             </a>
+            
+            <!--- View PDF Button --->
+            <a href="letters/move_job_agreement.cfm?clientid=#ClientID#&formid=#getAllMoveJobForms.id#" target="_blank" class="button small secondary" title="View PDF" style="margin-left:5px;">
+              <i class="fa fa-file-pdf-o"></i>
+            </a>
+            
+            <!--- DocuSign Button --->
+            <cfif NOT Len(getAllMoveJobForms.docusign_status) OR getAllMoveJobForms.docusign_status NEQ "completed">
+              <form method="post" action="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#&formID=#getAllMoveJobForms.id#" style="display:inline;">
+                <button type="submit" name="SendToDocuSign" class="button small success" title="Send to DocuSign for Signature" style="margin-left:5px;">
+                  <i class="fa fa-envelope"></i> DocuSign
+                </button>
+              </form>
+            </cfif>
+            
+            <!--- Check Status Button (if sent but not completed) --->
+            <cfif Len(getAllMoveJobForms.docusign_envelope_id) AND getAllMoveJobForms.docusign_status NEQ "completed">
+              <a href="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#&checkDocuSignStatus=true&envelopeId=#getAllMoveJobForms.docusign_envelope_id#" class="button small warning" title="Check DocuSign Status" style="margin-left:5px;">
+                <i class="fa fa-refresh"></i>
+              </a>
+            </cfif>
+            
             <a href="##" onclick="confirmDelete(#getAllMoveJobForms.id#, '#JSStringFormat(getAllMoveJobForms.customer_name)#'); return false;" class="button small alert" title="Delete" style="margin-left:5px;">
               <i class="fa fa-trash"></i>
             </a>
