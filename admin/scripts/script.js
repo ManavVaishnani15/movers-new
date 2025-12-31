@@ -41,4 +41,19 @@ $(document).ready(function(){
       changeYear: true //this option for allowing user to select from year range
     });
 
+    $( "#datepickerCarrierPacking" ).datepicker({
+      changeMonth: true,//this option for allowing user to select month
+      changeYear: true //this option for allowing user to select from year range
+    });
+
+    $( "#datepickerCarrierDelivery" ).datepicker({
+      changeMonth: true,//this option for allowing user to select month
+      changeYear: true //this option for allowing user to select from year range
+    });
+
+    $( "#datepickerCarrierPreferred" ).datepicker({
+      changeMonth: true,//this option for allowing user to select month
+      changeYear: true //this option for allowing user to select from year range
+    });
+
 });

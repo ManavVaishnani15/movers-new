@@ -6,13 +6,14 @@
 <title>Administration - Edit Record</title>
 <link rel="stylesheet" href="foundation-6.2.4/css/foundation.css">
 <link rel="stylesheet" type="text/css" href="font-awesome-4.7.0/css/font-awesome.css">
+<link rel="stylesheet" href="https://top12movingbiz.com/admin/css/jquery-ui.css"/>
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-<!-- Load SCRIPT.JS which will create datepicker for input field  -->
-<script src="https://top12movingbiz.com/admin/scripts/script.js"></script>
 <script src="https://top12movingbiz.com/admin/scripts/typeahead.jquery.min.js"></script>
-<script src="https://top12movingbiz.com/admin/scripts/jquery-ui.min.js"></script>
-<link rel="stylesheet" href="https://top12movingbiz.com/admin/css/jquery-ui.css"/>
+<!-- Load SCRIPT.JS which will create datepicker for input field  -->
+<script src="scripts/script.js"></script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style type="text/css">
         .tt-menu {
@@ -114,6 +115,206 @@ where id=#clientid#
 	SET BusinessCardPhoto = '#theFilename#'
 	WHERE ID = #ClientID#
 	</cfquery>
+</cfif>
+
+<!--- Delete Move Job Agreement Form --->
+<cfif IsDefined("url.deleteMoveJobForm") AND IsDefined("url.formID")>
+	<cfquery name="deleteMoveJobForm" datasource="aaalh3x_onestep">
+	DELETE FROM carrier_move_job_agreements
+	WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#url.formID#">
+	AND carrier_id = <cfqueryparam cfsqltype="cf_sql_integer" value="#ClientID#">
+	</cfquery>
+	<cfset session.deleteSuccess = true>
+	<cflocation url="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#" addtoken="no">
+</cfif>
+
+<cfif IsDefined("form.SaveMoveJobForm")>
+	<!--- Check if we're updating an existing form or creating a new one --->
+	<cfif IsDefined("form.MoveJobFormID") AND form.MoveJobFormID NEQ "">
+		<!--- Update existing form --->
+		<cfquery name="updateMoveJobForm" datasource="aaalh3x_onestep">
+		UPDATE carrier_move_job_agreements
+		SET customer_name = '#form.CustomerName#',
+			customer_phone = '#form.CustomerPhone#',
+			customer_email = '#form.CustomerEmail#',
+			move_from = '#form.MoveFrom#',
+			move_to = '#form.MoveTo#',
+			packing_loading_date = <cfif form.PackingLoadingDate NEQ '' AND IsDate(form.PackingLoadingDate)>'#DateFormat(form.PackingLoadingDate, "yyyy-mm-dd")#'<cfelse>NULL</cfif>,
+			delivery_date = <cfif form.DeliveryDate NEQ '' AND IsDate(form.DeliveryDate)>'#DateFormat(form.DeliveryDate, "yyyy-mm-dd")#'<cfelse>NULL</cfif>,
+			preferred_delivery_date = <cfif form.PreferredDeliveryDate NEQ '' AND IsDate(form.PreferredDeliveryDate)>'#DateFormat(form.PreferredDeliveryDate, "yyyy-mm-dd")#'<cfelse>NULL</cfif>,
+			move_type = '#form.MoveType#',
+			storage_needed = '#form.StorageNeeded#',
+			days_in_storage = <cfif IsNumeric(form.DaysInStorage)>#form.DaysInStorage#<cfelse>NULL</cfif>,
+			miles = <cfif IsNumeric(form.Miles)>#form.Miles#<cfelse>NULL</cfif>,
+			approx_travel_time_hours = '#form.ApproxTravelTime#',
+			total_hours_billed = '#form.TotalHoursBilled#',
+			men_required = <cfif IsNumeric(form.MenRequired)>#form.MenRequired#<cfelse>NULL</cfif>,
+			suggested_truck_size = '#form.SuggestedTruckSize#',
+			residence_type = '#form.ResidenceType#',
+			elevator = '#form.Elevator#',
+			stairs_inside = '#form.StairsInside#',
+			stairs_outside = '#form.StairsOutside#',
+			long_carry = '#form.LongCarry#',
+			move_size = '#form.MoveSize#',
+			weight_cubic_feet = '#form.WeightCubicFeet#',
+			packing = '#form.Packing#',
+			total_items = <cfif IsNumeric(form.TotalItems)>#form.TotalItems#<cfelse>NULL</cfif>,
+			dishpacks = <cfif IsNumeric(form.Dishpacks)>#form.Dishpacks#<cfelse>NULL</cfif>,
+			small_boxes = <cfif IsNumeric(form.SmallBoxes)>#form.SmallBoxes#<cfelse>NULL</cfif>,
+			book_boxes = <cfif IsNumeric(form.BookBoxes)>#form.BookBoxes#<cfelse>NULL</cfif>,
+			medium_boxes = <cfif IsNumeric(form.MediumBoxes)>#form.MediumBoxes#<cfelse>NULL</cfif>,
+			large_boxes = <cfif IsNumeric(form.LargeBoxes)>#form.LargeBoxes#<cfelse>NULL</cfif>,
+			extra_large_boxes = <cfif IsNumeric(form.ExtraLargeBoxes)>#form.ExtraLargeBoxes#<cfelse>NULL</cfif>,
+			boxes_6 = <cfif IsNumeric(form.Boxes6)>#form.Boxes6#<cfelse>NULL</cfif>,
+			boxes_6_5 = <cfif IsNumeric(form.Boxes65)>#form.Boxes65#<cfelse>NULL</cfif>,
+			mirror_picture_boxes = <cfif IsNumeric(form.MirrorPictureBoxes)>#form.MirrorPictureBoxes#<cfelse>NULL</cfif>,
+			wardrobe_boxes = <cfif IsNumeric(form.WardrobeBoxes)>#form.WardrobeBoxes#<cfelse>NULL</cfif>,
+			flat_tv_boxes = <cfif IsNumeric(form.FlatTVBoxes)>#form.FlatTVBoxes#<cfelse>NULL</cfif>,
+			flat_screen_tv_count = <cfif IsNumeric(form.FlatScreenTVCount)>#form.FlatScreenTVCount#<cfelse>NULL</cfif>,
+			crib_mattress = <cfif IsNumeric(form.CribMattress)>#form.CribMattress#<cfelse>NULL</cfif>,
+			single_bed_boxes = <cfif IsNumeric(form.SingleBedBoxes)>#form.SingleBedBoxes#<cfelse>NULL</cfif>,
+			double_bed_boxes = <cfif IsNumeric(form.DoubleBedBoxes)>#form.DoubleBedBoxes#<cfelse>NULL</cfif>,
+			king_queen_bed_boxes = <cfif IsNumeric(form.KingQueenBedBoxes)>#form.KingQueenBedBoxes#<cfelse>NULL</cfif>,
+			other_material_needed = '#form.OtherMaterialNeeded#',
+			accessorial = '#form.Accessorial#',
+			extra_info = '#form.ExtraInfo#',
+			virtual_survey = '#form.VirtualSurvey#',
+			other_estimate = '#form.OtherEstimate#',
+			binding_estimate = '#form.BindingEstimate#',
+			non_binding_estimate = '#form.NonBindingEstimate#',
+			not_to_exceed = '#form.NotToExceed#',
+			flat_rate = '#form.FlatRate#',
+			hourly_estimate = '#form.HourlyEstimate#',
+			amount_paid_to_carrier = '#form.AmountPaidToCarrier#',
+			addendum = '#form.Addendum#',
+			updated_at = NOW()
+		WHERE id = #form.MoveJobFormID#
+		</cfquery>
+	<cfelse>
+		<cfquery name="insertMoveJobForm" datasource="aaalh3x_onestep">
+		INSERT INTO carrier_move_job_agreements(
+			carrier_id, customer_name, customer_phone, customer_email,
+			move_from, move_to, packing_loading_date, delivery_date, preferred_delivery_date,
+			move_type, storage_needed, days_in_storage, miles,
+			approx_travel_time_hours, total_hours_billed, men_required,
+			suggested_truck_size, residence_type, elevator,
+			stairs_inside, stairs_outside, long_carry,
+			move_size, weight_cubic_feet, packing, total_items,
+			dishpacks, small_boxes, book_boxes, medium_boxes, large_boxes, extra_large_boxes,
+			boxes_6, boxes_6_5, mirror_picture_boxes, wardrobe_boxes,
+			flat_tv_boxes, flat_screen_tv_count, crib_mattress,
+			single_bed_boxes, double_bed_boxes, king_queen_bed_boxes,
+			other_material_needed, accessorial, extra_info,
+			virtual_survey, other_estimate, binding_estimate, non_binding_estimate,
+			not_to_exceed, flat_rate, hourly_estimate, amount_paid_to_carrier, addendum
+		)
+		VALUES(
+			#ClientID#, '#form.CustomerName#', '#form.CustomerPhone#', '#form.CustomerEmail#',
+			'#form.MoveFrom#', '#form.MoveTo#',
+			<cfif form.PackingLoadingDate NEQ '' AND IsDate(form.PackingLoadingDate)>'#DateFormat(form.PackingLoadingDate, "yyyy-mm-dd")#'<cfelse>NULL</cfif>,
+			<cfif form.DeliveryDate NEQ '' AND IsDate(form.DeliveryDate)>'#DateFormat(form.DeliveryDate, "yyyy-mm-dd")#'<cfelse>NULL</cfif>,
+			<cfif form.PreferredDeliveryDate NEQ '' AND IsDate(form.PreferredDeliveryDate)>'#DateFormat(form.PreferredDeliveryDate, "yyyy-mm-dd")#'<cfelse>NULL</cfif>,
+			'#form.MoveType#', '#form.StorageNeeded#',
+			<cfif IsNumeric(form.DaysInStorage)>#form.DaysInStorage#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.Miles)>#form.Miles#<cfelse>NULL</cfif>,
+			'#form.ApproxTravelTime#', '#form.TotalHoursBilled#',
+			<cfif IsNumeric(form.MenRequired)>#form.MenRequired#<cfelse>NULL</cfif>,
+			'#form.SuggestedTruckSize#', '#form.ResidenceType#', '#form.Elevator#',
+			'#form.StairsInside#', '#form.StairsOutside#', '#form.LongCarry#',
+			'#form.MoveSize#', '#form.WeightCubicFeet#', '#form.Packing#',
+			<cfif IsNumeric(form.TotalItems)>#form.TotalItems#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.Dishpacks)>#form.Dishpacks#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.SmallBoxes)>#form.SmallBoxes#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.BookBoxes)>#form.BookBoxes#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.MediumBoxes)>#form.MediumBoxes#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.LargeBoxes)>#form.LargeBoxes#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.ExtraLargeBoxes)>#form.ExtraLargeBoxes#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.Boxes6)>#form.Boxes6#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.Boxes65)>#form.Boxes65#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.MirrorPictureBoxes)>#form.MirrorPictureBoxes#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.WardrobeBoxes)>#form.WardrobeBoxes#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.FlatTVBoxes)>#form.FlatTVBoxes#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.FlatScreenTVCount)>#form.FlatScreenTVCount#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.CribMattress)>#form.CribMattress#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.SingleBedBoxes)>#form.SingleBedBoxes#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.DoubleBedBoxes)>#form.DoubleBedBoxes#<cfelse>NULL</cfif>,
+			<cfif IsNumeric(form.KingQueenBedBoxes)>#form.KingQueenBedBoxes#<cfelse>NULL</cfif>,
+			'#form.OtherMaterialNeeded#', '#form.Accessorial#', '#form.ExtraInfo#',
+			'#form.VirtualSurvey#', '#form.OtherEstimate#', '#form.BindingEstimate#', '#form.NonBindingEstimate#',
+			'#form.NotToExceed#', '#form.FlatRate#', '#form.HourlyEstimate#', '#form.AmountPaidToCarrier#', '#form.Addendum#'
+		)
+		</cfquery>
+		<cfquery name="getLastInsertID" datasource="aaalh3x_onestep">
+		SELECT LAST_INSERT_ID() as lastID
+		</cfquery>
+		<cfset formID = getLastInsertID.lastID>
+	</cfif>
+	
+	<!--- Generate PDF for Move Job Agreement --->
+	<cfif NOT IsDefined("form.MoveJobFormID") OR form.MoveJobFormID EQ "">
+		<cfset formID = getLastInsertID.lastID>
+	<cfelse>
+		<cfset formID = form.MoveJobFormID>
+	</cfif>
+	
+	<!--- Get the saved form data to generate PDF --->
+	<cfquery name="getFormData" datasource="aaalh3x_onestep">
+	SELECT *
+	FROM carrier_move_job_agreements
+	WHERE id = #formID#
+	</cfquery>
+	
+	<!--- Check if PDF already exists for this form --->
+	<cfif IsDefined("getFormData.pdf_path") AND getFormData.pdf_path NEQ "" AND NOT IsNull(getFormData.pdf_path)>
+		<!--- Delete old PDF file if name changed --->
+		<cfset oldPdfPath = "C:\lucee\tomcat\webapps\ROOT\movers\admin\CarrierDocuments\#getFormData.pdf_path#">
+	</cfif>
+	
+	<!--- Always extract customer last name from full name --->
+	<cfset customerFullName = form.CustomerName>
+	<cfset nameArray = ListToArray(customerFullName, " ")>
+	<cfif ArrayLen(nameArray) GT 0>
+		<cfset customerLastName = nameArray[ArrayLen(nameArray)]>
+	<cfelse>
+		<cfset customerLastName = customerFullName>
+	</cfif>
+	
+	<!--- Sanitize filename (remove special characters) --->
+	<cfset customerLastName = REReplace(customerLastName, "[^a-zA-Z0-9]", "", "ALL")>
+	
+	<!--- Generate filename with customer last name only --->
+	<cfset pdfFileName = "#customerLastName#.pdf">
+	
+	<!--- Delete old PDF file if it exists and name changed --->
+	<cfif IsDefined("oldPdfPath") AND FileExists(oldPdfPath) AND getFormData.pdf_path NEQ pdfFileName>
+		<cffile action="delete" file="#oldPdfPath#">
+	</cfif>
+	
+	<cfset pdfFilePath = "C:\lucee\tomcat\webapps\ROOT\movers\admin\CarrierDocuments\#pdfFileName#">
+	
+	<!--- Set URL-like variables for the template --->
+	<cfset url.clientid = ClientID>
+	<cfset url.formid = formID>
+	
+	<!--- Generate PDF using cfdocument --->
+	<cfdocument
+      format="PDF" pagetype="letter" scale="88" 
+      margintop="0.3" marginbottom="0.3" marginleft="0.3" marginright="0.3"
+      filename="#pdfFilePath#"
+      overwrite="yes" >
+  
+    <cfinclude template="letters/move_job_agreement.cfm">
+  </cfdocument>
+	
+	<!--- Update pdf_path in database --->
+	<cfquery name="updatePDFPath" datasource="aaalh3x_onestep">
+	UPDATE carrier_move_job_agreements
+	SET pdf_path = '#pdfFileName#'
+	WHERE id = #formID#
+	</cfquery>
+	
+	<!--- Redirect to clear form (no formID = blank form) --->
+	<cflocation url="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#" addtoken="no" />
 </cfif>
 
 <cfif IsDefined("form.UpdateBoxRateButton")>
@@ -264,7 +465,7 @@ where id=#clientid#
 </cfif>
 
 <cfif isDefined("form.submitDocument")>
-	<cffile action="upload" destination="C:\home\top12movingbiz.com\wwwroot\admin\CarrierDocuments\" filefield="documentFile" nameconflict="makeunique"> 
+	<cffile action="upload" destination="C:\lucee\tomcat\webapps\ROOT\movers\admin\CarrierDocuments" filefield="documentFile" nameconflict="makeunique"> 
 	<cfset theFilename = cffile.serverfile>
 	<cfquery name="logDocumentfile" datasource="aaalh3x_onestep">
 	INSERT INTO carrier_supportdocs(ClientID, Document)
@@ -280,7 +481,7 @@ where id=#clientid#
 		ClientID = #ClientID#
 	</cfquery>
 	<cfif getDocumentfile.RecordCount>
-	<cffile action="delete" file="C:\home\top12movingbiz.com\wwwroot\admin\CarrierDocuments\#getDocumentfile.Document#">
+	<cffile action="delete" file="C:\lucee\tomcat\webapps\ROOT\movers\admin\CarrierDocuments\#getDocumentfile.Document#">
 	<cfquery name="getDocumentfile" datasource="aaalh3x_onestep">
 	DELETE
 	FROM carrier_supportdocs
@@ -288,6 +489,29 @@ where id=#clientid#
 		ClientID = #ClientID#
 	</cfquery>
 	</cfif>
+</cfif>
+
+<!--- Delete Move Job Agreement PDF --->
+<cfif isDefined("url.killMoveJobPDF") and url.killMoveJobPDF eq "true" and isDefined("url.moveJobID")>
+	<cfquery name="getMoveJobPDF" datasource="aaalh3x_onestep">
+	SELECT pdf_path
+	FROM carrier_move_job_agreements
+	WHERE id = #url.moveJobID# 
+	AND carrier_id = #ClientID#
+	</cfquery>
+	<cfif getMoveJobPDF.RecordCount and getMoveJobPDF.pdf_path NEQ "">
+		<cfset pdfFullPath = "C:\lucee\tomcat\webapps\ROOT\movers\admin\CarrierDocuments\#getMoveJobPDF.pdf_path#">
+		<cfif FileExists(pdfFullPath)>
+			<cffile action="delete" file="#pdfFullPath#">
+		</cfif>
+		<cfquery name="deleteMoveJobPDF" datasource="aaalh3x_onestep">
+		UPDATE carrier_move_job_agreements
+		SET pdf_path = NULL
+		WHERE id = #url.moveJobID#
+		AND carrier_id = #ClientID#
+		</cfquery>
+	</cfif>
+	<cflocation url="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#" addtoken="no" />
 </cfif>
 
 
@@ -432,6 +656,7 @@ SET repfirstname = '#Rep_first_name#', replastname = '#Rep_last_name#', cellphon
     Emailaddress2 = '#Rep_email2#', Emailaddress3 = '#Rep_email3#', Emailaddress4 = '#Rep_email4#',
     CompanyPosition = '#Rep_Position#', CompanyWebsite = '#CompanyWebsite#',
     AddTo409Agreement = '#AddTo409Agreement#', AddTo409Agreement2 = '#AddTo409Agreement2#', AddTo409Agreement3 = '#AddTo409Agreement3#',
+    AddToMoveJobAgreement = '#AddToMoveJobAgreement#', AddToMoveJobAgreement2 = '#AddToMoveJobAgreement2#', AddToMoveJobAgreement3 = '#AddToMoveJobAgreement3#',
     Rep2firstname = '#Rep2_first_name#', Rep2lastname = '#Rep2_last_name#', Rep2phone = '#Rep2_Phone#',
     Rep2Emailaddress = '#Rep2_email#', Rep2cellphone = '#Rep2_cellPhone#', Rep2Position = '#Rep2_Position#',
     Rep2cellphone2 = '#Rep2_cellPhone2#', Rep2cellphone3 = '#Rep2_cellPhone3#', Rep2cellphone4 = '#Rep2_cellPhone4#',
@@ -706,21 +931,67 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
 	from carrier_supportdocs
 	where ClientID = #clientid#
 	</cfquery>
+	
+	<!--- Get Move Job Agreement PDFs --->
+	<cfquery name="getMoveJobPDFs" datasource="aaalh3x_onestep">
+	SELECT id, customer_name, pdf_path, packing_loading_date, created_at, updated_at
+	FROM carrier_move_job_agreements
+	WHERE carrier_id = #clientid#
+	AND pdf_path IS NOT NULL
+	AND pdf_path != ''
+	ORDER BY id DESC
+	</cfquery>
+	
 	<div class="row">
 		<!-- LEFT COLUMN : Carrier Documents -->
 		<div class="small-8 columns">
-			<cfif getDocuments.recordCount eq 0>
+			<cfif getDocuments.recordCount eq 0 AND getMoveJobPDFs.recordCount eq 0>
 					<h5>No Carrier Documents Found</h5>
 			<cfelse>
-				<cfoutput query="getDocuments">
-					<div>
-						<a href="CarrierDocuments/#Document#" target="_blank">
-								<strong>#Document#</strong>
-						</a>
-						<a href="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#&killDocument=true&ID=#ID#"
-							title="DELETE DOCUMENT">[x]</a>
-					</div>
-				</cfoutput>
+				<!--- Display Move Job Agreement PDFs --->
+				<cfif getMoveJobPDFs.recordCount gt 0>
+					<h6><strong>Move Job Agreements:</strong></h6>
+					<cfoutput query="getMoveJobPDFs">
+						<!--- Extract last name from customer_name --->
+						<cfset displayNameArray = ListToArray(customer_name, " ")>
+						<cfif ArrayLen(displayNameArray) GT 0>
+							<cfset displayLastName = displayNameArray[ArrayLen(displayNameArray)]>
+						<cfelse>
+							<cfset displayLastName = customer_name>
+						</cfif>
+						<div style="margin-bottom:8px; padding:8px; background-color:##f9f9f9; border-left:3px solid ##2199e8;">
+							<a href="CarrierDocuments/#pdf_path#" target="_blank" style="font-weight:bold;">
+								<i class="fa fa-file-pdf-o" style="color:##d32f2f;"></i> #displayLastName#
+							</a>
+							<cfif IsDate(updated_at)>
+								<span style="color:##666; font-size:12px; margin-left:10px;">
+									(#DateFormat(updated_at, "mm/dd/yyyy")#)
+								</span>
+							<cfelseif IsDate(created_at)>
+								<span style="color:##666; font-size:12px; margin-left:10px;">
+									(#DateFormat(created_at, "mm/dd/yyyy")#)
+								</span>
+							</cfif>
+							<a href="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#&killMoveJobPDF=true&moveJobID=#id#"
+								title="DELETE PDF" style="margin-left:10px; color:red;">[x]</a>
+						</div>
+					</cfoutput>
+					<br>
+				</cfif>
+				
+				<!--- Display Support Documents --->
+				<cfif getDocuments.recordCount gt 0>
+					<h6><strong>Other Documents:</strong></h6>
+					<cfoutput query="getDocuments">
+						<div>
+							<a href="CarrierDocuments/#Document#" target="_blank">
+									<strong>#Document#</strong>
+							</a>
+							<a href="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#&killDocument=true&ID=#ID#"
+								title="DELETE DOCUMENT">[x]</a>
+						</div>
+					</cfoutput>
+				</cfif>
 			</cfif>
 
 			<br>
@@ -936,8 +1207,13 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
           </select>
         </div>
         <div class="small-3 columns">
+          <label for="AddToMoveJobAgreement" class="text-left middle">Add to Move Job Agreement</label>
         </div>
         <div class="small-3 columns">
+          <select name="AddToMoveJobAgreement" id="AddToMoveJobAgreement">
+            <option value="0"<cfif AddToMoveJobAgreement eq 0 or AddToMoveJobAgreement eq ""> selected="selected"</cfif>>No</option>
+            <option value="1"<cfif AddToMoveJobAgreement eq 1> selected="selected"</cfif>>Yes</option>
+          </select>
         </div>
       </div>
       </cfoutput>
@@ -1041,8 +1317,13 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
           </select>
         </div>
         <div class="small-3 columns">
+          <label for="AddToMoveJobAgreement2" class="text-left middle">Add to Move Job Agreement</label>
         </div>
         <div class="small-3 columns">
+          <select name="AddToMoveJobAgreement2" id="AddToMoveJobAgreement2">
+            <option value="0"<cfif AddToMoveJobAgreement2 eq 0 or AddToMoveJobAgreement2 eq ""> selected="selected"</cfif>>No</option>
+            <option value="1"<cfif AddToMoveJobAgreement2 eq 1> selected="selected"</cfif>>Yes</option>
+          </select>
         </div>
       </div>
       </cfoutput>
@@ -1146,8 +1427,13 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
           </select>
         </div>
         <div class="small-3 columns">
+          <label for="AddToMoveJobAgreement3" class="text-left middle">Add to Move Job Agreement</label>
         </div>
         <div class="small-3 columns">
+          <select name="AddToMoveJobAgreement3" id="AddToMoveJobAgreement3">
+            <option value="0"<cfif AddToMoveJobAgreement3 eq 0 or AddToMoveJobAgreement3 eq ""> selected="selected"</cfif>>No</option>
+            <option value="1"<cfif AddToMoveJobAgreement3 eq 1> selected="selected"</cfif>>Yes</option>
+          </select>
         </div>
       </div>
       </cfoutput>
@@ -1420,7 +1706,438 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
         </div>
       </div>
       </form>
+  
+    <!---     Move job form --->
+    <!--- Only load form data if editing (formID in URL) --->
+    <cfif IsDefined("url.formID") AND url.formID NEQ "">
+      <cfquery name="getMoveJobForm" datasource="aaalh3x_onestep">
+      SELECT *
+      FROM carrier_move_job_agreements
+      WHERE carrier_id = #clientid# AND id = #url.formID#
+      </cfquery>
+    <cfelse>
+      <!--- Empty query for blank form --->
+      <cfset getMoveJobForm = QueryNew("id,customer_name,customer_phone,customer_email,move_from,move_to,packing_loading_date,delivery_date,preferred_delivery_date,move_type,storage_needed,days_in_storage,miles,approx_travel_time_hours,total_hours_billed,men_required,suggested_truck_size,residence_type,elevator,stairs_inside,stairs_outside,long_carry,move_size,weight_cubic_feet,packing,total_items,dishpacks,small_boxes,book_boxes,medium_boxes,large_boxes,extra_large_boxes,boxes_6,boxes_6_5,mirror_picture_boxes,wardrobe_boxes,flat_tv_boxes,flat_screen_tv_count,crib_mattress,single_bed_boxes,double_bed_boxes,king_queen_bed_boxes,other_material_needed,accessorial,extra_info,virtual_survey,other_estimate,binding_estimate,non_binding_estimate,not_to_exceed,flat_rate,hourly_estimate,amount_paid_to_carrier,addendum")>
+    </cfif>
+    <cfoutput><form action="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#<cfif IsDefined('url.formID') AND url.formID NEQ ''>&formID=#url.formID#</cfif>" method="post" name="moveJobAgreementForm"></cfoutput>
+    <fieldset class="fieldset">
+    <legend><strong>Move Job Agreement Form</strong></legend>
+    <cfoutput>
+    <input type="hidden" name="MoveJobFormID" id="MoveJobFormID" value="<cfif IsDefined('url.formID') AND url.formID NEQ ''>#url.formID#</cfif>">
+    <div class="row">
+        <div class="small-10 columns">
+          <cfif IsDefined('url.formID') AND url.formID NEQ '' AND getMoveJobForm.RecordCount>
+            <p><strong>Editing Form ID: #getMoveJobForm.id# - Customer: #getMoveJobForm.customer_name#</strong></p>
+          <cfelse>
+            <p><strong>Create New Move Job Agreement Form</strong></p>
+          </cfif>
+        </div>
+        <div class="small-2 columns">
+          <a href="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#" class="button small">New Form</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="small-2 columns">
+          <label for="CustomerName" class="text-left middle">Customer Name:</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="CustomerName" id="CustomerName" placeholder="Customer Name" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.customer_name#</cfif>">
+        </div>
+        <div class="small-2 columns">
+          <label for="CustomerPhone" class="text-left middle">Customer phone number</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="CustomerPhone" id="CustomerPhone" placeholder="Customer Phone Number" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.customer_phone#</cfif>">
+        </div>
+        <div class="small-2 columns">
+          <label for="CustomerEmail" class="text-left middle">Customer email</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="CustomerEmail" id="CustomerEmail" placeholder="Customer email" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.customer_email#</cfif>">
+        </div>
+      </div>
     
+    <div class="row">
+        <div class="small-2 columns">
+          <label for="MoveFrom" class="text-left middle">Move from</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="MoveFrom" id="MoveFrom" placeholder="Move from" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.move_from#</cfif>">
+        </div>
+        <div class="small-2 columns">
+          <label for="MoveTo" class="text-left middle">Move to</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="MoveTo" id="MoveTo" placeholder="Move to" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.move_to#</cfif>">
+        </div>
+        <div class="small-2 columns">
+          <label for="PackingLoadingDate" class="text-left middle">Packing/loading date</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="PackingLoadingDate" id="datepickerCarrierPacking" class="remindmedropdowna" placeholder="MM/DD/YYYY" value="<cfif getMoveJobForm.RecordCount AND IsDate(getMoveJobForm.packing_loading_date)>#DateFormat(getMoveJobForm.packing_loading_date, 'mm/dd/yyyy')#</cfif>" size="10">
+        </div>
+      </div>
+    
+    <div class="row">
+        <div class="small-2 columns">
+          <label for="DeliveryDate" class="text-left middle">Delivery date</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="DeliveryDate" id="datepickerCarrierDelivery" class="remindmedropdowna" placeholder="MM/DD/YYYY" value="<cfif getMoveJobForm.RecordCount AND IsDate(getMoveJobForm.delivery_date)>#DateFormat(getMoveJobForm.delivery_date, 'mm/dd/yyyy')#</cfif>" size="10">
+        </div>
+        <div class="small-2 columns">
+          <label for="PreferredDeliveryDate" class="text-left middle">Customer preferred delivery date</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="PreferredDeliveryDate" id="datepickerCarrierPreferred" class="remindmedropdowna" placeholder="MM/DD/YYYY" value="<cfif getMoveJobForm.RecordCount AND IsDate(getMoveJobForm.preferred_delivery_date)>#DateFormat(getMoveJobForm.preferred_delivery_date, 'mm/dd/yyyy')#</cfif>" size="10">
+        </div>
+        <div class="small-2 columns">
+          <label for="MoveType" class="text-left middle">Move type</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="MoveType" id="MoveType" placeholder="Move type" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.move_type#</cfif>">
+        </div>
+      </div>
+    
+    <div class="row">
+        <div class="small-2 columns">
+          <label for="StorageNeeded" class="text-left middle">Storage needed</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="StorageNeeded" id="StorageNeeded" placeholder="Storage needed" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.storage_needed#</cfif>">
+        </div>
+        <div class="small-2 columns">
+          <label for="DaysInStorage" class="text-left middle">Days in storage</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="number" name="DaysInStorage" id="DaysInStorage" placeholder="Days in storage" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.days_in_storage#</cfif>">
+        </div>
+        <div class="small-2 columns">
+          <label for="Miles" class="text-left middle">Miles</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="number" name="Miles" id="Miles" placeholder="Miles" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.miles#</cfif>">
+        </div>
+      </div>
+    
+    <div class="row">
+        <div class="small-2 columns">
+          <label for="ApproxTravelTime" class="text-left middle">Approx travel time</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="ApproxTravelTime" id="ApproxTravelTime" placeholder="Hours" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.approx_travel_time_hours#</cfif>">
+        </div>
+        <div class="small-2 columns">
+          <label for="TotalHoursBilled" class="text-left middle">Total hours billed</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="TotalHoursBilled" id="TotalHoursBilled" placeholder="Total hours billed" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.total_hours_billed#</cfif>">
+        </div>
+        <div class="small-2 columns">
+          <label for="MenRequired" class="text-left middle">Men Required</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="number" name="MenRequired" id="MenRequired" placeholder="Men Required" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.men_required#</cfif>">
+        </div>
+      </div>
+    
+    <div class="row">
+        <div class="small-2 columns">
+          <label for="SuggestedTruckSize" class="text-left middle">Suggested Truck size & number to use</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="SuggestedTruckSize" id="SuggestedTruckSize" placeholder="Truck size" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.suggested_truck_size#</cfif>">
+        </div>
+        <div class="small-2 columns">
+          <label for="ResidenceType" class="text-left middle">Residence type</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="ResidenceType" id="ResidenceType" placeholder="Residence type" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.residence_type#</cfif>">
+        </div>
+        <div class="small-2 columns">
+          <label for="Elevator" class="text-left middle">Elevator</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="Elevator" id="Elevator" placeholder="Elevator" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.elevator#</cfif>">
+        </div>
+      </div>
+    
+    <div class="row">
+        <div class="small-2 columns">
+          <label for="StairsInside" class="text-left middle">Stairs inside</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="StairsInside" id="StairsInside" placeholder="Stairs inside" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.stairs_inside#</cfif>">
+        </div>
+        <div class="small-2 columns">
+          <label for="StairsOutside" class="text-left middle">Stairs outside</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="StairsOutside" id="StairsOutside" placeholder="Stairs outside" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.stairs_outside#</cfif>">
+        </div>
+        <div class="small-2 columns">
+          <label for="LongCarry" class="text-left middle">Long carry</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="LongCarry" id="LongCarry" placeholder="Long carry" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.long_carry#</cfif>">
+        </div>
+      </div>
+    
+    <div class="row">
+        <div class="small-2 columns">
+          <label for="MoveSize" class="text-left middle">Move Size</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="MoveSize" id="MoveSize" placeholder="Move Size" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.move_size#</cfif>">
+        </div>
+        <div class="small-2 columns">
+          <label for="WeightCubicFeet" class="text-left middle">Weight & Cubic Feet</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="WeightCubicFeet" id="WeightCubicFeet" placeholder="Weight & Cubic Feet" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.weight_cubic_feet#</cfif>">
+        </div>
+        <div class="small-2 columns">
+          <label for="Packing" class="text-left middle">Packing</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="text" name="Packing" id="Packing" placeholder="Packing" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.packing#</cfif>">
+        </div>
+      </div>
+    
+    <div class="row">
+        <div class="small-2 columns">
+          <label for="TotalItems" class="text-left middle">Total Items Number</label>
+        </div>
+        <div class="small-2 columns">
+          <input type="number" name="TotalItems" id="TotalItems" placeholder="Total Items" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.total_items#</cfif>">
+        </div>
+        <div class="small-2 columns">
+        </div>
+        <div class="small-2 columns">
+        </div>
+        <div class="small-2 columns">
+        </div>
+        <div class="small-2 columns">
+        </div>
+      </div>
+    
+    <hr>
+    
+    <div class="row">
+        <div class="small-5 columns">
+          <div class="row">
+            <div class="small-8 columns"><label class="text-left middle"><strong>5.1 or Dishpacks:</strong></label></div>
+            <div class="small-4 columns"><input type="number" name="Dishpacks" id="Dishpacks" style="width: 60px;" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.dishpacks#</cfif>"></div>
+          </div>
+          <div class="row">
+            <div class="small-8 columns"><label class="text-left middle"><strong>1.5 or Small Boxes:</strong></label></div>
+            <div class="small-4 columns"><input type="number" name="SmallBoxes" id="SmallBoxes" style="width: 60px;" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.small_boxes#</cfif>"></div>
+          </div>
+          <div class="row">
+            <div class="small-8 columns"><label class="text-left middle"><strong>Book Boxes:</strong></label></div>
+            <div class="small-4 columns"><input type="number" name="BookBoxes" id="BookBoxes" style="width: 60px;" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.book_boxes#</cfif>"></div>
+          </div>
+          <div class="row">
+            <div class="small-8 columns"><label class="text-left middle"><strong>3.0 or Medium Boxes:</strong></label></div>
+            <div class="small-4 columns"><input type="number" name="MediumBoxes" id="MediumBoxes" style="width: 60px;" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.medium_boxes#</cfif>"></div>
+          </div>
+          <div class="row">
+            <div class="small-8 columns"><label class="text-left middle"><strong>4.5 or Large Boxes:</strong></label></div>
+            <div class="small-4 columns"><input type="number" name="LargeBoxes" id="LargeBoxes" style="width: 60px;" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.large_boxes#</cfif>"></div>
+          </div>
+          <div class="row">
+            <div class="small-8 columns"><label class="text-left middle"><strong>5.0 Extra Large Boxes:</strong></label></div>
+            <div class="small-4 columns"><input type="number" name="ExtraLargeBoxes" id="ExtraLargeBoxes" style="width: 60px;" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.extra_large_boxes#</cfif>"></div>
+          </div>
+          <div class="row">
+            <div class="small-8 columns"><label class="text-left middle"><strong>6.0 Boxes:</strong></label></div>
+            <div class="small-4 columns"><input type="number" name="Boxes6" id="Boxes6" style="width: 60px;" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.boxes_6#</cfif>"></div>
+          </div>
+          <div class="row">
+            <div class="small-8 columns"><label class="text-left middle"><strong>6.5 Boxes</strong></label></div>
+            <div class="small-4 columns"><input type="number" name="Boxes65" id="Boxes65" style="width: 60px;" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.boxes_6_5#</cfif>"></div>
+          </div>
+          <div class="row">
+            <div class="small-8 columns"><label class="text-left middle"><strong>Mirror or picture Boxes:</strong></label></div>
+            <div class="small-4 columns"><input type="number" name="MirrorPictureBoxes" id="MirrorPictureBoxes" style="width: 60px;" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.mirror_picture_boxes#</cfif>"></div>
+          </div>
+          <div class="row">
+            <div class="small-8 columns"><label class="text-left middle"><strong>Wardrobe (18-24 inches) Boxes:</strong></label></div>
+            <div class="small-4 columns"><input type="number" name="WardrobeBoxes" id="WardrobeBoxes" style="width: 60px;" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.wardrobe_boxes#</cfif>"></div>
+          </div>
+          <div class="row">
+            <div class="small-8 columns"><label class="text-left middle"><strong>Flat TV boxes or wrap:</strong></label></div>
+            <div class="small-4 columns"><input type="number" name="FlatTVBoxes" id="FlatTVBoxes" style="width: 60px;" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.flat_tv_boxes#</cfif>"></div>
+          </div>
+          <div class="row">
+            <div class="small-8 columns"><label class="text-left middle"><strong>Flat Screen TV ##:</strong></label></div>
+            <div class="small-4 columns"><input type="number" name="FlatScreenTVCount" id="FlatScreenTVCount" style="width: 60px;" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.flat_screen_tv_count#</cfif>"></div>
+          </div>
+          <div class="row">
+            <div class="small-8 columns"><label class="text-left middle"><strong>Crib mattress:</strong></label></div>
+            <div class="small-4 columns"><input type="number" name="CribMattress" id="CribMattress" style="width: 60px;" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.crib_mattress#</cfif>"></div>
+          </div>
+          <div class="row">
+            <div class="small-8 columns"><label class="text-left middle"><strong>Single Bed Bag or Boxes:</strong></label></div>
+            <div class="small-4 columns"><input type="number" name="SingleBedBoxes" id="SingleBedBoxes" style="width: 60px;" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.single_bed_boxes#</cfif>"></div>
+          </div>
+          <div class="row">
+            <div class="small-8 columns"><label class="text-left middle"><strong>Double Bed Bag or Boxes:</strong></label></div>
+            <div class="small-4 columns"><input type="number" name="DoubleBedBoxes" id="DoubleBedBoxes" style="width: 60px;" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.double_bed_boxes#</cfif>"></div>
+          </div>
+          <div class="row">
+            <div class="small-8 columns"><label class="text-left middle"><strong>King/Queen Bed Bag or Boxes:</strong></label></div>
+            <div class="small-4 columns"><input type="number" name="KingQueenBedBoxes" id="KingQueenBedBoxes" style="width: 60px;" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.king_queen_bed_boxes#</cfif>"></div>
+          </div>
+          <div class="row">
+            <div class="small-7 columns"><label class="text-left middle"><strong>Other material needed:</strong></label></div>
+            <div class="small-5 columns"><input type="text" name="OtherMaterialNeeded" id="OtherMaterialNeeded" style="width: 100%;" placeholder="Other material" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.other_material_needed#</cfif>"></div>
+          </div>
+        </div>
+        <div class="small-7 columns">
+          <div class="row">
+            <div class="small-2 columns">
+              <label for="Accessorial" class="text-left"><strong>Accessorial</strong></label>
+            </div>
+            <div class="small-10 columns">
+              <textarea name="Accessorial" id="Accessorial" rows="8" placeholder="Accessorial" style="resize: vertical;"><cfif getMoveJobForm.RecordCount>#getMoveJobForm.accessorial#</cfif></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="small-2 columns">
+              <label for="ExtraInfo" class="text-left"><strong>Extra info</strong></label>
+            </div>
+            <div class="small-10 columns">
+              <textarea name="ExtraInfo" id="ExtraInfo" rows="8" placeholder="Extra Info" style="resize: vertical;"><cfif getMoveJobForm.RecordCount>#getMoveJobForm.extra_info#</cfif></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="small-3 columns">
+              <label for="VirtualSurvey" class="text-left middle"><strong>VIRTUAL SURVEY:</strong></label>
+            </div>
+            <div class="small-3 columns">
+              <input type="text" name="VirtualSurvey" id="VirtualSurvey" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.virtual_survey#</cfif>">
+            </div>
+            <div class="small-3 columns">
+              <label for="OtherEstimate" class="text-left middle"><strong>OTHER:</strong></label>
+            </div>
+            <div class="small-3 columns">
+              <input type="text" name="OtherEstimate" id="OtherEstimate" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.other_estimate#</cfif>">
+            </div>
+          </div>
+          <div class="row">
+            <div class="small-3 columns">
+              <label for="BindingEstimate" class="text-left middle"><strong>BINDING ESTIMATE:</strong></label>
+            </div>
+            <div class="small-3 columns">
+              <input type="text" name="BindingEstimate" id="BindingEstimate" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.binding_estimate#</cfif>">
+            </div>
+            <div class="small-3 columns">
+              <label for="NonBindingEstimate" class="text-left middle"><strong>NON-BINDING ESTIMATE</strong></label>
+            </div>
+            <div class="small-3 columns">
+              <input type="text" name="NonBindingEstimate" id="NonBindingEstimate" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.non_binding_estimate#</cfif>">
+            </div>
+          </div>
+          <div class="row">
+            <div class="small-3 columns">
+              <label for="NotToExceed" class="text-left middle"><strong>NOT TO EXCEED</strong></label>
+            </div>
+            <div class="small-3 columns">
+              <input type="text" name="NotToExceed" id="NotToExceed" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.not_to_exceed#</cfif>">
+            </div>
+            <div class="small-3 columns">
+              <label for="FlatRate" class="text-left middle"><strong>FLAT RATE:</strong></label>
+            </div>
+            <div class="small-3 columns">
+              <input type="text" name="FlatRate" id="FlatRate" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.flat_rate#</cfif>">
+            </div>
+          </div>
+          <div class="row">
+            <div class="small-3 columns">
+              <label for="HourlyEstimate" class="text-left middle"><strong>HOURLY ESTIMATE:</strong></label>
+            </div>
+            <div class="small-3 columns">
+              <input type="text" name="HourlyEstimate" id="HourlyEstimate" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.hourly_estimate#</cfif>">
+            </div>
+            <div class="small-6 columns">
+            </div>
+          </div>
+          <div class="row">
+            <div class="small-4 columns" style="margin-right: 0px; padding-right: 0px;">
+              <label for="AmountPaidToCarrier" class="text-left middle"><strong>Amount Paid to Carrier:</strong></label>
+            </div>
+            <div class="small-4 columns" style=" margin-right: 225px; padding-left: 0px;">
+              <input class="text-left" type="text" name="AmountPaidToCarrier" id="AmountPaidToCarrier" value="<cfif getMoveJobForm.RecordCount>#getMoveJobForm.amount_paid_to_carrier#</cfif>">
+            </div>
+          </div>
+          <div class="row">
+            <div class="small-2 columns">
+              <label for="Addendum" class="text-left"><strong>Addendum:</strong></label>
+            </div>
+            <div class="small-10 columns">
+              <textarea name="Addendum" id="Addendum" rows="5" placeholder="Addendum" style="resize: vertical;"><cfif getMoveJobForm.RecordCount>#getMoveJobForm.addendum#</cfif></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    </cfoutput>
+    </fieldset>
+    <div class="row">
+      <div class="small-12 columns">
+        <input type="submit" value="Save Changes" name="SaveMoveJobForm" class="button">
+      </div>
+    </div>
+    </form>
+
+    <!--- Display list of saved Move Job Agreement forms --->
+    <cfquery name="getAllMoveJobForms" datasource="aaalh3x_onestep">
+    SELECT id, customer_name, customer_phone, move_from, move_to, packing_loading_date, delivery_date
+    FROM carrier_move_job_agreements
+    WHERE carrier_id = #clientid#
+    ORDER BY id DESC
+    </cfquery>
+    
+    <cfif getAllMoveJobForms.RecordCount GT 0>
+    <fieldset class="fieldset">
+    <legend><strong>Saved Move Job Agreement Forms</strong></legend>
+    <table width="100%" border="1" cellspacing="0" cellpadding="5">
+      <thead>
+        <tr style="background-color: ##f0f0f0;">
+          <th>Customer Name</th>
+          <th>Phone</th>
+          <th>Move From</th>
+          <th>Move To</th>
+          <th>Packing Date</th>
+          <th>Delivery Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <cfoutput query="getAllMoveJobForms">
+        <tr>
+          <td>#getAllMoveJobForms.customer_name#</td>
+          <td>#getAllMoveJobForms.customer_phone#</td>
+          <td>#getAllMoveJobForms.move_from#</td>
+          <td>#getAllMoveJobForms.move_to#</td>
+          <td><cfif IsDate(getAllMoveJobForms.packing_loading_date)>#DateFormat(getAllMoveJobForms.packing_loading_date, "mm/dd/yyyy")#</cfif></td>
+          <td><cfif IsDate(getAllMoveJobForms.delivery_date)>#DateFormat(getAllMoveJobForms.delivery_date, "mm/dd/yyyy")#</cfif></td>
+          <td>
+            <a href="carrier_client_info.cfm?un=#un#&pw=#pw#&ClientID=#ClientID#&formID=#getAllMoveJobForms.id#" class="button small" title="Edit">
+              <i class="fa fa-pencil"></i>
+            </a>
+            <a href="##" onclick="confirmDelete(#getAllMoveJobForms.id#, '#JSStringFormat(getAllMoveJobForms.customer_name)#'); return false;" class="button small alert" title="Delete" style="margin-left:5px;">
+              <i class="fa fa-trash"></i>
+            </a>
+          </td>
+        </tr>
+        </cfoutput>
+      </tbody>
+    </table>
+    </fieldset>
+    </cfif>
+
     <fieldset class="fieldset">
     <legend><strong>Packing Rates</strong></legend>
     <cfquery name="getBoxes" datasource="aaalh3x_onestep">
@@ -1609,7 +2326,34 @@ where (send_type=10 or send_type = 11) and sent=2 and cust_hook=#clientid#
 <script src="foundation-6.2.4/js/vendor/foundation.js"></script>
 <script>
 
-      $(document).foundation();
-    </script>
+  $(document).foundation();
+  
+  function confirmDelete(formID, customerName) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to delete the Move Job Agreement form for "' + customerName + '"? You won\'t be able to revert this!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+          window.location.href = 'carrier_client_info.cfm?un=<cfoutput>#un#</cfoutput>&pw=<cfoutput>#pw#</cfoutput>&ClientID=<cfoutput>#ClientID#</cfoutput>&deleteMoveJobForm=true&formID=' + formID;
+      }
+    });
+  }
+
+  <cfif IsDefined("session.deleteSuccess") AND session.deleteSuccess>
+    Swal.fire({
+      title: 'Deleted!',
+      text: 'Move Job Agreement has been successfully deleted.',
+      icon: 'success',
+      confirmButtonColor: '#3085d6'
+    });
+    <cfset StructDelete(session, "deleteSuccess")>
+  </cfif>
+</script>
 </body>
 </html>
